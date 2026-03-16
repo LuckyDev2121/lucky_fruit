@@ -2,8 +2,8 @@ import LuckyFruitGame from "./components/LuckyFruitGame"
 
 function App() {
   return (
-    <div className="relative h-full w-full ">
-      <LuckyFruitGame/>
+    <div className="relative mr-auto flex content-center justify-center h-full w-full ">
+      <LuckyFruitGame />
     </div>
   )
 }

@@ -4,7 +4,7 @@ import PlayBoard from "./PlayBoard";
 
 export default function LuckyFruitGame() {
   return (
-    <div className="w-screen h-screen relative bg-[#A91FE6]">
+    <div className="w-screen h-screen relative bg-[#A91FE6]  max-w-[393px] max-h-[533px]">
       <div className="flex justify-between">
         <div className="ml-[13px] mt-[11px]">
           <CoinBoard />

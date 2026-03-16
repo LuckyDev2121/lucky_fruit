@@ -12,10 +12,10 @@ import bottomboard from "../assets/BottomBoard/bottomboard.svg"
 
 export default function PlayBoard() {
     return (
-        <div className="pointer-events-none absolute z-20 object-contain" style={{ width: "100%", height: "auto" }}>
+        <div className="pointer-events-none absolute z-20 object-contain" style={{ width: "100%", height: "100%" }}>
             <div className=" relative z-20 inset-0">
                 <img src={luckyfruit} alt="luckyfruit" className="absolute top-[20px] inset-0 z-20 left-1/2 transform -translate-x-1/2" />
-                <img src={playboard} className=" absolute inset-0" />
+                <img src={playboard} className=" absolute inset-0 mt-[7px]" />
                 <span className="absolute justify-center font-regular top-[69px] w-[124px] h-[18px] text-center left-1/2 transform -translate-x-1/2 rounded-full bg-[#3D005C] ">Round 1526 of today</span>
                 <img src={fruitboard} className=" absolute top-[90px] z-20 left-1/2 transform -translate-x-1/2" />
                 <img src={timer} className="absolute top-[183px] z-20 left-1/2 transform -translate-x-1/2" />
