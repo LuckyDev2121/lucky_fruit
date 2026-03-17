@@ -7,11 +7,14 @@ import HelpMenu from "./HelpMenu";
 import NoteMenu from "./NoteMenu";
 import CupMenu from "./CupMenu";
 import ResultMenu from "./ResultMenu";
+import RepeatModal from "./RepeatModal";
 // import { div } from "framer-motion/client";
 
 export default function LuckyFruitGame() {
 
   const [activeModal, setActiveModal] = useState<string | null>(null);
+  const [activeAlert, setActiveAlert] = useState<string | null>(null);
+
   return (
     <div className="w-screen h-screen relative bg-[#A91FE6]  max-w-[393px] max-h-[533px]">
       <div className="flex justify-between">
@@ -23,7 +26,8 @@ export default function LuckyFruitGame() {
         </div>
       </div>
       <div className="bottom-0 left-0 right-0">
-        <PlayBoard onOpenModal={(modal) => setActiveModal(modal)} />
+        <PlayBoard onOpenModal={(modal) => setActiveModal(modal)}
+          onOpenAlert={(alert) => setActiveAlert(alert)} />
       </div>
       <AnimatePresence>
         {activeModal && (
@@ -52,6 +56,18 @@ export default function LuckyFruitGame() {
                 setActiveModal(null)
               }} />
             )}
+          </motion.div >
+        )}
+        {activeAlert === "repeat" && (
+          <motion.div
+            key={activeAlert}
+            initial={{ transform: 'translate(-50%, -50%)', opacity: 0 }}
+            animate={{ transform: 'translate(-50%, -50%)', opacity: 1 }}
+            exit={{ transform: 'translate(-50%, -50%)', opacity: 0 }}
+            transition={{ duration: 0.4 }}
+            className="absolute z-50 top-1/2 left-1/2"
+          >
+            <RepeatModal onCloseRepeatModal={() => setActiveAlert(null)} />
           </motion.div >
         )}
       </AnimatePresence>

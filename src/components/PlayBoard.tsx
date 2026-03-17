@@ -18,9 +18,10 @@ import { useState } from "react";
 
 type PlayBoardProps = {
     onOpenModal: (modal: string) => void;
+    onOpenAlert: (alert: string) => void;
 };
 
-export default function PlayBoard({ onOpenModal }: PlayBoardProps) {
+export default function PlayBoard({ onOpenModal, onOpenAlert }: PlayBoardProps) {
 
     const [showLedTimer, setShowLedTimer] = useState(true);
     const [showChooseTimer, setShowChooseTimer] = useState(false);
@@ -34,24 +35,32 @@ export default function PlayBoard({ onOpenModal }: PlayBoardProps) {
                 <img src={fruitboard} className=" absolute top-[90px] z-20 left-1/2 transform -translate-x-1/2" />
                 <SlotGrid />
                 <img src={timer} className="absolute top-[183px] z-20 left-1/2 transform -translate-x-1/2" />
-
-                <img src={repeat} className="absolute top-[320px] z-20 left-[calc(78%-0px)]" />
-                <div className="absolute inset-0 top-[361px] z-20 flex justify-center">
-                    <button className="relative">
+                <button
+                    style={{
+                        cursor: "pointer",
+                        pointerEvents: 'auto'
+                    }}
+                    onClick={() => onOpenAlert("repeat")}
+                    className="absolute top-[320px] h-fit w-full z-20 left-[calc(78%-0px)]">
+                    <img src={repeat} alt="Repeat Icon" className="relative" />
+                </button>
+                <div className="absolute inset-0 top-[361px] z-20 flex justify-center" style={{ pointerEvents: 'auto' }}>
+                    <button className="relative" onClick={() => console.log("Level 1 clicked")}>
                         <img src={lvl1} alt="Level 1" className="relative" />
                     </button>
-                    <button className="relative">
+                    <button className="relative" onClick={() => console.log("Level 2 clicked")}>
                         <img src={lvl2} alt="Level 2" className="relative" />
                     </button>
-                    <button className="relative">
+                    <button className="relative" onClick={() => console.log("Level 3 clicked")}>
                         <img src={lvl3} alt="Level 3" className="relative" />
                     </button>
-                    <button className="relative">
+                    <button className="relative" onClick={() => console.log("Level 4 clicked")}>
                         <img src={lvl4} alt="Level 4" className="relative" />
                     </button>
-                    <button className="relative">
+                    <button className="relative" onClick={() => console.log("Level 5 clicked")}>
                         <img src={lvl5} alt="Level 5" className="relative" />
                     </button>
+
                 </div>
                 <img src={bottomboard} className=" absolute top-[442px] left-1/2 transform -translate-x-1/2 z-20" />
                 {showLedTimer && (
