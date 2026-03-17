@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import rectangle from "../assets/Modal/Rectangle.svg"
 import shine from "../assets/Modal/Rotated Instances.svg"
 
