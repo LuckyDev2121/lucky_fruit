@@ -10,15 +10,31 @@ import lvl4 from "../assets/BetBoard/100K.svg"
 import lvl5 from "../assets/BetBoard/1M.svg"
 import bottomboard from "../assets/BottomBoard/bottomboard.svg"
 
-export default function PlayBoard() {
+import SlotGrid from "./SlotGrid"
+import LedTimer from "./LedTimer";
+import ChooseTimer from "./ChooseTimer";
+import HiddenTimer from "./HiddenTimer";
+import { useState } from "react";
+
+type PlayBoardProps = {
+    onOpenModal: (modal: string) => void;
+};
+
+export default function PlayBoard({ onOpenModal }: PlayBoardProps) {
+
+    const [showLedTimer, setShowLedTimer] = useState(true);
+    const [showChooseTimer, setShowChooseTimer] = useState(false);
+    const [showHiddenTimer, setShowHiddenTimer] = useState(false);
     return (
         <div className="pointer-events-none absolute z-20 object-contain" style={{ width: "100%", height: "100%" }}>
             <div className=" relative z-20 inset-0">
-                <img src={luckyfruit} alt="luckyfruit" className="absolute top-[20px] inset-0 z-20 left-1/2 transform -translate-x-1/2" />
+                <img src={luckyfruit} alt="luckyfruit" className="absolute top-[25px] inset-0 z-20 left-1/2 transform -translate-x-1/2" />
                 <img src={playboard} className=" absolute inset-0 mt-[7px]" />
-                <span className="absolute justify-center font-regular top-[69px] w-[124px] h-[18px] text-center left-1/2 transform -translate-x-1/2 rounded-full bg-[#3D005C] ">Round 1526 of today</span>
+                <span className="absolute justify-center font-regular top-[70px] w-[124px] h-[18px] text-center left-1/2 transform -translate-x-1/2 rounded-full bg-[#3D005C] ">Round 1526 of today</span>
                 <img src={fruitboard} className=" absolute top-[90px] z-20 left-1/2 transform -translate-x-1/2" />
+                <SlotGrid />
                 <img src={timer} className="absolute top-[183px] z-20 left-1/2 transform -translate-x-1/2" />
+
                 <img src={repeat} className="absolute top-[320px] z-20 left-[calc(78%-0px)]" />
                 <div className="absolute inset-0 top-[361px] z-20 flex justify-center">
                     <button className="relative">
@@ -38,6 +54,31 @@ export default function PlayBoard() {
                     </button>
                 </div>
                 <img src={bottomboard} className=" absolute top-[442px] left-1/2 transform -translate-x-1/2 z-20" />
+                {showLedTimer && (
+                    <div className="absolute z-30 top-[175px] left-1/2 transform -translate-x-1/2">
+                        <LedTimer start={40} onLedTimeUp={() => {
+                            setShowChooseTimer(true)
+                            setShowLedTimer(false)
+                        }} />
+                    </div>
+                )}
+                {showChooseTimer && (
+                    <div className="absolute z-30 top-[175px] left-1/2 transform -translate-x-1/2">
+                        <ChooseTimer start={10} onChooseTimeUp={() => {
+                            setShowChooseTimer(false)
+                            setShowHiddenTimer(true)
+                            onOpenModal("result")
+                        }} />
+                    </div>
+                )}
+                {showHiddenTimer && (
+                    <div className="absolute z-30 top-[175px] left-1/2 transform -translate-x-1/2">
+                        <HiddenTimer start={5} onHiddenTimeUp={() => {
+                            setShowHiddenTimer(false)
+                            setShowLedTimer(true)
+                        }} />
+                    </div>
+                )}
             </div>
         </div >
     )

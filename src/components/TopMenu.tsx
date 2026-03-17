@@ -5,32 +5,46 @@ import music from "../assets/TopMenu/MusicNotes.svg";
 import help from "../assets/TopMenu/QuestionMark.svg";
 import speaker from "../assets/TopMenu/SpeakerHigh.svg";
 import close from "../assets/TopMenu/X.svg";
+import cup from "../assets/TopMenu/cup.svg";
 
-const TopMenu: React.FC = () => {
+type TopMenuProps = {
+  onOpenModal: (modal: string) => void;
+};
+
+const TopMenu: React.FC<TopMenuProps> = ({ onOpenModal }) => {
+
+
+
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-[5px]">
+      <MenuButton
+        icon={cup}
+        background={"#773AC8"}
+        onClick={() => onOpenModal("cup")}
+      />
+
       <MenuButton
         icon={music}
         background={"#773AC8"}
-        onClick={() => console.log("music clicked")}
+        onClick={() => onOpenModal("music")}
       />
 
       <MenuButton
         icon={note}
         background={"#773AC8"}
-        onClick={() => console.log("help clicked")}
+        onClick={() => onOpenModal("note")}
       />
 
       <MenuButton
         icon={help}
         background={"#773AC8"}
-        onClick={() => console.log("sound clicked")}
+        onClick={() => onOpenModal("help")}
       />
 
       <MenuButton
         icon={speaker}
         background={"#773AC8"}
-        onClick={() => console.log("close clicked")}
+        onClick={() => onOpenModal("speaker")}
       />
 
       <MenuButton
@@ -38,7 +52,7 @@ const TopMenu: React.FC = () => {
         background={"#773AC8"}
         onClick={() => console.log("close clicked")}
       />
-    </div>
+    </div >
   );
 };
 
