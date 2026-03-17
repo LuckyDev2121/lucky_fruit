@@ -1,13 +1,5 @@
 import { useEffect, useState } from "react"
-import { getGameElements } from "../api/gameApi"
-
-interface GameElement {
-    id: number
-    element_name: string
-    element_icon: string
-    paytable: number
-    win_weights: number
-}
+import { type GameElement, getGameElements } from "../api/gameElementApi"
 
 export default function SlotGrid() {
     const [elements, setElements] = useState<GameElement[]>([])
@@ -26,7 +18,7 @@ export default function SlotGrid() {
             {elements.map((el) => (
                 <div key={el.id} className="flex flex-col items-center justify-center">
                     <img
-                        src={`https://funint.site/${el.element_icon}`}
+                        src={el.element_icon}
                         alt={el.element_name}
                     />
                     <span>{el.paytable} Times</span>

@@ -12,9 +12,6 @@ type TopMenuProps = {
 };
 
 const TopMenu: React.FC<TopMenuProps> = ({ onOpenModal }) => {
-
-
-
   return (
     <div className="flex gap-[5px]">
       <MenuButton
