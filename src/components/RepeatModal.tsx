@@ -1,5 +1,5 @@
-import dimond from "../assets/CoinBoard/dimond.svg"
 import Checkbox from "./CheckBox";
+import CoinIcon from "./CoinIcon";
 
 type RepeatModalProps = {
     onCloseRepeatModal: () => void;
@@ -10,7 +10,9 @@ export default function RepeatModal({ onCloseRepeatModal }: RepeatModalProps) {
         <div className="relative h-[245px] w-[340px]  bg-gradient-to-t from-[#6D1F92] to-[#B935F8]  rounded-[32px]">
             <span className="absolute top-[23px] flew px-[39px] text-center text-[15px] font-bold">Are you sure to repeat the previous round of betting?</span>
             <div className="absolute top-[73px] flex z-20 w-full left-1/2 transform -translate-x-1/2 items-center justify-center">
-                <img src={dimond} className="ml-[9px]" />
+                <div className="ml-[9px] justify-center items-center flex">
+                    <CoinIcon />
+                </div>
                 <span className="ml-2.5  font-bold">1111111</span>
             </div>
             <div className="absolute top-[106px] flex z-20 w-full left-1/2 transform -translate-x-1/2 items-center justify-center">
