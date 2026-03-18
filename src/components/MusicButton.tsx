@@ -5,6 +5,7 @@ type MusicButtonProps = {
     icon: string;
     background: string;
     onClick: () => void;
+    isMuted: boolean;
     size?: number;
 };
 
@@ -14,6 +15,7 @@ const MusicButton: React.FC<MusicButtonProps> = ({
     icon,
     background,
     onClick,
+    isMuted,
     size = 32,
 }) => {
     return (
@@ -29,6 +31,7 @@ const MusicButton: React.FC<MusicButtonProps> = ({
                 background: "transparent",
                 cursor: "pointer",
                 padding: 0,
+                opacity: isMuted ? 0.5 : 1,
             }}
         >
             {/* Background circle */}

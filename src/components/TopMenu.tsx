@@ -10,9 +10,10 @@ import cup from "../assets/TopMenu/cup.svg";
 type TopMenuProps = {
   onOpenModal: (modal: string) => void;
   onToggleMusic: () => void;
+  isMusicPlaying: boolean;
 };
 
-const TopMenu: React.FC<TopMenuProps> = ({ onOpenModal, onToggleMusic }) => {
+const TopMenu: React.FC<TopMenuProps> = ({ onOpenModal, onToggleMusic, isMusicPlaying }) => {
   return (
     <div className="flex gap-[5px]">
       <MenuButton
@@ -24,7 +25,8 @@ const TopMenu: React.FC<TopMenuProps> = ({ onOpenModal, onToggleMusic }) => {
       <MusicButton
         icon={music}
         background={"#773AC8"}
-        onClick={() => onToggleMusic}
+        isMuted={!isMusicPlaying}
+        onClick={() => onToggleMusic()}
       />
 
       <MenuButton

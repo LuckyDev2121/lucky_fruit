@@ -11,7 +11,14 @@ import RepeatModal from "./RepeatModal";
 import RechargeMenu from "./RechargeMenu";
 // import { div } from "framer-motion/client";
 
-export default function LuckyFruitGame({ onToggleMusic }: { onToggleMusic: () => void }) {
+
+export default function LuckyFruitGame({
+  onToggleMusic,
+  isMusicPlaying,
+}: {
+  onToggleMusic: () => void;
+  isMusicPlaying: boolean;
+}) {
 
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const [activeAlert, setActiveAlert] = useState<string | null>(null);
@@ -25,6 +32,7 @@ export default function LuckyFruitGame({ onToggleMusic }: { onToggleMusic: () =>
         <div className="ml-auto mr-4 mt-2.5">
           <TopMenu onOpenModal={(modal) => setActiveModal(modal)}
             onToggleMusic={onToggleMusic}
+            isMusicPlaying={isMusicPlaying}
           />
         </div>
       </div>
