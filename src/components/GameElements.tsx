@@ -60,7 +60,6 @@ const GameElements = () => {
                 );
             })}
         </div>
-
     );
 };
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import rectangle from "../assets/Modal/Rectangle.svg"
-import shine from "../assets/Modal/Rotated Instances.svg"
+import shine from "../assets/Modal/RotatedInstances.svg"
 
 type ResultMenuProps = {
     start?: number;

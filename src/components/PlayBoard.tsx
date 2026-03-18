@@ -9,8 +9,8 @@ import lvl3 from "../assets/BetBoard/1000.svg"
 import lvl4 from "../assets/BetBoard/100K.svg"
 import lvl5 from "../assets/BetBoard/1M.svg"
 import bottomboard from "../assets/BottomBoard/bottomboard.svg"
-
-import GameElements from "./GameElements";
+import FruitBoard from "./FruitBoard";
+// import GameElements from "./GameElements";
 import LedTimer from "./LedTimer";
 import ChooseTimer from "./ChooseTimer";
 import HiddenTimer from "./HiddenTimer";
@@ -33,7 +33,7 @@ export default function PlayBoard({ onOpenModal, onOpenAlert }: PlayBoardProps) 
                 <img src={playboard} className=" absolute inset-0 mt-[7px]" />
                 <span className="absolute justify-center font-regular top-[70px] w-[124px] h-[18px] text-center left-1/2 transform -translate-x-1/2 rounded-full bg-[#3D005C] ">Round 1526 of today</span>
                 <img src={fruitboard} className=" absolute top-[90px] z-20 left-1/2 transform -translate-x-1/2" />
-                <GameElements />
+                <FruitBoard />
                 <img src={timer} className="absolute top-[183px] z-20 left-1/2 transform -translate-x-1/2" />
                 <button
                     style={{
