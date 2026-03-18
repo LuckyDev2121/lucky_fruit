@@ -1,5 +1,5 @@
 import MenuButton from "./MenuButton";
-
+import MusicButton from "./MusicButton";
 import note from "../assets/TopMenu/ClipboardText.svg";
 import music from "../assets/TopMenu/MusicNotes.svg";
 import help from "../assets/TopMenu/QuestionMark.svg";
@@ -9,9 +9,10 @@ import cup from "../assets/TopMenu/cup.svg";
 
 type TopMenuProps = {
   onOpenModal: (modal: string) => void;
+  onToggleMusic: () => void;
 };
 
-const TopMenu: React.FC<TopMenuProps> = ({ onOpenModal }) => {
+const TopMenu: React.FC<TopMenuProps> = ({ onOpenModal, onToggleMusic }) => {
   return (
     <div className="flex gap-[5px]">
       <MenuButton
@@ -20,10 +21,10 @@ const TopMenu: React.FC<TopMenuProps> = ({ onOpenModal }) => {
         onClick={() => onOpenModal("cup")}
       />
 
-      <MenuButton
+      <MusicButton
         icon={music}
         background={"#773AC8"}
-        onClick={() => onOpenModal("music")}
+        onClick={() => onToggleMusic}
       />
 
       <MenuButton

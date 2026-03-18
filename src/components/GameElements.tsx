@@ -50,12 +50,12 @@ const GameElements = () => {
                         />
 
                         {(element.id === 33 || element.id === 32 || element.id === 31 || element.id === 26) && (
-                            <span className='absolute top-[64px] m-auto justify-center left-0 right-0'>5 Times</span>
+                            <span className='absolute top-[64px] m-auto justify-center font-bold left-0 right-0'>5 Times</span>
                         )}
-                        {element.id === 30 && <span className='absolute top-[64px] m-auto justify-center left-0 right-0'>10 Times</span>}
-                        {element.id === 29 && <span className='absolute top-[64px] m-auto justify-center left-0 right-0'>15 Times</span>}
-                        {element.id === 28 && <span className='absolute top-[64px] m-auto justify-center left-0 right-0'>25 Times</span>}
-                        {element.id === 27 && <span className='absolute top-[64px] m-auto justify-center left-0 right-0'>40 Times</span>}
+                        {element.id === 30 && <span className='absolute top-[64px] m-auto justify-center font-bold left-0 right-0'>10 Times</span>}
+                        {element.id === 29 && <span className='absolute top-[64px] m-auto justify-center font-bold left-0 right-0'>15 Times</span>}
+                        {element.id === 28 && <span className='absolute top-[64px] m-auto justify-center font-bold left-0 right-0'>25 Times</span>}
+                        {element.id === 27 && <span className='absolute top-[64px] m-auto justify-center font-bold left-0 right-0'>40 Times</span>}
                     </button>
                 );
             })}
