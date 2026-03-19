@@ -19,7 +19,7 @@ export default function LuckyFruitGame({
   onToggleMusic: () => void;
   isMusicPlaying: boolean;
 }) {
-
+  const [resultFruit, setResultFruit] = useState<string | null>(null);
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const [activeAlert, setActiveAlert] = useState<string | null>(null);
 
@@ -38,7 +38,8 @@ export default function LuckyFruitGame({
       </div>
       <div className="bottom-0 left-0 right-0">
         <PlayBoard onOpenModal={(modal) => setActiveModal(modal)}
-          onOpenAlert={(alert) => setActiveAlert(alert)} />
+          onOpenAlert={(alert) => setActiveAlert(alert)}
+          onResult={(fruit) => setResultFruit(fruit)} />
       </div>
       <AnimatePresence>
         {(activeModal && activeModal !== "recharge") && (
@@ -63,9 +64,13 @@ export default function LuckyFruitGame({
               <CupMenu onCloseCup={() => setActiveModal(null)} onOpenModal={setActiveModal} />
             )}
             {activeModal === "result" && (
-              <ResultMenu start={5} onResultTimeUp={() => {
-                setActiveModal(null)
-              }} />
+              <ResultMenu
+                resultFruit={resultFruit} // 👈 SEND HERE
+                start={5}
+                onResultTimeUp={() => {
+                  setActiveModal(null);
+                }}
+              />
             )}
 
           </motion.div >

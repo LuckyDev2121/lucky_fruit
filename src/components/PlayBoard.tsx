@@ -9,6 +9,8 @@ import lvl3 from "../assets/BetBoard/1000.svg"
 import lvl4 from "../assets/BetBoard/100K.svg"
 import lvl5 from "../assets/BetBoard/1M.svg"
 import bottomboard from "../assets/BottomBoard/bottomboard.svg"
+import opacityBoard from "../assets/PlayBoard/playboardopacity.svg"
+import ChooseRectangle from "./ChooseRectangle";
 import FruitBoard from "./FruitBoard";
 // import GameElements from "./GameElements";
 import LedTimer from "./LedTimer";
@@ -19,13 +21,18 @@ import { useState } from "react";
 type PlayBoardProps = {
     onOpenModal: (modal: string) => void;
     onOpenAlert: (alert: string) => void;
+    onResult: (fruit: string) => void; // 👈 NEW PROP
 };
 
-export default function PlayBoard({ onOpenModal, onOpenAlert }: PlayBoardProps) {
+export default function PlayBoard({ onOpenModal, onOpenAlert, onResult }: PlayBoardProps) {
 
+    const [resultFruit, setResultFruit] = useState<string | null>(null);
+    const [blockClick, setBlockClick] = useState<"auto" | "none">("auto");
     const [showLedTimer, setShowLedTimer] = useState(true);
     const [showChooseTimer, setShowChooseTimer] = useState(false);
     const [showHiddenTimer, setShowHiddenTimer] = useState(false);
+    const [showBoardOpacity, setShowBoardOpacity] = useState(false);
+    const [showChooseRectangle, setShowChooseRectangle] = useState(false);
     return (
         <div className="pointer-events-none absolute z-20 object-contain" style={{ width: "100%", height: "100%" }}>
             <div className=" relative z-20 inset-0">
@@ -33,8 +40,8 @@ export default function PlayBoard({ onOpenModal, onOpenAlert }: PlayBoardProps) 
                 <img src={playboard} className=" absolute inset-0 mt-[7px]" />
                 <span className="absolute justify-center font-regular top-[70px] w-[124px] h-[18px] text-center left-1/2 transform -translate-x-1/2 rounded-full bg-[#3D005C] ">Round 1526 of today</span>
                 <img src={fruitboard} className=" absolute top-[90px] z-20 left-1/2 transform -translate-x-1/2" />
-                <FruitBoard />
-                <img src={timer} className="absolute top-[183px] z-20 left-1/2 transform -translate-x-1/2" />
+                <FruitBoard controlButtons={blockClick} />
+                <img src={timer} className="absolute top-[183px] z-40 left-1/2 transform -translate-x-1/2" />
                 <button
                     style={{
                         cursor: "pointer",
@@ -63,16 +70,22 @@ export default function PlayBoard({ onOpenModal, onOpenAlert }: PlayBoardProps) 
 
                 </div>
                 <img src={bottomboard} className=" absolute top-[442px] left-1/2 transform -translate-x-1/2 z-20" />
+                {showBoardOpacity && (
+                    <img src={opacityBoard} className=" absolute opacity-70 top-[90px] left-1/2 transform -translate-x-1/2 z-30" />
+                )}
                 {showLedTimer && (
-                    <div className="absolute z-30 top-[175px] left-1/2 transform -translate-x-1/2">
+                    <div className="absolute z-50 top-[175px] left-1/2 transform -translate-x-1/2">
                         <LedTimer start={40} onLedTimeUp={() => {
                             setShowChooseTimer(true)
                             setShowLedTimer(false)
+                            setShowBoardOpacity(true)
+                            setBlockClick("none")
+                            setShowChooseRectangle(true)
                         }} />
                     </div>
                 )}
                 {showChooseTimer && (
-                    <div className="absolute z-30 top-[175px] left-1/2 transform -translate-x-1/2">
+                    <div className="absolute z-50 top-[175px] left-1/2 transform -translate-x-1/2">
                         <ChooseTimer start={10} onChooseTimeUp={() => {
                             setShowChooseTimer(false)
                             setShowHiddenTimer(true)
@@ -85,8 +98,20 @@ export default function PlayBoard({ onOpenModal, onOpenAlert }: PlayBoardProps) 
                         <HiddenTimer start={5} onHiddenTimeUp={() => {
                             setShowHiddenTimer(false)
                             setShowLedTimer(true)
+                            setBlockClick("auto")
+                            setShowBoardOpacity(false)
                         }} />
                     </div>
+                )}
+                {showChooseRectangle && (
+                    <ChooseRectangle onChooseTimeUp={() => {
+                        setShowChooseRectangle(false)
+                    }}
+                        onResult={(fruit) => {
+                            setResultFruit(fruit);   // store locally
+                            onResult(fruit)// send up to LuckyFruitGame 🚀
+                        }}
+                    />
                 )}
             </div>
         </div >

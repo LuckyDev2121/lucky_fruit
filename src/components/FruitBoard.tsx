@@ -8,21 +8,25 @@ import tomato from "../assets/fruits/tomato.svg"
 import kiwi from "../assets/fruits/kiwi.svg"
 
 const fruits = [
-    { id: 26, element_name: "Kiwi", element_icon: kiwi },
-    { id: 27, element_name: "Orange", element_icon: orange },
-    { id: 28, element_name: "Lemon", element_icon: lemon },
-    { id: 29, element_name: "Cherry", element_icon: cherry },
-    { id: 30, element_name: "Strawberry", element_icon: strawberry },
-    { id: 31, element_name: "Grape", element_icon: grape },
-    { id: 32, element_name: "Watermelon", element_icon: watermelon },
-    { id: 33, element_name: "Tomato", element_icon: tomato }
+    { id: 0, element_name: "Kiwi", element_icon: kiwi },
+    { id: 1, element_name: "Orange", element_icon: orange },
+    { id: 2, element_name: "Lemon", element_icon: lemon },
+    { id: 3, element_name: "Cherry", element_icon: cherry },
+    { id: 4, element_name: "Strawberry", element_icon: strawberry },
+    { id: 5, element_name: "Grape", element_icon: grape },
+    { id: 6, element_name: "Watermelon", element_icon: watermelon },
+    { id: 7, element_name: "Tomato", element_icon: tomato }
 ];
 
+type FruitBoardProps = {
+    controlButtons: "auto" | "none";
+};
 
-export default function FruitBoard() {
+export default function FruitBoard({ controlButtons }: FruitBoardProps) {
+
 
     return (
-        <div className='relative top-[90px] h-[271px] w-[280px] z-30 grid grid-cols-3 grid-rows-3 left-1/2 transform -translate-x-1/2' style={{ pointerEvents: 'auto' }}>
+        <div className='relative top-[90px] h-[271px] w-[280px] z-30 grid grid-cols-3 grid-rows-3 left-1/2 transform -translate-x-1/2' style={{ pointerEvents: controlButtons }}>
             {fruits.map((element, index) => {
                 // Custom grid positioning for each button
                 let gridPosition = '';
@@ -37,6 +41,7 @@ export default function FruitBoard() {
                 return (
                     <button
                         key={element.id}
+
                         style={{ cursor: 'pointer' }}
                         onClick={() => console.log(`Clicked on ${element.element_name}`)}
                         className={`relative ${gridPosition} `}>
@@ -47,13 +52,13 @@ export default function FruitBoard() {
                             className='absolute top-[0px] m-auto justify-center left-0 right-0'
                         />
 
-                        {(element.id === 33 || element.id === 26 || element.id === 27 || element.id === 28) && (
+                        {(element.id === 7 || element.id === 0 || element.id === 1 || element.id === 2) && (
                             <span className='absolute top-[64px] m-auto justify-center font-bold left-0 right-0'>5 Times</span>
                         )}
-                        {element.id === 29 && <span className='absolute top-[64px] m-auto justify-center font-bold left-0 right-0'>10 Times</span>}
-                        {element.id === 30 && <span className='absolute top-[64px] m-auto justify-center font-bold left-0 right-0'>15 Times</span>}
-                        {element.id === 31 && <span className='absolute top-[64px] m-auto justify-center font-bold left-0 right-0'>25 Times</span>}
-                        {element.id === 32 && <span className='absolute top-[64px] m-auto justify-center font-bold left-0 right-0'>40 Times</span>}
+                        {element.id === 3 && <span className='absolute top-[64px] m-auto justify-center font-bold left-0 right-0'>10 Times</span>}
+                        {element.id === 4 && <span className='absolute top-[64px] m-auto justify-center font-bold left-0 right-0'>15 Times</span>}
+                        {element.id === 5 && <span className='absolute top-[64px] m-auto justify-center font-bold left-0 right-0'>25 Times</span>}
+                        {element.id === 6 && <span className='absolute top-[64px] m-auto justify-center font-bold left-0 right-0'>40 Times</span>}
                     </button>
                 );
             })}
