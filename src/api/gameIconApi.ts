@@ -5,7 +5,7 @@ export interface GameIconResponse {
   icon: string;
 }
 
-const BASE_URL = "http://localhost:5000"; // Change this to your actual backend URL
+const BASE_URL = "https://funint.site"; // Change this to your actual backend URL
 
 export const getGameIcon = async (): Promise<GameIconResponse> => {
   const response = await axios.post(
