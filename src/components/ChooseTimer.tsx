@@ -33,7 +33,7 @@ export default function ChooseTimer({ start = 10, onChooseTimeUp }: LedTimerProp
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 1 }}
                     // transition={{ duration: 1 }}
-                    style={{ fontFamily: "Digital7" }}
+                    style={{ fontFamily: "MyBlodFont" }}
                     className={`relative text-[70px] font-mono font-bold text-yellow-300 drop-shadow-[0_0_12px_#FFE600] ${time <= 5 ? "animate-pulse" : ""
                         }`}
                 >
