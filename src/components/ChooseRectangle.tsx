@@ -32,7 +32,6 @@ export default function ChooseRectangle({ onChooseTimeUp, onResult }: { onChoose
         }, 100 + 10 * time);
 
         return () => {
-            console.log("Clearing timer", randomIndex, currentFruit.element_name);
             clearInterval(timer)
         };
     }, [time, second, onResult, currentFruit.element_name, randomIndex, onChooseTimeUp]);
