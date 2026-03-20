@@ -21,6 +21,19 @@ type ResultMenuProps = {
 export default function ResultMenu({ start = 5, onResultTimeUp, resultFruit }: ResultMenuProps) {
     const [time, setTime] = useState(start);
 
+    const fruitConfig: Record<string, { src: string; alt: string; size: string; top: string }> = {
+        Kiwi: { src: kiwi, alt: "kiwi", size: "h-[85px] w-[85px]", top: "top-[70px]" },
+        Orange: { src: orange, alt: "orange", size: "h-[85px] w-[85px]", top: "top-[70px]" },
+        Lemon: { src: lemon, alt: "lemon", size: "h-[85px] w-[85px]", top: "top-[70px]" },
+        Cherry: { src: cherry, alt: "cherry", size: "h-[105px] w-[105px]", top: "top-[42px]" },
+        Strawberry: { src: strawberry, alt: "strawberry", size: "h-[85px] w-[85px]", top: "top-[70px]" },
+        Grape: { src: grape, alt: "grape", size: "h-[85px] w-[85px]", top: "top-[70px]" },
+        Watermelon: { src: watermelon, alt: "watermelon", size: "h-[85px] w-[85px]", top: "top-[70px]" },
+        Tomato: { src: tomato, alt: "tomato", size: "h-[85px] w-[85px]", top: "top-[70px]" },
+    };
+
+    const selectedFruit = resultFruit ? fruitConfig[resultFruit] : null;
+
     useEffect(() => {
         if (time === 0) {
             onResultTimeUp?.(); // trigger notification
@@ -37,31 +50,30 @@ export default function ResultMenu({ start = 5, onResultTimeUp, resultFruit }: R
     const formatted = time.toString().padStart(2, "0");
 
     return (
-        <div className="h-[342px] bg-gradient-to-t from-[#7C00D5] to-[#5028C1] w-[393px] rounded-t-[20px]">
+        <div className="relative h-[342px] w-[393px] overflow-hidden rounded-t-[20px] bg-gradient-to-t from-[#7C00D5] to-[#5028C1]">
             <img src={rectangle} alt="Rectangle" className="absolute left-1/2 transform -translate-x-1/2" />
             <span className="absolute  left-1/2 transform -translate-x-1/2 text-sm font-bold mt-1">Round 178 of Today</span>
             <span className="absolute h-[19px] w-[19px] mt-[5px] right-[62px] rounded-full " >
                 {formatted}
             </span>
-            <motion.img
-                src={shine}
-                alt="Shine"
-                className="absolute top-[57px] left-1/2 transform -translate-x-1/2"
-                animate={{ rotate: 360, scale: [1, 1.1, 1] }}
-                transition={{
-                    rotate: { repeat: Infinity, duration: 6, ease: "linear" },
-                    scale: { repeat: Infinity, duration: 2, ease: "easeInOut" },
-                }}
-            />
-            {/* <img src={shine} alt="Shine" className="absolute top-[57px] left-1/2 transform -translate-x-1/2" /> */}
-            {resultFruit === "Kiwi" && <img src={kiwi} alt="kiwi" className="absolute top-[70px] h-[85px] w-[85px] left-1/2 transform -translate-x-1/2" />}
-            {resultFruit === "Orange" && <img src={orange} alt="orange" className="absolute top-[70px] h-[85px] w-[85px] left-1/2 transform -translate-x-1/2" />}
-            {resultFruit === "Lemon" && <img src={lemon} alt="lemon" className="absolute top-[70px] h-[85px] w-[85px] left-1/2 transform -translate-x-1/2" />}
-            {resultFruit === "Cherry" && <img src={cherry} alt="cherry" className="absolute top-[42px] h-[105px] w-[105px] left-1/2 transform -translate-x-1/2" />}
-            {resultFruit === "Strawberry" && <img src={strawberry} alt="strawberry" className="absolute top-[70px] h-[85px] w-[85px] left-1/2 transform -translate-x-1/2" />}
-            {resultFruit === "Grape" && <img src={grape} alt="grape" className="absolute top-[70px] h-[85px] w-[85px] left-1/2 transform -translate-x-1/2" />}
-            {resultFruit === "Watermelon" && <img src={watermelon} alt="watermelon" className="absolute top-[70px] h-[85px] w-[85px] left-1/2 transform -translate-x-1/2" />}
-            {resultFruit === "Tomato" && <img src={tomato} alt="tomato" className="absolute top-[70px] h-[85px] w-[85px] left-1/2 transform -translate-x-1/2" />}
+            <div className="absolute left-1/2 top-[57px] h-[117px] w-[117px] -translate-x-1/2 overflow-hidden rounded-full">
+                <motion.img
+                    src={shine}
+                    alt="Shine"
+                    className="absolute inset-0 h-full w-full origin-center"
+                    animate={{ rotate: 360 }}
+                    transition={{
+                        rotate: { repeat: Infinity, duration: 8, ease: "linear" },
+                    }}
+                />
+            </div>
+            {selectedFruit && (
+                <img
+                    src={selectedFruit.src}
+                    alt={selectedFruit.alt}
+                    className={`absolute left-1/2 -translate-x-1/2 ${selectedFruit.top} ${selectedFruit.size}`}
+                />
+            )}
         </div>
     )
 }
