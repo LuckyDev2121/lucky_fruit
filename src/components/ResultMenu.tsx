@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import rectangle from "../assets/Modal/Rectangle.svg"
 import shine from "../assets/Modal/RotatedInstances.svg"
@@ -20,6 +20,7 @@ type ResultMenuProps = {
 
 export default function ResultMenu({ start = 5, onResultTimeUp, resultFruit }: ResultMenuProps) {
     const [time, setTime] = useState(start);
+    const onResultTimeUpRef = useRef(onResultTimeUp);
 
     const fruitConfig: Record<string, { src: string; alt: string; size: string; top: string }> = {
         Kiwi: { src: kiwi, alt: "kiwi", size: "h-[85px] w-[85px]", top: "top-[70px]" },
@@ -35,17 +36,27 @@ export default function ResultMenu({ start = 5, onResultTimeUp, resultFruit }: R
     const selectedFruit = resultFruit ? fruitConfig[resultFruit] : null;
 
     useEffect(() => {
-        if (time === 0) {
-            onResultTimeUp?.(); // trigger notification
-            return;
-        }
+        onResultTimeUpRef.current = onResultTimeUp;
+    }, [onResultTimeUp]);
 
+    useEffect(() => {
+        setTime(start);
+    }, [start]);
+
+    useEffect(() => {
         const timer = setInterval(() => {
-            setTime((t) => t - 1);
+            setTime((prev) => {
+                if (prev <= 1) {
+                    clearInterval(timer);
+                    onResultTimeUpRef.current?.();
+                    return 0;
+                }
+                return prev - 1;
+            });
         }, 1000);
 
         return () => clearInterval(timer);
-    }, [time, onResultTimeUp]);
+    }, [start]);
 
     const formatted = time.toString().padStart(2, "0");
 
@@ -77,5 +88,4 @@ export default function ResultMenu({ start = 5, onResultTimeUp, resultFruit }: R
         </div>
     )
 }
-
 

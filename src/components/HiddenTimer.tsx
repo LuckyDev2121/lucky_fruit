@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 
 type HiddenTimerProps = {
     start?: number;
@@ -6,20 +6,25 @@ type HiddenTimerProps = {
 };
 
 export default function HiddenTimer({ start = 5, onHiddenTimeUp }: HiddenTimerProps) {
-    const [time, setTime] = useState(start);
+    const onHiddenTimeUpRef = useRef(onHiddenTimeUp);
 
     useEffect(() => {
-        if (time === 0) {
-            onHiddenTimeUp?.(); // trigger notification
+        onHiddenTimeUpRef.current = onHiddenTimeUp;
+    }, [onHiddenTimeUp]);
+
+    useEffect(() => {
+        if (start <= 0) {
+            onHiddenTimeUpRef.current?.();
             return;
         }
 
-        const timer = setInterval(() => {
-            setTime((t) => t - 1);
-        }, 1000);
+        const timer = window.setTimeout(() => {
+            onHiddenTimeUpRef.current?.();
+        }, start * 1000);
 
-        return () => clearInterval(timer);
-    }, [time, onHiddenTimeUp]);
+        return () => window.clearTimeout(timer);
+    }, [start]);
+
     return (
         <div>
         </div>

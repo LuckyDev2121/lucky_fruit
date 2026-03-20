@@ -34,7 +34,7 @@ export default function PlayBoard({ onOpenModal, onOpenAlert, onResult }: PlayBo
     const [showBoardOpacity, setShowBoardOpacity] = useState(false);
     const [showChooseRectangle, setShowChooseRectangle] = useState(false);
     return (
-        <div className="pointer-events-none absolute z-20 object-contain" style={{ width: "100%", height: "100%" }}>
+        <div className="absolute z-20 object-contain" style={{ width: "100%", height: "100%" }}>
             <div className=" relative z-20 inset-0">
                 <img src={luckyfruit} alt="luckyfruit" className="absolute top-[25px] inset-0 z-20 left-1/2 transform -translate-x-1/2" />
                 <img src={playboard} className=" absolute inset-0 mt-[7px]" />

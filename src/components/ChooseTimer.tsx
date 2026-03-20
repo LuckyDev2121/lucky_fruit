@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 type LedTimerProps = {
@@ -8,19 +8,30 @@ type LedTimerProps = {
 
 export default function ChooseTimer({ start = 10, onChooseTimeUp }: LedTimerProps) {
     const [time, setTime] = useState(start);
+    const onChooseTimeUpRef = useRef(onChooseTimeUp);
 
     useEffect(() => {
-        if (time === 0) {
-            onChooseTimeUp?.(); // trigger notification
-            return;
-        }
+        onChooseTimeUpRef.current = onChooseTimeUp;
+    }, [onChooseTimeUp]);
 
+    useEffect(() => {
+        setTime(start);
+    }, [start]);
+
+    useEffect(() => {
         const timer = setInterval(() => {
-            setTime((t) => t - 1);
+            setTime((prev) => {
+                if (prev <= 1) {
+                    clearInterval(timer);
+                    onChooseTimeUpRef.current?.();
+                    return 0;
+                }
+                return prev - 1;
+            });
         }, 1000);
 
         return () => clearInterval(timer);
-    }, [time, onChooseTimeUp]);
+    }, [start]);
 
     const formatted = time.toString().padStart(2, "0");
 

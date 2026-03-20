@@ -1,5 +1,5 @@
 import rectangle from "../assets/PlayBoard/chooserectangle.svg"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 const fruits = [
     { id: 0, element_name: "Kiwi", top: 94, left: 154 },
@@ -17,12 +17,23 @@ export default function ChooseRectangle({ onChooseTimeUp, onResult }: { onChoose
     const [time, setTime] = useState(0);
     const [second, setSecond] = useState(10000);
     const [randomIndex] = useState(() => Math.floor(Math.random() * fruits.length));
+    const onChooseTimeUpRef = useRef(onChooseTimeUp);
+    const onResultRef = useRef(onResult);
     const currentFruit = fruits[(randomIndex + time - 1) % fruits.length];
+
+    useEffect(() => {
+        onChooseTimeUpRef.current = onChooseTimeUp;
+    }, [onChooseTimeUp]);
+
+    useEffect(() => {
+        onResultRef.current = onResult;
+    }, [onResult]);
+
     useEffect(() => {
 
         if (second - 10 * time < 100) {
-            onResult?.(currentFruit.element_name);
-            onChooseTimeUp?.(); // trigger notification
+            onResultRef.current?.(currentFruit.element_name);
+            onChooseTimeUpRef.current?.(); // trigger notification
             return;
         }
 
@@ -34,7 +45,7 @@ export default function ChooseRectangle({ onChooseTimeUp, onResult }: { onChoose
         return () => {
             clearInterval(timer)
         };
-    }, [time, second, onResult, currentFruit.element_name, randomIndex, onChooseTimeUp]);
+    }, [time, second, currentFruit.element_name]);
 
     return (
         <div className="absolute z-40" style={{ top: `${fruits[(randomIndex + time) % fruits.length].top}px`, left: `${fruits[(randomIndex + time) % fruits.length].left}px` }}>
