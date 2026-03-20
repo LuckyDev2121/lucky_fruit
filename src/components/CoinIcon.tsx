@@ -17,7 +17,7 @@ const CoinIcon: React.FC = () => {
     }, []);
 
     const CoinUrl = data?.icon
-        ? `http://localhost:5000${data.icon}`
+        ? `https://funint.site${data.icon}`
         : null;
 
     return (
