@@ -7,6 +7,7 @@ import NoteMenu from "./NoteMenu";
 import PlayBoard from "./PlayBoard";
 import RechargeMenu from "./RechargeMenu";
 import RepeatModal from "./RepeatModal";
+import MusicModal from "./MusicModal";
 import ResultMenu from "./ResultMenu";
 import TopMenu from "./TopMenu";
 
@@ -23,6 +24,7 @@ export default function LuckyFruitGame({
   const [resultFruit, setResultFruit] = useState<string | null>(null);
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const [activeAlert, setActiveAlert] = useState<string | null>(null);
+  const [isSoundEnabled, setIsSoundEnabled] = useState(true);
   const [scale, setScale] = useState(1);
 
   useEffect(() => {
@@ -65,8 +67,7 @@ export default function LuckyFruitGame({
             <div className="ml-auto mr-4 mt-2.5">
               <TopMenu
                 onOpenModal={(modal) => setActiveModal(modal)}
-                onToggleMusic={onToggleMusic}
-                isMusicPlaying={isMusicPlaying}
+                onOpenAlert={(alert) => setActiveAlert(alert)}
               />
             </div>
           </div>
@@ -92,7 +93,7 @@ export default function LuckyFruitGame({
                 {activeModal === "help" && (
                   <HelpMenu onCloseHelp={() => setActiveModal(null)} />
                 )}
-                {activeModal === "music" && <div></div>}
+
                 {activeModal === "note" && (
                   <NoteMenu
                     onCloseNote={() => setActiveModal(null)}
@@ -130,7 +131,7 @@ export default function LuckyFruitGame({
               </motion.div>
             )}
 
-            {activeAlert === "repeat" && (
+            {activeAlert && (
               <motion.div
                 key={activeAlert}
                 initial={{ transform: "translate(-50%, -50%)", opacity: 0 }}
@@ -139,9 +140,23 @@ export default function LuckyFruitGame({
                 transition={{ duration: 0.4 }}
                 className="absolute left-1/2 top-1/2 z-50"
               >
-                <RepeatModal onCloseRepeatModal={() => setActiveAlert(null)} />
+                {
+                  activeAlert === "repeat" && (
+                    <RepeatModal onCloseRepeatModal={() => setActiveAlert(null)} />
+                  )
+                }
+                {activeAlert === "music" && (
+                  <MusicModal
+                    isMusicPlaying={isMusicPlaying}
+                    isSoundEnabled={isSoundEnabled}
+                    onToggleMusic={onToggleMusic}
+                    onToggleSound={() => setIsSoundEnabled((prev) => !prev)}
+                    onCloseMusicModal={() => setActiveAlert(null)}
+                  />
+                )}
               </motion.div>
             )}
+
           </AnimatePresence>
         </div>
       </div>

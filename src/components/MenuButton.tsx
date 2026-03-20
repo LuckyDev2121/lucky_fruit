@@ -6,6 +6,8 @@ type MenuButtonProps = {
     background: string;
     onClick: () => void;
     size?: number;
+    borderColor: string;
+    borderWidth: string;
 };
 
 
@@ -25,14 +27,15 @@ const MenuButton: React.FC<MenuButtonProps> = ({
                 position: "relative",
                 width: size,
                 height: size,
-                border: "none",
                 background: "transparent",
                 cursor: "pointer",
                 padding: 0,
             }}
         >
             {/* Background circle */}
-            <div className="absolute inset-0 w-full h-full rounded-full" style={{ backgroundColor: background }}></div>
+            <div className="absolute inset-0 w-full h-full rounded-full" style={{
+                backgroundColor: background,
+            }}></div>
 
             {/* Icon */}
             <img
