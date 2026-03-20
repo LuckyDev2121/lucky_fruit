@@ -26,6 +26,7 @@ type PlayBoardProps = {
 
 export default function PlayBoard({ onOpenModal, onOpenAlert, onResult }: PlayBoardProps) {
 
+    const [selectBetMode, setSelectBetMode] = useState(2);
     const [blockClick, setBlockClick] = useState<"auto" | "none">("auto");
     const [showLedTimer, setShowLedTimer] = useState(true);
     const [showChooseTimer, setShowChooseTimer] = useState(false);
@@ -51,22 +52,21 @@ export default function PlayBoard({ onOpenModal, onOpenAlert, onResult }: PlayBo
                     <img src={repeat} alt="Repeat Icon" className="relative" />
                 </button>
                 <div className="absolute inset-0 top-[361px] z-20 flex justify-center" style={{ pointerEvents: 'auto' }}>
-                    <button className="relative" onClick={() => console.log("Level 1 clicked")}>
-                        <img src={lvl1} alt="Level 1" className="relative" />
+                    <button className="relative" onClick={() => setSelectBetMode(1)}>
+                        <img src={lvl1} alt="Level 1" className={`relative  ${selectBetMode === 1 ? "pt-3" : "pt-0"}`} />
                     </button>
-                    <button className="relative" onClick={() => console.log("Level 2 clicked")}>
-                        <img src={lvl2} alt="Level 2" className="relative" />
+                    <button className="relative" onClick={() => setSelectBetMode(2)}>
+                        <img src={lvl2} alt="Level 2" className={`relative  ${selectBetMode === 2 ? "pt-3" : "pt-0"}`} />
                     </button>
-                    <button className="relative" onClick={() => console.log("Level 3 clicked")}>
-                        <img src={lvl3} alt="Level 3" className="relative" />
+                    <button className="relative" onClick={() => setSelectBetMode(3)}>
+                        <img src={lvl3} alt="Level 3" className={`relative  ${selectBetMode === 3 ? "pt-3" : "pt-0"}`} />
                     </button>
-                    <button className="relative" onClick={() => console.log("Level 4 clicked")}>
-                        <img src={lvl4} alt="Level 4" className="relative" />
+                    <button className="relative" onClick={() => setSelectBetMode(4)}>
+                        <img src={lvl4} alt="Level 4" className={`relative  ${selectBetMode === 4 ? "pt-3" : "pt-0"}`} />
                     </button>
-                    <button className="relative" onClick={() => console.log("Level 5 clicked")}>
-                        <img src={lvl5} alt="Level 5" className="relative" />
+                    <button className="relative" onClick={() => setSelectBetMode(5)}>
+                        <img src={lvl5} alt="Level 5" className={`relative  ${selectBetMode === 5 ? "pt-3" : "pt-0"}`} />
                     </button>
-
                 </div>
                 <img src={bottomboard} className=" absolute top-[442px] left-1/2 transform -translate-x-1/2 z-20" />
                 {showBoardOpacity && (
