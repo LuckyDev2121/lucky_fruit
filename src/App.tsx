@@ -5,7 +5,7 @@ function App() {
   const [isMusicPlaying, setIsMusicPlaying] = useState(true);
 
   return (
-    <div className=" relative mr-auto flex content-center justify-center h-full w-full ">
+    <div className=" relative flex min-h-[100dvh] w-full items-end justify-center overflow-hidden ">
       <MusicPlayer isMusicPlaying={isMusicPlaying} />
       <LuckyFruitGame
         isMusicPlaying={isMusicPlaying}
