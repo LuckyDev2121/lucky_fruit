@@ -5,7 +5,7 @@ import timer from "../assets/PlayBoard/timer.svg";
 import repeat from "../assets/PlayBoard/repeat.svg";
 import lvl1 from "../assets/BetBoard/100.svg"
 import lvl2 from "../assets/BetBoard/1000.svg"
-import lvl3 from "../assets/BetBoard/1000.svg"
+import lvl3 from "../assets/BetBoard/10000.svg"
 import lvl4 from "../assets/BetBoard/100K.svg"
 import lvl5 from "../assets/BetBoard/1M.svg"
 import bottomboard from "../assets/BottomBoard/bottomboard.svg"
