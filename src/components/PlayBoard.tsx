@@ -26,7 +26,7 @@ type PlayBoardProps = {
 
 export default function PlayBoard({ onOpenModal, onOpenAlert, onResult }: PlayBoardProps) {
 
-    const [resultFruit, setResultFruit] = useState<string | null>(null);
+    // const [resultFruit, setResultFruit] = useState<string | null>(null);
     const [blockClick, setBlockClick] = useState<"auto" | "none">("auto");
     const [showLedTimer, setShowLedTimer] = useState(true);
     const [showChooseTimer, setShowChooseTimer] = useState(false);
@@ -108,7 +108,7 @@ export default function PlayBoard({ onOpenModal, onOpenAlert, onResult }: PlayBo
                         setShowChooseRectangle(false)
                     }}
                         onResult={(fruit) => {
-                            setResultFruit(fruit);   // store locally
+                            // setResultFruit(fruit);   // store locally
                             onResult(fruit)// send up to LuckyFruitGame 🚀
                         }}
                     />
