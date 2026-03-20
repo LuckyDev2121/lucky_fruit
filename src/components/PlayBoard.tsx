@@ -41,7 +41,7 @@ export default function PlayBoard({ onOpenModal, onOpenAlert, onResult }: PlayBo
                 <span className="absolute justify-center font-regular top-[70px] w-[124px] h-[18px] text-center left-1/2 transform -translate-x-1/2 rounded-full bg-[#3D005C] ">Round 1526 of today</span>
                 <img src={fruitboard} className=" absolute top-[90px] z-20 left-1/2 transform -translate-x-1/2" />
                 <FruitBoard controlButtons={blockClick} />
-                <img src={timer} className="absolute top-[183px] z-40 left-1/2 transform -translate-x-1/2" />
+                <img src={timer} className="absolute top-[183px] z-40 left-[calc(50%-1px)] transform -translate-x-1/2" />
                 <button
                     style={{
                         cursor: "pointer",
@@ -74,7 +74,7 @@ export default function PlayBoard({ onOpenModal, onOpenAlert, onResult }: PlayBo
                     <img src={opacityBoard} className=" absolute opacity-70 top-[90px] left-1/2 transform -translate-x-1/2 z-30" />
                 )}
                 {showLedTimer && (
-                    <div className="absolute z-50 top-[175px] left-1/2 transform -translate-x-1/2">
+                    <div className="absolute z-50 top-[198px] left-1/2 transform -translate-x-1/2">
                         <LedTimer start={40} onLedTimeUp={() => {
                             setShowChooseTimer(true)
                             setShowLedTimer(false)
@@ -85,7 +85,7 @@ export default function PlayBoard({ onOpenModal, onOpenAlert, onResult }: PlayBo
                     </div>
                 )}
                 {showChooseTimer && (
-                    <div className="absolute z-50 top-[175px] left-1/2 transform -translate-x-1/2">
+                    <div className="absolute z-50 top-[198px] left-1/2 transform -translate-x-1/2">
                         <ChooseTimer start={10} onChooseTimeUp={() => {
                             setShowChooseTimer(false)
                             setShowHiddenTimer(true)
@@ -94,7 +94,7 @@ export default function PlayBoard({ onOpenModal, onOpenAlert, onResult }: PlayBo
                     </div>
                 )}
                 {showHiddenTimer && (
-                    <div className="absolute z-30 top-[175px] left-1/2 transform -translate-x-1/2">
+                    <div className="absolute z-30 top-[197px] left-1/2 transform -translate-x-1/2">
                         <HiddenTimer start={5} onHiddenTimeUp={() => {
                             setShowHiddenTimer(false)
                             setShowLedTimer(true)

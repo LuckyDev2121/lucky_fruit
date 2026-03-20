@@ -24,7 +24,7 @@ export default function LuckyFruitGame({
   const [activeAlert, setActiveAlert] = useState<string | null>(null);
 
   return (
-    <div className="w-screen h-screen relative bg-[#A91FE6]  max-w-[393px] max-h-[533px]">
+    <div className="bottom-0 fixed w-screen h-screen bg-[#A91FE6]  max-w-[393px] max-h-[533px]">
       <div className="flex justify-between">
         <div className=" ml-[13px] mt-[11px]">
           <CoinBoard onOpenModal={(modal) => setActiveModal(modal)} />
