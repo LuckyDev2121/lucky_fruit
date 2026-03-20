@@ -17,7 +17,7 @@ export default function ChooseRectangle({ onChooseTimeUp, onResult }: { onChoose
     const [time, setTime] = useState(0);
     const [second, setSecond] = useState(10000);
     const [randomIndex] = useState(() => Math.floor(Math.random() * fruits.length));
-    const currentFruit = fruits[(randomIndex + time) % fruits.length];
+    const currentFruit = fruits[(randomIndex + time - 1) % fruits.length];
     useEffect(() => {
 
         if (second - 10 * time < 100) {

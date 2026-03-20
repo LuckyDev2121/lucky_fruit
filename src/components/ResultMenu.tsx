@@ -43,14 +43,14 @@ export default function ResultMenu({ start = 5, onResultTimeUp, resultFruit }: R
                 {formatted}
             </span>
             <img src={shine} alt="Shine" className="absolute top-[57px] left-1/2 transform -translate-x-1/2" />
-            {resultFruit === "Kiwi" && <img src={kiwi} alt="kiwi" className="absolute top-[57px] h-[103px] w-[101px] left-1/2 transform -translate-x-1/2" />}
-            {resultFruit === "Orange" && <img src={orange} alt="orange" className="absolute top-[57px] h-[103px] w-[101px] left-1/2 transform -translate-x-1/2" />}
-            {resultFruit === "Lemon" && <img src={lemon} alt="lemon" className="absolute top-[57px] h-[103px] w-[101px] left-1/2 transform -translate-x-1/2" />}
+            {resultFruit === "Kiwi" && <img src={kiwi} alt="kiwi" className="absolute top-[70px] h-[85px] w-[85px] left-1/2 transform -translate-x-1/2" />}
+            {resultFruit === "Orange" && <img src={orange} alt="orange" className="absolute top-[70px] h-[85px] w-[85px] left-1/2 transform -translate-x-1/2" />}
+            {resultFruit === "Lemon" && <img src={lemon} alt="lemon" className="absolute top-[70px] h-[85px] w-[85px] left-1/2 transform -translate-x-1/2" />}
             {resultFruit === "Cherry" && <img src={cherry} alt="cherry" className="absolute top-[42px] h-[105px] w-[105px] left-1/2 transform -translate-x-1/2" />}
-            {resultFruit === "Strawberry" && <img src={strawberry} alt="strawberry" className="absolute top-[57px] h-[103px] w-[101px] left-1/2 transform -translate-x-1/2" />}
-            {resultFruit === "Grape" && <img src={grape} alt="grape" className="absolute top-[57px] h-[103px] w-[101px] left-1/2 transform -translate-x-1/2" />}
-            {resultFruit === "Watermelon" && <img src={watermelon} alt="watermelon" className="absolute top-[57px] h-[103px] w-[101px] left-1/2 transform -translate-x-1/2" />}
-            {resultFruit === "Tomato" && <img src={tomato} alt="tomato" className="absolute top-[57px] h-[103px] w-[101px] left-1/2 transform -translate-x-1/2" />}
+            {resultFruit === "Strawberry" && <img src={strawberry} alt="strawberry" className="absolute top-[70px] h-[85px] w-[85px] left-1/2 transform -translate-x-1/2" />}
+            {resultFruit === "Grape" && <img src={grape} alt="grape" className="absolute top-[70px] h-[85px] w-[85px] left-1/2 transform -translate-x-1/2" />}
+            {resultFruit === "Watermelon" && <img src={watermelon} alt="watermelon" className="absolute top-[70px] h-[85px] w-[85px] left-1/2 transform -translate-x-1/2" />}
+            {resultFruit === "Tomato" && <img src={tomato} alt="tomato" className="absolute top-[70px] h-[85px] w-[85px] left-1/2 transform -translate-x-1/2" />}
         </div>
     )
 }
