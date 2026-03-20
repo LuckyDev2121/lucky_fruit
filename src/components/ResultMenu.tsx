@@ -60,7 +60,7 @@ export default function ResultMenu({ start = 5, onResultTimeUp, resultFruit }: R
                 <motion.img
                     src={shine}
                     alt="Shine"
-                    className="absolute inset-0 h-full w-full origin-center"
+                    className="absolute inset-0 h-full w-full origin-center opacity-50"
                     animate={{ rotate: 360 }}
                     transition={{
                         rotate: { repeat: Infinity, duration: 8, ease: "linear" },
