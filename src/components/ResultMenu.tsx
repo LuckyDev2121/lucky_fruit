@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import rectangle from "../assets/Modal/Rectangle.svg"
 import shine from "../assets/Modal/RotatedInstances.svg"
 import cherry from "../assets/fruits/cherry.svg"
@@ -42,7 +43,17 @@ export default function ResultMenu({ start = 5, onResultTimeUp, resultFruit }: R
             <span className="absolute h-[19px] w-[19px] mt-[5px] right-[62px] rounded-full " >
                 {formatted}
             </span>
-            <img src={shine} alt="Shine" className="absolute top-[57px] left-1/2 transform -translate-x-1/2" />
+            <motion.img
+                src={shine}
+                alt="Shine"
+                className="absolute top-[57px] left-1/2 transform -translate-x-1/2"
+                animate={{ rotate: 360, scale: [1, 1.1, 1] }}
+                transition={{
+                    rotate: { repeat: Infinity, duration: 6, ease: "linear" },
+                    scale: { repeat: Infinity, duration: 2, ease: "easeInOut" },
+                }}
+            />
+            {/* <img src={shine} alt="Shine" className="absolute top-[57px] left-1/2 transform -translate-x-1/2" /> */}
             {resultFruit === "Kiwi" && <img src={kiwi} alt="kiwi" className="absolute top-[70px] h-[85px] w-[85px] left-1/2 transform -translate-x-1/2" />}
             {resultFruit === "Orange" && <img src={orange} alt="orange" className="absolute top-[70px] h-[85px] w-[85px] left-1/2 transform -translate-x-1/2" />}
             {resultFruit === "Lemon" && <img src={lemon} alt="lemon" className="absolute top-[70px] h-[85px] w-[85px] left-1/2 transform -translate-x-1/2" />}

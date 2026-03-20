@@ -33,7 +33,7 @@ export default function LedTimer({ start = 40, onLedTimeUp }: LedTimerProps) {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 1 }}
                     // transition={{ duration: 1 }}
-                    style={{ fontFamily: "MyBoldFont", letterSpacing: "2px" }}
+                    style={{ fontFamily: "MyBoldFont", letterSpacing: "2px", }}
                     className={`relative text-[39px] font-mono font-bold text-yellow-300 drop-shadow-[0_0_12px_#FFE600] ${time <= 5 ? "animate-pulse" : ""
                         }`}
                 >
