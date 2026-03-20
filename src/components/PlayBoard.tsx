@@ -74,7 +74,7 @@ export default function PlayBoard({ onOpenModal, onOpenAlert, onResult }: PlayBo
                     <img src={opacityBoard} className=" absolute opacity-70 top-[90px] left-1/2 transform -translate-x-1/2 z-30" />
                 )}
                 {showLedTimer && (
-                    <div className="absolute z-50 top-[198px] left-1/2 transform -translate-x-1/2">
+                    <div className="absolute z-50 top-[198px] left-[calc(50%+1px)] transform -translate-x-1/2">
                         <LedTimer start={40} onLedTimeUp={() => {
                             setShowChooseTimer(true)
                             setShowLedTimer(false)
@@ -85,7 +85,7 @@ export default function PlayBoard({ onOpenModal, onOpenAlert, onResult }: PlayBo
                     </div>
                 )}
                 {showChooseTimer && (
-                    <div className="absolute z-50 top-[198px] left-1/2 transform -translate-x-1/2">
+                    <div className="absolute z-50 top-[198px] left-[calc(50%+1px)] transform -translate-x-1/2">
                         <ChooseTimer start={10} onChooseTimeUp={() => {
                             setShowChooseTimer(false)
                             setShowHiddenTimer(true)
