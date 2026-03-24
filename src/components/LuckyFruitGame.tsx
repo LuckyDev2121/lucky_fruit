@@ -10,6 +10,7 @@ import RepeatModal from "./RepeatModal";
 import MusicModal from "./MusicModal";
 import ResultMenu from "./ResultMenu";
 import TopMenu from "./TopMenu";
+// import { useGameRealtime } from "../hooks/useGameRealtime";
 
 const GAME_WIDTH = 393;
 const GAME_HEIGHT = 533;
@@ -26,6 +27,19 @@ export default function LuckyFruitGame({
   const [activeAlert, setActiveAlert] = useState<string | null>(null);
   const [isSoundEnabled, setIsSoundEnabled] = useState(true);
   const [scale, setScale] = useState(1);
+
+  // const {
+  //   countdownSeconds,
+  //   latestResultFruit,
+  //   latestResultIcon,
+  //   playerBalance,
+  //   winList,
+  //   jackpotAmount,
+  //   connectionStatus,
+  //   lastError,
+  //   reconnectAttempts,
+  //   retryConnection,
+  // } = useGameRealtime();
 
   useEffect(() => {
     const updateScale = () => {
