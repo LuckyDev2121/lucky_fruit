@@ -6,7 +6,7 @@ type LedTimerProps = {
     onLedTimeUp?: () => void;
 };
 
-export default function LedTimer({ start = 40, onLedTimeUp }: LedTimerProps) {
+export default function LedTimer({ start = 10, onLedTimeUp }: LedTimerProps) {
     const [time, setTime] = useState(start);
     const onLedTimeUpRef = useRef(onLedTimeUp);
 

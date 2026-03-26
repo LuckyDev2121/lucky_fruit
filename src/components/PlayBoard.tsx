@@ -11,8 +11,8 @@ import lvl5 from "../assets/BetBoard/1M.svg"
 import bottomboard from "../assets/BottomBoard/bottomboard.svg"
 import opacityBoard from "../assets/PlayBoard/playboardopacity.svg"
 import ChooseRectangle from "./ChooseRectangle";
-import FruitBoard from "./FruitBoard";
-// import GameElements from "./GameElements";
+// import FruitBoard from "./FruitBoard";
+import GameElements from "./GameElements";
 import LedTimer from "./LedTimer";
 import ChooseTimer from "./ChooseTimer";
 import HiddenTimer from "./HiddenTimer";
@@ -40,7 +40,8 @@ export default function PlayBoard({ onOpenModal, onOpenAlert, onResult }: PlayBo
                 <img src={playboard} className=" absolute inset-0 mt-[7px]" />
                 <span className="absolute justify-center font-regular top-[70px] w-[124px] h-[18px] text-center left-1/2 transform -translate-x-1/2 rounded-full bg-[#3D005C] ">Round 1526 of today</span>
                 <img src={fruitboard} className=" absolute top-[90px] z-20 left-1/2 transform -translate-x-1/2" />
-                <FruitBoard controlButtons={blockClick} />
+                {/* <FruitBoard controlButtons={blockClick} /> */}
+                <GameElements controlButtons={blockClick} />
                 <img src={timer} className="absolute top-[183px] z-40 left-[calc(50%-1px)] transform -translate-x-1/2" />
                 <button
                     style={{
@@ -74,7 +75,7 @@ export default function PlayBoard({ onOpenModal, onOpenAlert, onResult }: PlayBo
                 )}
                 {showLedTimer && (
                     <div className="absolute z-50 top-[198px] left-[calc(50%+1px)] transform -translate-x-1/2">
-                        <LedTimer start={40} onLedTimeUp={() => {
+                        <LedTimer start={10} onLedTimeUp={() => {
                             setShowChooseTimer(true)
                             setShowLedTimer(false)
                             setShowBoardOpacity(true)

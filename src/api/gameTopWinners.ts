@@ -1,15 +1,15 @@
 import axios from "axios";
 
-export interface MusicResponse {
-  music: string;
+export interface TopWinnersResponse {
+  TopWinners: string;
 }
 
 const BASE_URL = "http://localhost:5000"; // Change this to your actual backend URL
 
-export const getGameMusic = async (): Promise<MusicResponse> => {
+export const getGameTopWinners = async (): Promise<TopWinnersResponse> => {
   try {
     const response = await axios({
-        url: `${BASE_URL}/game/game/music`,
+        url: `${BASE_URL}/game/top/winers`,
         method: "GET",
         headers: {
             "Content-Type": "application/json",

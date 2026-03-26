@@ -1,15 +1,16 @@
 import rectangle from "../assets/PlayBoard/chooserectangle.svg"
 import { useEffect, useRef, useState } from "react"
+// import { type GameElement, fetchGameElements } from '../api/gameElementApi';
 
 const fruits = [
-    { id: 0, element_name: "Kiwi", top: 94, left: 154 },
-    { id: 1, element_name: "Orange", top: 94, left: 248 },
-    { id: 2, element_name: "Lemon", top: 183, left: 248 },
-    { id: 3, element_name: "Cherry", top: 273, left: 248 },
-    { id: 4, element_name: "Strawberry", top: 273, left: 154 },
-    { id: 5, element_name: "Grape", top: 273, left: 60 },
-    { id: 6, element_name: "Watermelon", top: 183, left: 60 },
-    { id: 7, element_name: "Tomato", top: 94, left: 60 }
+    { id: 0, element_name: "G", top: 94, left: 154 },
+    { id: 1, element_name: "F", top: 94, left: 248 },
+    { id: 2, element_name: "E", top: 183, left: 248 },
+    { id: 3, element_name: "D", top: 273, left: 248 },
+    { id: 4, element_name: "C", top: 273, left: 154 },
+    { id: 5, element_name: "B", top: 273, left: 60 },
+    { id: 6, element_name: "A", top: 183, left: 60 },
+    { id: 7, element_name: "H", top: 94, left: 60 }
 ];
 
 
@@ -20,6 +21,15 @@ export default function ChooseRectangle({ onChooseTimeUp, onResult }: { onChoose
     const onChooseTimeUpRef = useRef(onChooseTimeUp);
     const onResultRef = useRef(onResult);
     const currentFruit = fruits[(randomIndex + time - 1) % fruits.length];
+    // const [gameElements, setGameElements] = useState<GameElement[]>([]);
+
+    // useEffect(() => {
+    //     const loadGameElements = async () => {
+    //         const data = await fetchGameElements();
+    //         setGameElements(data);
+    //     };
+    //     loadGameElements();
+    // }, []);
 
     useEffect(() => {
         onChooseTimeUpRef.current = onChooseTimeUp;

@@ -2,14 +2,16 @@ import rectangle from "../assets/Modal/Rectangle.svg"
 import close from "../assets/TopMenu/X.svg";
 import help from "../assets/TopMenu/QuestionMark.svg";
 import CoinIcon from "./CoinIcon";
-import cherry from "../assets/fruits/cherry.svg"
-import grape from "../assets/fruits/grapes.svg"
-import lemon from "../assets/fruits/lemon.svg"
-import orange from "../assets/fruits/orange.svg"
-import strawberry from "../assets/fruits/strawberry.svg"
-import watermelon from "../assets/fruits/watermelon.svg"
-import tomato from "../assets/fruits/tomato.svg"
-import kiwi from "../assets/fruits/kiwi.svg"
+// import cherry from "../assets/fruits/cherry.svg"
+// import grape from "../assets/fruits/grapes.svg"
+// import lemon from "../assets/fruits/lemon.svg"
+// import orange from "../assets/fruits/orange.svg"
+// import strawberry from "../assets/fruits/strawberry.svg"
+// import watermelon from "../assets/fruits/watermelon.svg"
+// import tomato from "../assets/fruits/tomato.svg"
+// import kiwi from "../assets/fruits/kiwi.svg"
+import { type GameElement, fetchGameElements } from '../api/gameElementApi';
+import { useEffect, useState } from "react";
 
 type NoteMenuProps = {
     onCloseNote: () => void;
@@ -17,6 +19,19 @@ type NoteMenuProps = {
 };
 
 export default function NoteMenu({ onCloseNote, onOpenModal }: NoteMenuProps) {
+
+
+
+    const [gameElements, setGameElements] = useState<GameElement[]>([]);
+
+    useEffect(() => {
+        const loadGameElements = async () => {
+            const data = await fetchGameElements();
+            setGameElements(data);
+        };
+        loadGameElements();
+    }, []);
+
     return (
         <div className="h-[342px] bg-gradient-to-t from-[#7C00D5] to-[#5028C1] w-[393px] rounded-t-[20px]">
             <img src={rectangle} alt="Rectangle" className="absolute left-1/2 transform -translate-x-1/2" />
@@ -50,62 +65,17 @@ export default function NoteMenu({ onCloseNote, onOpenModal }: NoteMenuProps) {
                     </div>
                     <span>Mine</span>
                     <div className="grid grid-cols-4 grid-rows-2 gap-1">
-                        <div className="justify-center items-center flex ">
-                            <img src={kiwi} alt="Kiwi" className="h-4 w-4 mr-[2px]" />
-                            <div className=" justify-center items-center  ">
-                                <CoinIcon />
-                            </div>
-                            <span>100000</span>
-                        </div>
-                        <div className="justify-center items-center flex ">
-                            <img src={orange} alt="Orange" className="h-4 w-4 mr-[2px]" />
-                            <div className="justify-center items-center ">
-                                <CoinIcon />
-                            </div>
-                            <span>100000</span>
-                        </div>
-                        <div className="justify-center items-center flex ">
-                            <img src={cherry} alt="Cherry" className="h-4 w-4 mr-[2px]" />
-                            <div className="justify-center items-center ">
-                                <CoinIcon />
-                            </div>
-                            <span>100000</span>
-                        </div>
-                        <div className="justify-center items-center flex ">
-                            <img src={tomato} alt="Tomato" className="h-4 w-4 mr-[2px]" />
-                            <div className="justify-center items-center ">
-                                <CoinIcon />
-                            </div>
-                            <span>100000</span>
-                        </div>
-                        <div className="justify-center items-center flex ">
-                            <img src={watermelon} alt="Watermelon" className="h-4 w-4 mr-[2px]" />
-                            <div className="justify-center items-center ">
-                                <CoinIcon />
-                            </div>
-                            <span>100000</span>
-                        </div>
-                        <div className="justify-center items-center flex ">
-                            <img src={grape} alt="Grape" className="h-4 w-4 mr-[2px]" />
-                            <div className="justify-center items-center flex">
-                                <CoinIcon />
-                            </div>
-                            <span>100000</span>
-                        </div>
-                        <div className="justify-center items-center flex ">
-                            <img src={strawberry} alt="Strawberry" className="h-4 w-4 mr-[2px]" />
-                            <div className="justify-center items-center ">
-                                <CoinIcon />
-                            </div>
-                            <span>100000</span>
-                        </div>
-                        <div className="justify-center items-center flex ">
-                            <img src={lemon} alt="Lemon" className="h-4 w-4 mr-[2px]" />
-                            <div className="justify-center items-center ">
-                                <CoinIcon />
-                            </div>
-                            <span>100000</span>
-                        </div>
+                        {gameElements.map((element) => {
+                            return (
+                                <div className="justify-center items-center flex " >
+                                    <img src={element.element_icon} alt={element.element_name} className="h-4 w-4 mr-[2px]" />
+                                    <div className=" justify-center items-center content-center h-[14px] w-[10px]">
+                                        <CoinIcon />
+                                    </div>
+                                    <span>1000</span>
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
             </div>

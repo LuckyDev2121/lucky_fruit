@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { type GameElement, fetchGameElements } from '../api/gameElementApi';
 
-const GameElements = () => {
+type FruitBoardProps = {
+    controlButtons: "auto" | "none";
+};
+
+const GameElements = ({ controlButtons }: FruitBoardProps) => {
     const [gameElements, setGameElements] = useState<GameElement[]>([]);
     const [error, setError] = useState<string | null>(null);
 
@@ -22,7 +26,7 @@ const GameElements = () => {
     }, []);
 
     return (
-        <div className='relative top-[90px] h-[271px] w-[280px] z-30 grid grid-cols-3 grid-rows-3 left-1/2 transform -translate-x-1/2'>
+        <div className='relative top-[90px] h-[271px] w-[280px] z-30 grid grid-cols-3 grid-rows-3 left-1/2 transform -translate-x-1/2' style={{ pointerEvents: controlButtons }}>
             {error && <p style={{ color: 'red' }}>{error}</p>}
 
             {gameElements.map((element, index) => {
@@ -46,16 +50,9 @@ const GameElements = () => {
                             src={element.element_icon}
                             alt={element.element_name}
                             style={{ width: 70, height: 70 }}
-                            className='absolute top-[0px] m-auto justify-center left-0 right-0'
+                            className='absolute top-[4px] m-auto justify-center left-0 right-0'
                         />
-
-                        {(element.id === 33 || element.id === 32 || element.id === 31 || element.id === 26) && (
-                            <span className='absolute top-[64px] m-auto justify-center font-bold left-0 right-0'>5 Times</span>
-                        )}
-                        {element.id === 30 && <span className='absolute top-[64px] m-auto justify-center font-bold left-0 right-0'>10 Times</span>}
-                        {element.id === 29 && <span className='absolute top-[64px] m-auto justify-center font-bold left-0 right-0'>15 Times</span>}
-                        {element.id === 28 && <span className='absolute top-[64px] m-auto justify-center font-bold left-0 right-0'>25 Times</span>}
-                        {element.id === 27 && <span className='absolute top-[64px] m-auto justify-center font-bold left-0 right-0'>40 Times</span>}
+                        <span className='absolute top-[68px] m-auto justify-center font-bold left-0 right-0'>{element.paytable} Times</span>
                     </button>
                 );
             })}
