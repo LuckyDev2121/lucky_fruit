@@ -19,11 +19,11 @@ export default function RepeatModal({ onCloseRepeatModal }: RepeatModalProps) {
                 <Checkbox label="Don't show next time" />
             </div>
             {/* <span className="absolute  left-1/2 transform -translate-x-1/2 font-bold">Are you sure to repeat the previous round of betting?</span> */}
-            <button className="absolute w-[191px] h-[38px] rounded-[6px] top-[136px] left-1/2 transform -translate-x-1/2 bg-gradient-to-t from-[#b87036] via-[#fcc024] via-[#fdd03c] to-[#fdf3ba]  text-[#A04800] font-bold"
+            <button className="absolute w-[191px] h-[38px] rounded-[6px] top-[136px] left-1/2 transform -translate-x-1/2 border-[1px] border-[#b87036] bg-gradient-to-t from-[#b87036] from-1% via-90% via-[#FDD03c] to-95% to-[#fdf3ba]  text-[#A04800] font-bold"
                 onClick={() => console.log("Confirm clicked")}>
                 Confirm
             </button>
-            <button className="absolute w-[191px] h-[38px] rounded-[6px] top-[182px] left-1/2 transform -translate-x-1/2 bg-gradient-to-t from-[#891ac1] via-[#ca7afd] via-[#d494f4] to-[#fdf3ba]  text-[#27598e] font-bold"
+            <button className="absolute w-[191px] h-[38px] rounded-[6px] top-[182px] left-1/2 transform -translate-x-1/2 border-[1px] border-[#891ac1] bg-gradient-to-t from-[#891ac1] from-1% via-90% via-[#d494f4] to-99% to-[#fdf3ba]  text-[#27598e] font-bold"
                 onClick={onCloseRepeatModal}>
                 Cancel
             </button>

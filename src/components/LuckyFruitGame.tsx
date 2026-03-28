@@ -27,6 +27,7 @@ export default function LuckyFruitGame({
   const [activeAlert, setActiveAlert] = useState<string | null>(null);
   const [isSoundEnabled, setIsSoundEnabled] = useState(true);
   const [scale, setScale] = useState(1);
+  const isOverlayOpen = activeModal !== null || activeAlert !== null;
 
   // const {
   //   countdownSeconds,
@@ -95,6 +96,17 @@ export default function LuckyFruitGame({
           </div>
 
           <AnimatePresence>
+            {isOverlayOpen && (
+              <motion.div
+                key="modal-backdrop"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.25 }}
+                className="absolute inset-0 z-40 rounded-t-[20px] bg-black/60"
+              />
+            )}
+
             {activeModal && activeModal !== "recharge" && (
               <motion.div
                 key={activeModal}
