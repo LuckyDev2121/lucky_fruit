@@ -9,7 +9,7 @@ import {
   toStringValue,
 } from "./apiGuards";
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "https://funint.site";
+const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "https://Funint.site";
 
 const DEFAULT_CONTEXT = {
   regisation: 5,

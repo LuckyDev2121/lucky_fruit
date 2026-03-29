@@ -4,7 +4,7 @@ export interface MusicResponse {
   music: string;
 }
 
-const BASE_URL = "https://funint.site"; // Change this to your actual backend URL
+const BASE_URL = "https://Funint.site"; // Change this to your actual backend URL
 
 export const getGameMusic = async (): Promise<MusicResponse> => {
   try {

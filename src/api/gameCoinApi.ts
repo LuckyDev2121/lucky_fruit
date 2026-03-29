@@ -4,7 +4,7 @@ export interface CoinResponse {
   icon:string;
 }
 
-const BASE_URL = "https://funint.site";
+const BASE_URL = "https://Funint.site";
 
 export const getCoinIcon = async (): Promise<CoinResponse> => {
   try {

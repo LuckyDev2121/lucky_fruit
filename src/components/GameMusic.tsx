@@ -30,7 +30,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ isMusicPlaying }) => {
 
 
     const musicUrl = data?.music
-        ? `https://funint.site${data.music}`
+        ? `https://Funint.site${data.music}`
         : null;
 
     useEffect(() => {
