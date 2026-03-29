@@ -13,14 +13,14 @@ function normalizeElements(elements: GameElement[]): GameElement[] {
     ...element,
     element_icon: element.element_icon.startsWith("http")
       ? element.element_icon
-      : `http://localhost:5000/${element.element_icon.replace(/^\/+/, "")}`,
+      : `https://funint.site/${element.element_icon.replace(/^\/+/, "")}`,
   }));
 }
 
 export const fetchGameElements = async (): Promise<GameElement[]> => {
   try {
     const response = await axios({
-      url: "http://localhost:5000/game/game/elements",
+      url: "https://funint.site/game/game/elements",
       method: "GET",
       headers: {
         "Content-Type": "application/json",

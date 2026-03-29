@@ -4,7 +4,7 @@ export interface RankYesterdayResponse {
   RankYesterday: string;
 }
 
-const BASE_URL = "http://localhost:5000"; // Change this to your actual backend URL
+const BASE_URL = "https://funint.site"; // Change this to your actual backend URL
 
 export const getGameRankYesterday = async (): Promise<RankYesterdayResponse> => {
   try {
