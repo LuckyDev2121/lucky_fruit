@@ -1,8 +1,29 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import Echo from "laravel-echo";
+import Pusher from "pusher-js";
 import { getGameDetails, type GameDetails } from "../api/gameApi";
-import { GAME_DETAILS_ID, GAME_DETAILS_WS_URL } from "../config/gameConfig";
+import {
+  GAME_DETAILS_CHANNEL,
+  GAME_DETAILS_EVENT,
+  GAME_DETAILS_ID,
+  PUSHER_APP_KEY,
+  PUSHER_FORCE_TLS,
+  PUSHER_HOST,
+  PUSHER_WS_PORT,
+  PUSHER_WSS_PORT,
+} from "../config/gameConfig";
 
-type SocketStatus = "connecting" | "connected" | "disconnected";
+type SocketStatus =
+  | "connecting"
+  | "connected"
+  | "disconnected"
+  | "missing-config";
+
+declare global {
+  interface Window {
+    Pusher: typeof Pusher;
+  }
+}
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
@@ -29,11 +50,17 @@ function getUpdatedGameName(payload: unknown): string | null {
 }
 
 export default function GameDetailsContainer() {
+  const isRealtimeConfigured = PUSHER_APP_KEY.trim() !== "";
   const [game, setGame] = useState<GameDetails | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [socketStatus, setSocketStatus] = useState<SocketStatus>("connecting");
-
-  const websocketUrl = useMemo(() => GAME_DETAILS_WS_URL, []);
+  const [error, setError] = useState<string | null>(
+    isRealtimeConfigured
+      ? null
+      : "Missing VITE_PUSHER_APP_KEY. Realtime is not configured yet."
+  );
+  const [socketStatus, setSocketStatus] = useState<SocketStatus>(
+    isRealtimeConfigured ? "connecting" : "missing-config"
+  );
+  const hasLoggedConfigError = useRef(false);
 
   useEffect(() => {
     let active = true;
@@ -59,46 +86,82 @@ export default function GameDetailsContainer() {
   }, []);
 
   useEffect(() => {
-    setSocketStatus("connecting");
-    const socket = new WebSocket(websocketUrl);
+    window.Pusher = Pusher;
 
-    socket.onopen = () => {
+    if (!isRealtimeConfigured) {
+      if (!hasLoggedConfigError.current) {
+        console.error(
+          "[game.updated] missing VITE_PUSHER_APP_KEY. Add your broadcast credentials to .env before testing realtime."
+        );
+        hasLoggedConfigError.current = true;
+      }
+
+      return;
+    }
+
+    setSocketStatus("connecting");
+    setError(null);
+
+    const echo = new Echo({
+      broadcaster: "pusher",
+      key: PUSHER_APP_KEY,
+      client: new Pusher(PUSHER_APP_KEY, {
+        cluster: "",
+        wsHost: PUSHER_HOST,
+        wsPort: PUSHER_WS_PORT,
+        wssPort: PUSHER_WSS_PORT,
+        forceTLS: PUSHER_FORCE_TLS,
+        enabledTransports: ["ws", "wss"],
+      }),
+    });
+
+    const pusherConnection = echo.connector.pusher.connection;
+
+    const handleConnected = () => {
       setSocketStatus("connected");
       setError(null);
-      console.log("[game.updated] websocket connected:", websocketUrl);
+      console.log(
+        `[game.updated] connected to channel "${GAME_DETAILS_CHANNEL}" on ${PUSHER_HOST}`
+      );
     };
 
-    socket.onmessage = (event) => {
-      try {
-        const payload = JSON.parse(event.data) as unknown;
-        const updatedName = getUpdatedGameName(payload);
-
-        if (!updatedName) return;
-
-        setGame((current) => ({
-          id: current?.id ?? GAME_DETAILS_ID,
-          name: updatedName,
-        }));
-        console.log("[game.updated] changed game name:", updatedName);
-      } catch (messageError) {
-        console.error("[game.updated] invalid websocket payload", messageError);
-      }
-    };
-
-    socket.onerror = () => {
-      setError("Realtime connection error");
-      console.error("[game.updated] websocket error");
-    };
-
-    socket.onclose = () => {
+    const handleDisconnected = () => {
       setSocketStatus("disconnected");
-      console.log("[game.updated] websocket disconnected");
+      console.log("[game.updated] realtime disconnected");
     };
+
+    const handleError = (connectionError: unknown) => {
+      setError("Realtime connection error");
+      console.error("[game.updated] connection error", connectionError);
+    };
+
+    pusherConnection.bind("connected", handleConnected);
+    pusherConnection.bind("disconnected", handleDisconnected);
+    pusherConnection.bind("error", handleError);
+
+    echo.channel(GAME_DETAILS_CHANNEL).listen(`.${GAME_DETAILS_EVENT}`, (payload: unknown) => {
+      const updatedName = getUpdatedGameName(payload);
+
+      if (!updatedName) {
+        console.log("[game.updated] event received, but no game name found:", payload);
+        return;
+      }
+
+      setGame((current) => ({
+        id: current?.id ?? GAME_DETAILS_ID,
+        name: updatedName,
+      }));
+      console.log("[game.updated] changed game name:", updatedName);
+    });
 
     return () => {
-      socket.close();
+      echo.leave(GAME_DETAILS_CHANNEL);
+      pusherConnection.unbind("connected", handleConnected);
+      pusherConnection.unbind("disconnected", handleDisconnected);
+      pusherConnection.unbind("error", handleError);
+      echo.disconnect();
     };
-  }, [websocketUrl]);
+  }, [isRealtimeConfigured]);
 
   return (
     <div className="absolute left-4 top-4 z-[80] w-[min(320px,calc(100vw-2rem))] rounded-2xl border border-white/30 bg-black/70 p-4 text-white shadow-xl backdrop-blur-sm">
@@ -111,6 +174,9 @@ export default function GameDetailsContainer() {
       <p className="mt-1 text-sm text-white/75">Game ID: {GAME_DETAILS_ID}</p>
       <p className="mt-1 text-sm text-white/75">
         WebSocket: {socketStatus}
+      </p>
+      <p className="mt-1 text-xs text-white/60">
+        Channel: {GAME_DETAILS_CHANNEL} | Event: {GAME_DETAILS_EVENT}
       </p>
       {error ? <p className="mt-2 text-sm text-red-300">{error}</p> : null}
       <p className="mt-3 text-xs text-white/60">
