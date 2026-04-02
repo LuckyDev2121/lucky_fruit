@@ -115,6 +115,11 @@ export interface SessionEndTimeResponse {
   next_run_time: string;
 }
 
+export interface GameDetails {
+  id: number;
+  name: string;
+}
+
 export type TopWinnerEntry = {
   mrs__player_id__player_name: string;
   last_balance: number | string;
@@ -269,6 +274,21 @@ function parsePlayerPosition(payload: unknown): PlayerPositionResponse {
   };
 }
 
+function parseGameDetails(payload: unknown): GameDetails {
+  const response = ensureRecord(payload, "game_details_response");
+  const data = ensureRecord(response.data, "game_details");
+  const id = toNumber(data.id);
+
+  if (id === null) {
+    throw new ApiValidationError("Invalid game id in game details response");
+  }
+
+  return {
+    id,
+    name: ensureString(data.name, "name", "Unknown Game"),
+  };
+}
+
 export const fetchGameElements = async (
   overrides?: Partial<typeof DEFAULT_CONTEXT>
 ): Promise<GameElement[]> => {
@@ -386,7 +406,18 @@ export const getAllGameData = async (
   return ensureRecord(payload, "all_game_data");
 };
 
+export const getGameDetails = async (id: number): Promise<GameDetails> => {
+  const payload = await getWithRetry<unknown>(`/game/${id}`, {
+    headers: {
+      Accept: "application/json",
+    },
+  });
+
+  return parseGameDetails(payload);
+};
+
 export const __testables = {
+  parseGameDetails,
   parseRankToday,
   parseRankYesterday,
   parseTopWinners,
