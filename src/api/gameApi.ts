@@ -9,7 +9,7 @@ import {
   toStringValue,
 } from "./apiGuards";
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "https://Funint.site";
+const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "https://funint.site/api";
 
 const DEFAULT_CONTEXT = {
   regisation: 5,
@@ -272,7 +272,7 @@ function parsePlayerPosition(payload: unknown): PlayerPositionResponse {
 export const fetchGameElements = async (
   overrides?: Partial<typeof DEFAULT_CONTEXT>
 ): Promise<GameElement[]> => {
-  const payload = await getWithRetry<unknown>("/game/game/elements", {
+  const payload = await getWithRetry<unknown>("/game/elements", {
     params: withDefaultContext(overrides),
   });
   return parseGameElements(payload);

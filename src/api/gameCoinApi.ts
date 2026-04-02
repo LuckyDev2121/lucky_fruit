@@ -4,12 +4,12 @@ export interface CoinResponse {
   icon:string;
 }
 
-const BASE_URL = "https://Funint.site";
+const BASE_URL = "https://funint.site/api";
 
 export const getCoinIcon = async (): Promise<CoinResponse> => {
   try {
     const response = await axios({
-        url: `${BASE_URL}/game/game/coin`,
+        url: `${BASE_URL}/game/coin`,
         method: "GET",
         headers: {
             "Content-Type": "application/json",

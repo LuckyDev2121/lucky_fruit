@@ -6,7 +6,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "https://Funint.site",
+        target: "https://funint.site/api",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
       },

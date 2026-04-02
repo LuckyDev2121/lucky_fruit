@@ -4,12 +4,12 @@ export interface EndtimeResponse {
   Endtime: string;
 }
 
-const BASE_URL = "https://Funint.site"; // Change this to your actual backend URL
+const BASE_URL = "https://funint.site/api"; // Change this to your actual backend URL
 
 export const getGameEndtime = async (): Promise<EndtimeResponse> => {
   try {
     const response = await axios({
-        url: `${BASE_URL}/game/game/session/end/time`,
+        url: `${BASE_URL}/game/session/end/time`,
         method: "GET",
         headers: {
             "Content-Type": "application/json",

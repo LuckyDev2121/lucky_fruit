@@ -4,12 +4,12 @@ export interface PrizeResponse {
   Prize: string;
 }
 
-const BASE_URL = "https://Funint.site"; // Change this to your actual backend URL
+const BASE_URL = "https://funint.site/api"; // Change this to your actual backend URL
 
 export const getGamePrize = async (): Promise<PrizeResponse> => {
   try {
     const response = await axios({
-        url: `${BASE_URL}/game/game/prize/distribution`,
+        url: `${BASE_URL}/game/prize/distribution`,
         method: "GET",
         headers: {
             "Content-Type": "application/json",
