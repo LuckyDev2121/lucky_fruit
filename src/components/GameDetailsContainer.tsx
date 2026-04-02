@@ -99,9 +99,6 @@ export default function GameDetailsContainer() {
       return;
     }
 
-    setSocketStatus("connecting");
-    setError(null);
-
     const echo = new Echo({
       broadcaster: "pusher",
       key: PUSHER_APP_KEY,
