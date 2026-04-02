@@ -12,6 +12,7 @@ import {
   PUSHER_WS_PORT,
   PUSHER_WSS_PORT,
 } from "../config/gameConfig";
+import { div } from "framer-motion/client";
 
 type SocketStatus =
   | "connecting"
@@ -161,8 +162,9 @@ export default function GameDetailsContainer() {
   }, [isRealtimeConfigured]);
 
   return (
-    <div className="absolute left-4 top-4 z-[80] w-[min(320px,calc(100vw-2rem))] rounded-2xl border border-white/30 bg-black/70 p-4 text-white shadow-xl backdrop-blur-sm">
-      <p className="text-[11px] uppercase tracking-[0.3em] text-white/70">
+    <div>
+      {/* <div className="absolute left-4 top-4 z-[80] w-[min(320px,calc(100vw-2rem))] rounded-2xl border border-white/30 bg-black/70 p-4 text-white shadow-xl backdrop-blur-sm"> */}
+      {/* <p className="text-[11px] uppercase tracking-[0.3em] text-white/70">
         Game Container
       </p>
       <h1 className="mt-2 text-xl font-semibold">
@@ -178,7 +180,7 @@ export default function GameDetailsContainer() {
       {error ? <p className="mt-2 text-sm text-red-300">{error}</p> : null}
       <p className="mt-3 text-xs text-white/60">
         Open the browser console to see every `game.updated` name change logged.
-      </p>
+      </p> */}
     </div>
   );
 }
