@@ -1,31 +1,33 @@
-import playboard from "../assets/PlayBoard/playboard.svg";
+import { useState } from "react";
+import lvl1 from "../assets/BetBoard/100.svg";
+import lvl2 from "../assets/BetBoard/1000.svg";
+import lvl3 from "../assets/BetBoard/10000.svg";
+import lvl4 from "../assets/BetBoard/100K.svg";
+import lvl5 from "../assets/BetBoard/1M.svg";
+import bottomboard from "../assets/BottomBoard/bottomboard.svg";
 import fruitboard from "../assets/PlayBoard/fruitboard.svg";
 import luckyfruit from "../assets/PlayBoard/luckyfruit.svg";
-import timer from "../assets/PlayBoard/timer.svg";
+import playboard from "../assets/PlayBoard/playboard.svg";
+import opacityBoard from "../assets/PlayBoard/playboardopacity.svg";
 import repeat from "../assets/PlayBoard/repeat.svg";
-import lvl1 from "../assets/BetBoard/100.svg"
-import lvl2 from "../assets/BetBoard/1000.svg"
-import lvl3 from "../assets/BetBoard/10000.svg"
-import lvl4 from "../assets/BetBoard/100K.svg"
-import lvl5 from "../assets/BetBoard/1M.svg"
-import bottomboard from "../assets/BottomBoard/bottomboard.svg"
-import opacityBoard from "../assets/PlayBoard/playboardopacity.svg"
+import timer from "../assets/PlayBoard/timer.svg";
 import ChooseRectangle from "./ChooseRectangle";
-// import FruitBoard from "./FruitBoard";
-import GameElements from "./GameElements";
-import LedTimer from "./LedTimer";
 import ChooseTimer from "./ChooseTimer";
+import GameElements from "./GameElements";
 import HiddenTimer from "./HiddenTimer";
-import { useState } from "react";
+import LedTimer from "./LedTimer";
 
 type PlayBoardProps = {
     onOpenModal: (modal: string) => void;
     onOpenAlert: (alert: string) => void;
-    onResult: (fruit: string) => void; // 👈 NEW PROP
+    onResult: (fruit: string) => void;
 };
 
-export default function PlayBoard({ onOpenModal, onOpenAlert, onResult }: PlayBoardProps) {
-
+export default function PlayBoard({
+    onOpenModal,
+    onOpenAlert,
+    onResult,
+}: PlayBoardProps) {
     const [selectBetMode, setSelectBetMode] = useState(2);
     const [blockClick, setBlockClick] = useState<"auto" | "none">("auto");
     const [showLedTimer, setShowLedTimer] = useState(true);
@@ -33,86 +35,138 @@ export default function PlayBoard({ onOpenModal, onOpenAlert, onResult }: PlayBo
     const [showHiddenTimer, setShowHiddenTimer] = useState(false);
     const [showBoardOpacity, setShowBoardOpacity] = useState(false);
     const [showChooseRectangle, setShowChooseRectangle] = useState(false);
+
     return (
         <div className="absolute z-20 object-contain" style={{ width: "100%", height: "100%" }}>
-            <div className=" relative z-20 inset-0">
-                <img src={luckyfruit} alt="luckyfruit" className="absolute top-[25px] inset-0 z-20 left-1/2 transform -translate-x-1/2" />
-                <img src={playboard} className=" absolute inset-0 mt-[7px]" />
-                <span className="absolute justify-center font-regular top-[70px] w-[124px] h-[18px] text-center left-1/2 transform -translate-x-1/2 rounded-full bg-[#3D005C] ">Round 1526 of today</span>
-                <img src={fruitboard} className=" absolute top-[90px] z-20 left-1/2 transform -translate-x-1/2" />
-                {/* <FruitBoard controlButtons={blockClick} /> */}
+            <div className="relative inset-0 z-20">
+                <img
+                    src={luckyfruit}
+                    alt="luckyfruit"
+                    className="absolute inset-0 left-1/2 top-[25px] z-20 -translate-x-1/2 transform"
+                />
+                <img src={playboard} className="absolute inset-0 mt-[7px]" />
+                <span className="absolute left-1/2 top-[70px] h-[18px] w-[124px] -translate-x-1/2 transform justify-center rounded-full bg-[#3D005C] text-center font-regular">
+                    Round 1526 of today
+                </span>
+                <img
+                    src={fruitboard}
+                    className="absolute left-1/2 top-[90px] z-20 -translate-x-1/2 transform"
+                />
                 <GameElements controlButtons={blockClick} />
-                <img src={timer} className="absolute top-[183px] z-40 left-[calc(50%-1px)] transform -translate-x-1/2" />
+                <img
+                    src={timer}
+                    className="absolute left-[calc(50%-1px)] top-[183px] z-40 -translate-x-1/2 transform"
+                />
                 <button
                     style={{
                         cursor: "pointer",
-                        pointerEvents: 'auto'
+                        pointerEvents: "auto",
                     }}
                     onClick={() => onOpenAlert("repeat")}
-                    className="absolute top-[320px] h-fit w-full z-20 left-[calc(78%-0px)]">
+                    className="absolute left-[calc(78%-0px)] top-[320px] z-20 h-fit w-full"
+                >
                     <img src={repeat} alt="Repeat Icon" className="relative" />
                 </button>
-                <div className="absolute inset-0 top-[361px] z-20 flex justify-center" style={{ pointerEvents: 'auto' }}>
+                <div
+                    className="absolute inset-0 top-[361px] z-20 flex justify-center"
+                    style={{ pointerEvents: "auto" }}
+                >
                     <button className="relative" onClick={() => setSelectBetMode(1)}>
-                        <img src={lvl1} alt="Level 1" className={`relative  ${selectBetMode === 1 ? "pt-3" : "pt-0"}`} />
+                        <img
+                            src={lvl1}
+                            alt="Level 1"
+                            className={`relative ${selectBetMode === 1 ? "pt-3" : "pt-0"}`}
+                        />
                     </button>
                     <button className="relative" onClick={() => setSelectBetMode(2)}>
-                        <img src={lvl2} alt="Level 2" className={`relative  ${selectBetMode === 2 ? "pt-3" : "pt-0"}`} />
+                        <img
+                            src={lvl2}
+                            alt="Level 2"
+                            className={`relative ${selectBetMode === 2 ? "pt-3" : "pt-0"}`}
+                        />
                     </button>
                     <button className="relative" onClick={() => setSelectBetMode(3)}>
-                        <img src={lvl3} alt="Level 3" className={`relative  ${selectBetMode === 3 ? "pt-3" : "pt-0"}`} />
+                        <img
+                            src={lvl3}
+                            alt="Level 3"
+                            className={`relative ${selectBetMode === 3 ? "pt-3" : "pt-0"}`}
+                        />
                     </button>
                     <button className="relative" onClick={() => setSelectBetMode(4)}>
-                        <img src={lvl4} alt="Level 4" className={`relative  ${selectBetMode === 4 ? "pt-3" : "pt-0"}`} />
+                        <img
+                            src={lvl4}
+                            alt="Level 4"
+                            className={`relative ${selectBetMode === 4 ? "pt-3" : "pt-0"}`}
+                        />
                     </button>
                     <button className="relative" onClick={() => setSelectBetMode(5)}>
-                        <img src={lvl5} alt="Level 5" className={`relative  ${selectBetMode === 5 ? "pt-3" : "pt-0"}`} />
+                        <img
+                            src={lvl5}
+                            alt="Level 5"
+                            className={`relative ${selectBetMode === 5 ? "pt-3" : "pt-0"}`}
+                        />
                     </button>
                 </div>
-                <img src={bottomboard} className=" absolute top-[442px] left-1/2 transform -translate-x-1/2 z-20" />
+                <img
+                    src={bottomboard}
+                    className="absolute left-1/2 top-[442px] z-20 -translate-x-1/2 transform"
+                />
                 {showBoardOpacity && (
-                    <img src={opacityBoard} className=" absolute opacity-70 top-[90px] left-1/2 transform -translate-x-1/2 z-30" />
+                    <img
+                        src={opacityBoard}
+                        className="absolute left-1/2 top-[90px] z-30 -translate-x-1/2 transform opacity-70"
+                    />
                 )}
                 {showLedTimer && (
-                    <div className="absolute z-50 top-[198px] left-[calc(50%+1px)] transform -translate-x-1/2">
-                        <LedTimer start={10} onLedTimeUp={() => {
-                            setShowChooseTimer(true)
-                            setShowLedTimer(false)
-                            setShowBoardOpacity(true)
-                            setBlockClick("none")
-                            setShowChooseRectangle(true)
-                        }} />
+                    <div className="absolute left-[calc(50%+1px)] top-[198px] z-50 -translate-x-1/2 transform">
+                        <LedTimer
+                            start={10}
+                            onLedTimeUp={() => {
+                                setShowChooseTimer(true);
+                                setShowLedTimer(false);
+                                setShowBoardOpacity(true);
+                                setBlockClick("none");
+                                setShowChooseRectangle(true);
+                            }}
+                        />
                     </div>
                 )}
                 {showChooseTimer && (
-                    <div className="absolute z-50 top-[198px] left-[calc(50%+1px)] transform -translate-x-1/2">
-                        <ChooseTimer start={10} onChooseTimeUp={() => {
-                            setShowChooseTimer(false)
-                            setShowHiddenTimer(true)
-                            onOpenModal("result")
-                        }} />
+                    <div className="absolute left-[calc(50%+1px)] top-[198px] z-50 -translate-x-1/2 transform">
+                        <ChooseTimer
+                            start={10}
+                            onChooseTimeUp={() => {
+                                setShowChooseTimer(false);
+                                setShowHiddenTimer(true);
+                                onOpenModal("result");
+                            }}
+                        />
                     </div>
                 )}
                 {showHiddenTimer && (
-                    <div className="absolute z-30 top-[197px] left-1/2 transform -translate-x-1/2">
-                        <HiddenTimer start={5} onHiddenTimeUp={() => {
-                            setShowHiddenTimer(false)
-                            setShowLedTimer(true)
-                            setBlockClick("auto")
-                            setShowBoardOpacity(false)
-                        }} />
+                    <div className="absolute left-1/2 top-[197px] z-30 -translate-x-1/2 transform">
+                        <HiddenTimer
+                            start={5}
+                            onHiddenTimeUp={() => {
+                                setShowHiddenTimer(false);
+                                setShowLedTimer(true);
+                                setBlockClick("auto");
+                                setShowBoardOpacity(false);
+                            }}
+                        />
                     </div>
                 )}
                 {showChooseRectangle && (
-                    <ChooseRectangle onChooseTimeUp={() => {
-                        setShowChooseRectangle(false)
-                    }}
+                    <ChooseRectangle
+                        onChooseTimeUp={() => {
+                            setShowChooseRectangle(false);
+                        }}
                         onResult={(fruit) => {
-                            onResult(fruit)// send up to LuckyFruitGame 🚀
+                            onResult(fruit);
                         }}
                     />
                 )}
             </div>
-        </div >
-    )
+        </div>
+    );
 }
