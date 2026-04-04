@@ -4,7 +4,7 @@ import rectangle from "../assets/Modal/Rectangle.svg"
 import shine from "../assets/Modal/RotatedInstances.svg"
 import linel from "../assets/Modal/LineL.svg"
 import liner from "../assets/Modal/LineR.svg"
-import image from "../assets/Modal/image.svg"
+import abatar from "../assets/Modal/abatar.svg"
 import CoinIcon from "./CoinIcon";
 // import cherry from "../assets/fruits/cherry.svg"
 // import grape from "../assets/fruits/grapes.svg"
@@ -122,7 +122,7 @@ export default function ResultMenu({ start = 5, onResultTimeUp, resultFruit }: R
             <span className="absolute left-1/2 -translate-x-1/2 top-[215px] text-[#FFFFFF]/60">Biggest winning of the round</span>
             <div className="absolute grid grid-cols-3 top-[244px] w-[300px] h-[100px] left-1/2 -translate-x-1/2 ">
                 <div className="relative h-[100px] w-[100px]">
-                    <img src={image} alt="image" className="absolute w-[50px] h-[50px] left-1/2 -translate-x-1/2" />
+                    <img src={abatar} alt="abatar" className="absolute w-[50px] h-[50px] left-1/2 -translate-x-1/2" />
                     <span className="absolute top-[50px] w-[100px] text-center">name</span>
                     <div className="absolute flex top-[70px] w-[100px] items-center justify-center">
                         <div className="relative ">
@@ -132,7 +132,7 @@ export default function ResultMenu({ start = 5, onResultTimeUp, resultFruit }: R
                     </div>
                 </div>
                 <div className="relative h-[100px] w-[100px]">
-                    <img src={image} alt="image" className="absolute w-[50px] h-[50px] left-1/2 -translate-x-1/2" />
+                    <img src={abatar} alt="abatar" className="absolute w-[50px] h-[50px] left-1/2 -translate-x-1/2" />
                     <span className="absolute top-[50px] w-[100px] text-center">name</span>
                     <div className="absolute flex top-[70px] w-[100px] items-center justify-center">
                         <div className="relative ">
@@ -142,7 +142,7 @@ export default function ResultMenu({ start = 5, onResultTimeUp, resultFruit }: R
                     </div>
                 </div>
                 <div className="relative h-[100px] w-[100px]">
-                    <img src={image} alt="image" className="absolute w-[50px] h-[50px] left-1/2 -translate-x-1/2" />
+                    <img src={abatar} alt="image" className="absolute w-[50px] h-[50px] left-1/2 -translate-x-1/2" />
                     <span className="absolute top-[50px] w-[100px] text-center">name</span>
                     <div className="absolute flex top-[70px] w-[100px] items-center justify-center">
                         <div className="relative ">
