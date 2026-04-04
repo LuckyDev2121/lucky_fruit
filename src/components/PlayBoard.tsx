@@ -68,35 +68,35 @@ export default function PlayBoard({
                         <img
                             src={getAssetUrl(GAME_ASSETS.betAmount100)}
                             alt="Level 1"
-                            className={`relative ${selectBetMode === 1 ? "pt-3" : "pt-0"}`}
+                            className={`relative ${selectBetMode === 1 ? "pt-0" : "pt-0"}`}
                         />
                     </button>
                     <button className="relative" onClick={() => setSelectBetMode(2)}>
                         <img
                             src={getAssetUrl(GAME_ASSETS.betAmount1000)}
                             alt="Level 2"
-                            className={`relative ${selectBetMode === 2 ? "pt-3" : "pt-0"}`}
+                            className={`relative ${selectBetMode === 2 ? "pt-0" : "pt-0"}`}
                         />
                     </button>
                     <button className="relative" onClick={() => setSelectBetMode(3)}>
                         <img
                             src={getAssetUrl(GAME_ASSETS.betAmount10k)}
                             alt="Level 3"
-                            className={`relative ${selectBetMode === 3 ? "pt-3" : "pt-0"}`}
+                            className={`relative ${selectBetMode === 3 ? "pt-0" : "pt-0"}`}
                         />
                     </button>
                     <button className="relative" onClick={() => setSelectBetMode(4)}>
                         <img
                             src={getAssetUrl(GAME_ASSETS.betAmount100k)}
                             alt="Level 4"
-                            className={`relative ${selectBetMode === 4 ? "pt-3" : "pt-0"}`}
+                            className={`relative ${selectBetMode === 4 ? "pt-0" : "pt-0"}`}
                         />
                     </button>
                     <button className="relative" onClick={() => setSelectBetMode(5)}>
                         <img
                             src={getAssetUrl(GAME_ASSETS.betAmount1M)}
                             alt="Level 5"
-                            className={`relative ${selectBetMode === 5 ? "pt-3" : "pt-0"}`}
+                            className={`relative ${selectBetMode === 5 ? "pt-0" : "pt-0"}`}
                         />
                     </button>
                 </div>
