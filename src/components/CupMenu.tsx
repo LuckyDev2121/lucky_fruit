@@ -2,9 +2,9 @@ import rectangle from "../assets/Modal/Rectangle.svg"
 import close from "../assets/TopMenu/X.svg";
 import help from "../assets/TopMenu/QuestionMark.svg";
 import abatar from "../assets/Modal/abatar.svg";
-import first from "../assets/Modal/result-1st-postion.svg";
-import second from "../assets/Modal/result-2nd-postion.svg";
-import third from "../assets/Modal/result-3rd-postion.svg";
+// import first from "../assets/Modal/result-1st-postion.svg";
+// import second from "../assets/Modal/result-2nd-postion.svg";
+// import third from "../assets/Modal/result-3rd-postion.svg";
 import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
 
 type CupMenuProps = {
@@ -25,7 +25,7 @@ export default function CupMenu({ onCloseCup, onOpenModal }: CupMenuProps) {
             </button>
             <div className="absolute top-[30px] h-[312px] w-[393px] overflow-y-auto overflow-x-hidden pt-[15px]">
                 <div className="relative flex h-[40px] w-[393px]">
-                    <img src={first} alt="First" className="absolute my-[2px] ml-[23px] mr-[15px] " />
+                    <img src={getAssetUrl(GAME_ASSETS.resultfirstposition)} alt="First" className="absolute my-[2px] ml-[23px] mr-[15px] " />
                     <img src={abatar} alt="Avatar" className="absolute left-[74px] h-[36px] w-[36px]" />
                     <div className="absolute left-[123px] flex h-[40px] w-[198px] flex-col justify-center">
                         <span className="text-[20px] leading-none my-[2px]">Name: C</span>
@@ -39,7 +39,7 @@ export default function CupMenu({ onCloseCup, onOpenModal }: CupMenuProps) {
                     </div>
                 </div>
                 <div className="relative flex h-[40px] w-[393px]">
-                    <img src={second} alt="Second" className="absolute my-[2px] ml-[23px] mr-[15px] " />
+                    <img src={getAssetUrl(GAME_ASSETS.resultsecondposition)} alt="Second" className="absolute my-[2px] ml-[23px] mr-[15px] " />
                     <img src={abatar} alt="Avatar" className="absolute left-[74px] h-[36px] w-[36px]" />
                     <div className="absolute left-[123px] flex h-[40px] w-[198px] flex-col justify-center">
                         <span className="text-[20px] leading-none my-[2px]">Name: D</span>
@@ -53,7 +53,7 @@ export default function CupMenu({ onCloseCup, onOpenModal }: CupMenuProps) {
                     </div>
                 </div>
                 <div className="relative flex h-[40px] w-[393px]">
-                    <img src={third} alt="Third" className="absolute my-[2px] ml-[23px] mr-[15px] " />
+                    <img src={getAssetUrl(GAME_ASSETS.resultthirdposition)} alt="Third" className="absolute my-[2px] ml-[23px] mr-[15px] " />
                     <img src={abatar} alt="Avatar" className="absolute left-[74px] h-[36px] w-[36px]" />
                     <div className="absolute left-[123px] flex h-[40px] w-[198px] flex-col justify-center">
                         <span className="text-[20px] leading-none my-[2px]">Name: D</span>

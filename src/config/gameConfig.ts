@@ -96,4 +96,7 @@ export const GAME_ASSETS = {
   fruitWatermalon: "fruit-watermalon.svg",
   timeCountingBoard: "time-Counting-board.svg",
   diamondIcon: "diamond-icon.svg",
+  resultfirstposition: "result-1st-postion.svg",
+  resultsecondposition: "result-2nd-postion.svg",
+  resultthirdposition: "result-3rd-postion.svg",
 } as const;
