@@ -1,5 +1,5 @@
 import Checkbox from "./CheckBox";
-import CoinIcon from "./CoinIcon";
+import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
 
 type RepeatModalProps = {
     onCloseRepeatModal: () => void;
@@ -11,7 +11,7 @@ export default function RepeatModal({ onCloseRepeatModal }: RepeatModalProps) {
             <span className="absolute top-[23px] flew px-[39px] text-center text-[15px] font-bold">Are you sure to repeat the previous round of betting?</span>
             <div className="absolute top-[73px] flex z-20 w-full left-1/2 transform -translate-x-1/2 items-center justify-center">
                 <div className="ml-[9px] justify-center items-center flex">
-                    <CoinIcon />
+                    <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" className="h-[9px] w-[16px] mr-[3px]" />
                 </div>
                 <span className="ml-2.5  font-bold">1111111</span>
             </div>

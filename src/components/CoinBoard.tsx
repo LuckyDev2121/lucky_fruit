@@ -1,8 +1,7 @@
 // import dimond from "../assets/CoinBoard/dimond.svg";
-import CoinIcon from "./CoinIcon";
 import rectangle from "../assets/CoinBoard/Rectangle 4.svg";
 import plus from "../assets/CoinBoard/Plus.svg";
-
+import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
 type CoinBoardProps = {
   onOpenModal: (modal: string) => void;
 };
@@ -13,14 +12,13 @@ export default function CoinBoard({ onOpenModal }: CoinBoardProps) {
       <div className="flex items-center relative" style={{ width: "107px", height: "26px" }}>
         <img src={rectangle} className="z-10 absolute inset-0 h-full w-full object-fill" />
         <div className="flex z-20 w-full">
-          {/* <img src={dimond} className="ml-[9px]" /> */}
           <div className="ml-[9px] justify-center items-center flex">
-            <CoinIcon />
+            <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" />
           </div>
           <span className="ml-2.5  font-bold">129454</span>
           <button className="ml-auto mr-[7px]"
             onClick={() => onOpenModal("recharge")}>
-            <img src={plus} />
+            <img src={plus} alt="Plus Icon" />
           </button>
         </div>
       </div>

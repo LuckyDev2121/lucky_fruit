@@ -5,7 +5,7 @@ import abatar from "../assets/Modal/abatar.svg";
 import first from "../assets/Modal/result-1st-postion.svg";
 import second from "../assets/Modal/result-2nd-postion.svg";
 import third from "../assets/Modal/result-3rd-postion.svg";
-import CoinIcon from "./CoinIcon";
+import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
 
 type CupMenuProps = {
     onCloseCup: () => void;
@@ -33,7 +33,7 @@ export default function CupMenu({ onCloseCup, onOpenModal }: CupMenuProps) {
                     </div>
                     <div className="absolute flex bg-[#39064B]/70 h-[22px] w-[55px] right-[22px] rounded-full my-[9px]">
                         <div className="relative ml-[5px] mr-[3px] h-[9px] w-[16px]">
-                            <CoinIcon />
+                            <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" />
                         </div>
                         <span className="relative inline-flex text-[12px] my-[2px] items-center justify-center">****</span>
                     </div>
@@ -47,7 +47,7 @@ export default function CupMenu({ onCloseCup, onOpenModal }: CupMenuProps) {
                     </div>
                     <div className="absolute flex bg-[#39064B]/70 h-[22px] w-[55px] right-[22px] rounded-full my-[9px]">
                         <div className="relative ml-[5px] mr-[3px] h-[9px] w-[16px]">
-                            <CoinIcon />
+                            <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" />
                         </div>
                         <span className="relative inline-flex text-[12px] my-[2px] items-center justify-center">****</span>
                     </div>
@@ -61,7 +61,7 @@ export default function CupMenu({ onCloseCup, onOpenModal }: CupMenuProps) {
                     </div>
                     <div className="absolute flex bg-[#39064B]/70 h-[22px] w-[55px] right-[22px] rounded-full my-[9px]">
                         <div className="relative ml-[5px] mr-[3px] h-[9px] w-[16px]">
-                            <CoinIcon />
+                            <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" />
                         </div>
                         <span className="relative inline-flex text-[12px] my-[2px] items-center justify-center">****</span>
                     </div>
@@ -76,7 +76,7 @@ export default function CupMenu({ onCloseCup, onOpenModal }: CupMenuProps) {
                         </div>
                         <div className="absolute flex bg-[#39064B]/70 h-[22px] w-[55px] right-[22px] rounded-full my-[9px]">
                             <div className="relative ml-[5px] mr-[3px] h-[9px] w-[16px]">
-                                <CoinIcon />
+                                <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" />
                             </div>
                             <span className="relative inline-flex text-[12px] my-[2px] items-center justify-center">****</span>
                         </div>

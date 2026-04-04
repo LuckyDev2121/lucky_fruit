@@ -5,7 +5,7 @@ import shine from "../assets/Modal/RotatedInstances.svg"
 import linel from "../assets/Modal/LineL.svg"
 import liner from "../assets/Modal/LineR.svg"
 import abatar from "../assets/Modal/abatar.svg"
-import CoinIcon from "./CoinIcon";
+import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
 // import cherry from "../assets/fruits/cherry.svg"
 // import grape from "../assets/fruits/grapes.svg"
 // import lemon from "../assets/fruits/lemon.svg"
@@ -126,7 +126,8 @@ export default function ResultMenu({ start = 5, onResultTimeUp, resultFruit }: R
                     <span className="absolute top-[50px] w-[100px] text-center">name</span>
                     <div className="absolute flex top-[70px] w-[100px] items-center justify-center">
                         <div className="relative ">
-                            <CoinIcon />
+                            <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" className="h-[9px] w-[16px] mr-[3px]" />
+
                         </div>
                         <span >1000</span>
                     </div>
@@ -136,7 +137,8 @@ export default function ResultMenu({ start = 5, onResultTimeUp, resultFruit }: R
                     <span className="absolute top-[50px] w-[100px] text-center">name</span>
                     <div className="absolute flex top-[70px] w-[100px] items-center justify-center">
                         <div className="relative ">
-                            <CoinIcon />
+                            <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" className="h-[9px] w-[16px] mr-[3px]" />
+
                         </div>
                         <span >1000</span>
                     </div>
@@ -146,7 +148,8 @@ export default function ResultMenu({ start = 5, onResultTimeUp, resultFruit }: R
                     <span className="absolute top-[50px] w-[100px] text-center">name</span>
                     <div className="absolute flex top-[70px] w-[100px] items-center justify-center">
                         <div className="relative ">
-                            <CoinIcon />
+                            <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" className="h-[9px] w-[16px] mr-[3px]" />
+
                         </div>
                         <span >1000</span>
                     </div>

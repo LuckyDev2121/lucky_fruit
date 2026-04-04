@@ -1,7 +1,7 @@
 import rectangle from "../assets/Modal/Rectangle.svg"
 import close from "../assets/TopMenu/X.svg";
 import help from "../assets/TopMenu/QuestionMark.svg";
-import CoinIcon from "./CoinIcon";
+import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
 // import cherry from "../assets/fruits/cherry.svg"
 // import grape from "../assets/fruits/grapes.svg"
 // import lemon from "../assets/fruits/lemon.svg"
@@ -47,7 +47,7 @@ export default function NoteMenu({ onCloseNote, onOpenModal }: NoteMenuProps) {
                     <span>Win Today</span>
                     <div>
                         <div className="ml-[9px] justify-center items-center flex">
-                            <CoinIcon />
+                            <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" className="h-[9px] w-[16px] mr-[3px]" />
                             <span className="ml-2.5 font-bold">0</span>
                         </div>
                     </div>
@@ -70,7 +70,7 @@ export default function NoteMenu({ onCloseNote, onOpenModal }: NoteMenuProps) {
                                 <div className="justify-center items-center flex " >
                                     <img src={element.element_icon} alt={element.element_name} className="h-4 w-4 mr-[2px]" />
                                     <div className=" justify-center items-center content-center h-[14px] w-[10px]">
-                                        <CoinIcon />
+                                        <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" className="h-[9px] w-[16px] mr-[3px]" />
                                     </div>
                                     <span>1000</span>
                                 </div>
