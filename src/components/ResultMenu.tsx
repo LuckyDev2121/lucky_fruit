@@ -127,7 +127,6 @@ export default function ResultMenu({ start = 5, onResultTimeUp, resultFruit }: R
                     <div className="absolute flex top-[70px] w-[100px] items-center justify-center">
                         <div className="relative ">
                             <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" className="h-[9px] w-[16px] mr-[3px]" />
-
                         </div>
                         <span >1000</span>
                     </div>
@@ -138,7 +137,6 @@ export default function ResultMenu({ start = 5, onResultTimeUp, resultFruit }: R
                     <div className="absolute flex top-[70px] w-[100px] items-center justify-center">
                         <div className="relative ">
                             <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" className="h-[9px] w-[16px] mr-[3px]" />
-
                         </div>
                         <span >1000</span>
                     </div>
@@ -149,7 +147,6 @@ export default function ResultMenu({ start = 5, onResultTimeUp, resultFruit }: R
                     <div className="absolute flex top-[70px] w-[100px] items-center justify-center">
                         <div className="relative ">
                             <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" className="h-[9px] w-[16px] mr-[3px]" />
-
                         </div>
                         <span >1000</span>
                     </div>
