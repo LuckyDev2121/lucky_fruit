@@ -5,8 +5,8 @@ import opacityBoard from "../assets/PlayBoard/playboardopacity.svg";
 import repeat from "../assets/PlayBoard/repeat.svg";
 import ChooseRectangle from "./ChooseRectangle";
 import ChooseTimer from "./ChooseTimer";
-import FruitBoard from "./FruitBoard";
-// import GameElements from "./GameElements";
+// import FruitBoard from "./FruitBoard";
+import GameElements from "./GameElements";
 import HiddenTimer from "./HiddenTimer";
 import LedTimer from "./LedTimer";
 
@@ -45,7 +45,7 @@ export default function PlayBoard({
                     src={getAssetUrl(GAME_ASSETS.fruitContainerFrame)}
                     className="absolute left-1/2 top-[90px] z-20 -translate-x-1/2 transform"
                 />
-                <FruitBoard controlButtons={blockClick} />
+                <GameElements controlButtons={blockClick} />
                 <img
                     src={getAssetUrl(GAME_ASSETS.timeCountingBoard)}
                     className="absolute left-[calc(50%-1px)] top-[183px] z-40 -translate-x-1/2 transform"
@@ -113,7 +113,7 @@ export default function PlayBoard({
                 {showLedTimer && (
                     <div className="absolute left-[calc(50%+1px)] top-[198px] z-50 -translate-x-1/2 transform">
                         <LedTimer
-                            start={10}
+                            start={30}
                             onLedTimeUp={() => {
                                 setShowChooseTimer(true);
                                 setShowLedTimer(false);
@@ -127,7 +127,7 @@ export default function PlayBoard({
                 {showChooseTimer && (
                     <div className="absolute left-[calc(50%+1px)] top-[198px] z-50 -translate-x-1/2 transform">
                         <ChooseTimer
-                            start={10}
+                            start={5}
                             onChooseTimeUp={() => {
                                 setShowChooseTimer(false);
                                 setShowHiddenTimer(true);
@@ -139,7 +139,7 @@ export default function PlayBoard({
                 {showHiddenTimer && (
                     <div className="absolute left-1/2 top-[197px] z-30 -translate-x-1/2 transform">
                         <HiddenTimer
-                            start={5}
+                            start={3}
                             onHiddenTimeUp={() => {
                                 setShowHiddenTimer(false);
                                 setShowLedTimer(true);

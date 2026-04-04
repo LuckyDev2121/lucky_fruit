@@ -6,8 +6,9 @@ type LedTimerProps = {
     onLedTimeUp?: () => void;
 };
 
-export default function LedTimer({ start = 10, onLedTimeUp }: LedTimerProps) {
-    const [time, setTime] = useState(start);
+export default function LedTimer({ start, onLedTimeUp }: LedTimerProps) {
+    const initialTime = Math.max(0, start ?? 0);
+    const [time, setTime] = useState(initialTime);
     const onLedTimeUpRef = useRef(onLedTimeUp);
 
     useEffect(() => {
@@ -15,14 +16,19 @@ export default function LedTimer({ start = 10, onLedTimeUp }: LedTimerProps) {
     }, [onLedTimeUp]);
 
     useEffect(() => {
-        setTime(start);
-    }, [start]);
+        setTime(initialTime);
+    }, [initialTime]);
 
     useEffect(() => {
-        const timer = setInterval(() => {
+        if (initialTime <= 0) {
+            onLedTimeUpRef.current?.();
+            return;
+        }
+
+        const timer = window.setInterval(() => {
             setTime((prev) => {
                 if (prev <= 1) {
-                    clearInterval(timer);
+                    window.clearInterval(timer);
                     onLedTimeUpRef.current?.();
                     return 0;
                 }
@@ -30,10 +36,10 @@ export default function LedTimer({ start = 10, onLedTimeUp }: LedTimerProps) {
             });
         }, 1000);
 
-        return () => clearInterval(timer);
-    }, [start]);
+        return () => window.clearInterval(timer);
+    }, [initialTime]);
 
-    const formatted = time.toString().padStart(2, "0");
+    const formatted = String(time).padStart(2, "0");
 
     return (
         <div>

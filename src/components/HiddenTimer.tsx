@@ -5,7 +5,8 @@ type HiddenTimerProps = {
     onHiddenTimeUp?: () => void;
 };
 
-export default function HiddenTimer({ start = 5, onHiddenTimeUp }: HiddenTimerProps) {
+export default function HiddenTimer({ start, onHiddenTimeUp }: HiddenTimerProps) {
+    const duration = Math.max(0, start ?? 0);
     const onHiddenTimeUpRef = useRef(onHiddenTimeUp);
 
     useEffect(() => {
@@ -13,17 +14,17 @@ export default function HiddenTimer({ start = 5, onHiddenTimeUp }: HiddenTimerPr
     }, [onHiddenTimeUp]);
 
     useEffect(() => {
-        if (start <= 0) {
+        if (duration <= 0) {
             onHiddenTimeUpRef.current?.();
             return;
         }
 
         const timer = window.setTimeout(() => {
             onHiddenTimeUpRef.current?.();
-        }, start * 1000);
+        }, duration * 1000);
 
         return () => window.clearTimeout(timer);
-    }, [start]);
+    }, [duration]);
 
     return (
         <div>
