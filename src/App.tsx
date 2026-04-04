@@ -1,15 +1,19 @@
-import LuckyFruitGame from "./components/LuckyFruitGame"
-import MusicPlayer from "./components/GameMusic"
-import { useState, useEffect } from "react"
-import LoadingScreen from "./components/LoadingScrean"
+import { useEffect, useState } from "react";
+
+import MusicPlayer from "./components/GameMusic";
+import LoadingScreen from "./components/LoadingScrean";
+import LuckyFruitGame from "./components/LuckyFruitGame";
+import { GAME_ASSETS, getAssetUrl } from "./config/gameConfig";
 
 async function preloadGameAssets(setProgress: (value: number) => void) {
-  const assets = [
-    "/src/assets/PlayBoard/playboard.svg",
-    "/src/assets/PlayBoard/fruitboard.svg",
-    "/src/assets/fruits/cherry.svg",
-    "/src/assets/fruits/grapes.svg",
-  ];
+  const assets = Object.values(GAME_ASSETS).map((fileName) =>
+    getAssetUrl(fileName),
+  );
+
+  if (assets.length === 0) {
+    setProgress(100);
+    return;
+  }
 
   let loaded = 0;
 
@@ -20,12 +24,12 @@ async function preloadGameAssets(setProgress: (value: number) => void) {
           const img = new Image();
           img.src = src;
           img.onload = img.onerror = () => {
-            loaded++;
+            loaded += 1;
             setProgress(Math.round((loaded / assets.length) * 100));
             resolve();
           };
-        })
-    )
+        }),
+    ),
   );
 }
 
@@ -48,10 +52,10 @@ function App() {
       <MusicPlayer isMusicPlaying={isMusicPlaying} />
       <LuckyFruitGame
         isMusicPlaying={isMusicPlaying}
-        onToggleMusic={() => setIsMusicPlaying(prev => !prev)}
+        onToggleMusic={() => setIsMusicPlaying((prev) => !prev)}
       />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

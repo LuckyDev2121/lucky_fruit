@@ -1,16 +1,8 @@
 import { useState } from "react";
-import lvl1 from "../assets/BetBoard/100.svg";
-import lvl2 from "../assets/BetBoard/1000.svg";
-import lvl3 from "../assets/BetBoard/10000.svg";
-import lvl4 from "../assets/BetBoard/100K.svg";
-import lvl5 from "../assets/BetBoard/1M.svg";
+import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
 import bottomboard from "../assets/BottomBoard/bottomboard.svg";
-import fruitboard from "../assets/PlayBoard/fruitboard.svg";
-import luckyfruit from "../assets/PlayBoard/luckyfruit.svg";
-import playboard from "../assets/PlayBoard/playboard.svg";
 import opacityBoard from "../assets/PlayBoard/playboardopacity.svg";
 import repeat from "../assets/PlayBoard/repeat.svg";
-import timer from "../assets/PlayBoard/timer.svg";
 import ChooseRectangle from "./ChooseRectangle";
 import ChooseTimer from "./ChooseTimer";
 import GameElements from "./GameElements";
@@ -40,21 +32,21 @@ export default function PlayBoard({
         <div className="absolute z-20 object-contain" style={{ width: "100%", height: "100%" }}>
             <div className="relative inset-0 z-20">
                 <img
-                    src={luckyfruit}
+                    src={getAssetUrl(GAME_ASSETS.fruitGameName)}
                     alt="luckyfruit"
                     className="absolute inset-0 left-1/2 top-[25px] z-20 -translate-x-1/2 transform"
                 />
-                <img src={playboard} className="absolute inset-0 mt-[7px]" />
+                <img src={getAssetUrl(GAME_ASSETS.fruitBgFrame)} className="absolute inset-0 mt-[7px]" />
                 <span className="absolute left-1/2 top-[70px] h-[18px] w-[124px] -translate-x-1/2 transform justify-center rounded-full bg-[#3D005C] text-center font-regular">
                     Round 1526 of today
                 </span>
                 <img
-                    src={fruitboard}
+                    src={getAssetUrl(GAME_ASSETS.fruitContainerFrame)}
                     className="absolute left-1/2 top-[90px] z-20 -translate-x-1/2 transform"
                 />
                 <GameElements controlButtons={blockClick} />
                 <img
-                    src={timer}
+                    src={getAssetUrl(GAME_ASSETS.timeCountingBoard)}
                     className="absolute left-[calc(50%-1px)] top-[183px] z-40 -translate-x-1/2 transform"
                 />
                 <button
@@ -73,35 +65,35 @@ export default function PlayBoard({
                 >
                     <button className="relative" onClick={() => setSelectBetMode(1)}>
                         <img
-                            src={lvl1}
+                            src={getAssetUrl(GAME_ASSETS.betAmount100)}
                             alt="Level 1"
                             className={`relative ${selectBetMode === 1 ? "pt-3" : "pt-0"}`}
                         />
                     </button>
                     <button className="relative" onClick={() => setSelectBetMode(2)}>
                         <img
-                            src={lvl2}
+                            src={getAssetUrl(GAME_ASSETS.betAmount1000)}
                             alt="Level 2"
                             className={`relative ${selectBetMode === 2 ? "pt-3" : "pt-0"}`}
                         />
                     </button>
                     <button className="relative" onClick={() => setSelectBetMode(3)}>
                         <img
-                            src={lvl3}
+                            src={getAssetUrl(GAME_ASSETS.betAmount10k)}
                             alt="Level 3"
                             className={`relative ${selectBetMode === 3 ? "pt-3" : "pt-0"}`}
                         />
                     </button>
                     <button className="relative" onClick={() => setSelectBetMode(4)}>
                         <img
-                            src={lvl4}
+                            src={getAssetUrl(GAME_ASSETS.betAmount100k)}
                             alt="Level 4"
                             className={`relative ${selectBetMode === 4 ? "pt-3" : "pt-0"}`}
                         />
                     </button>
                     <button className="relative" onClick={() => setSelectBetMode(5)}>
                         <img
-                            src={lvl5}
+                            src={getAssetUrl(GAME_ASSETS.betAmount1M)}
                             alt="Level 5"
                             className={`relative ${selectBetMode === 5 ? "pt-3" : "pt-0"}`}
                         />

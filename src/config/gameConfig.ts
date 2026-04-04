@@ -18,9 +18,14 @@ function getRuntimeOrigin(): string {
 
 const RUNTIME_ORIGIN = getRuntimeOrigin();
 export const APP_ORIGIN = RUNTIME_ORIGIN;
+
+
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ||
   (import.meta.env.DEV ? "/api" : `${RUNTIME_ORIGIN}/api`);
+
+
+
 
 export const GAME_DETAILS_API_URL = `${API_BASE_URL.replace(/\/$/, "")}/game-details/${GAME_ID}`;
 
@@ -39,6 +44,20 @@ export const REALTIME_PORT = Number(
 );
 export const FALLBACK_REFRESH_MS = 5_000;
 
+export const ASSET_BASE_URL ="https://funint.site/core/storage/app/public/";
+
+export function getAssetUrl(fileName: string): string {
+  if (!fileName) {
+    return "";
+  }
+
+  if (/^https?:\/\//i.test(fileName)) {
+    return fileName;
+  }
+
+  return `${ASSET_BASE_URL}${fileName.replace(/^\/+/, "")}`;
+}
+
 export const CONNECTION_LABELS: Record<ConnectionState, string> = {
   connecting: "Connecting",
   connected: "Live",
@@ -47,3 +66,23 @@ export const CONNECTION_LABELS: Record<ConnectionState, string> = {
   unavailable: "Unavailable",
   failed: "Failed",
 };
+
+export const GAME_ASSETS = {
+  betAmount1M: "bet-amount-1M.svg",
+  betAmount10k: "bet-amount-10k.svg",
+  betAmount100: "bet-amount-100.svg",
+  betAmount100k: "bet-amount-100k.svg",
+  betAmount1000: "bet-amount-1000.svg",
+  fruitAvocado: "fruit-avocado.svg",
+  fruitBgFrame: "fruit-bg-frame.svg",
+  fruitCheri: "fruit-cheri.svg",
+  fruitContainerFrame: "fruit-container-frame.svg",
+  fruitGameName: "fruit-game-name.svg",
+  fruitGraps: "fruit-graps.svg",
+  fruitLemon: "fruit-lemon.svg",
+  fruitOrange: "fruit-orange.svg",
+  fruitStroberry: "fruit-stroberry.svg",
+  fruitTomato: "fruit-tomato.svg",
+  fruitWatermalon: "fruit-watermalon.svg",
+  timeCountingBoard: "time-Counting-board.svg",
+} as const;

@@ -4,7 +4,6 @@ import Pusher from "pusher-js";
 
 import { 
   GAME_DETAILS_API_URL,
-  APP_ORIGIN,
   CONNECTION_LABELS,
   FALLBACK_REFRESH_MS,
   REALTIME_CHANNEL,
@@ -13,6 +12,7 @@ import {
   REALTIME_PORT,
   REVERB_KEY,
   USE_TLS,
+  getAssetUrl
  } from "../config/gameConfig";
 
 type ConnectionState =
@@ -124,15 +124,7 @@ function mergeGame(
 }
 
 export function resolveAssetUrl(path: string): string {
-  if (!path) {
-    return "";
-  }
-
-  if (/^https?:\/\//i.test(path)) {
-    return path;
-  }
-
-  return new URL(path.replace(/^\/+/, ""), `${APP_ORIGIN}/`).toString();
+  return getAssetUrl(path);
 }
 
 export function useGameDetails() {
