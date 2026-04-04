@@ -1,6 +1,4 @@
 import rectangle from "../assets/Modal/Rectangle.svg"
-import close from "../assets/TopMenu/X.svg";
-import help from "../assets/TopMenu/QuestionMark.svg";
 import abatar from "../assets/Modal/abatar.svg";
 // import first from "../assets/Modal/result-1st-postion.svg";
 // import second from "../assets/Modal/result-2nd-postion.svg";
@@ -12,16 +10,50 @@ type CupMenuProps = {
     onOpenModal: (modal: string) => void;
 };
 
+function QuestionMarkIcon() {
+    return (
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
+            <path
+                d="M5.55 5.4C5.55 4.35 6.4 3.5 7.45 3.5C8.5 3.5 9.35 4.25 9.35 5.2C9.35 5.95 8.95 6.45 8.25 6.9C7.6 7.3 7.2 7.7 7.2 8.45V8.7"
+                stroke="white"
+                strokeWidth="1.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
+            <circle cx="7.2" cy="11.1" r="0.8" fill="white" />
+        </svg>
+    );
+}
+
+function CloseIcon() {
+    return (
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
+            <path
+                d="M4.2 4.2L10.8 10.8"
+                stroke="white"
+                strokeWidth="1.4"
+                strokeLinecap="round"
+            />
+            <path
+                d="M10.8 4.2L4.2 10.8"
+                stroke="white"
+                strokeWidth="1.4"
+                strokeLinecap="round"
+            />
+        </svg>
+    );
+}
+
 export default function CupMenu({ onCloseCup, onOpenModal }: CupMenuProps) {
     return (
         <div className="h-[342px] bg-gradient-to-t from-[#7C00D5] to-[#5028C1] w-[393px] rounded-t-[20px]">
             <img src={rectangle} alt="Rectangle" className="absolute left-1/2 transform -translate-x-1/2" />
             <span className="absolute  left-1/2 transform -translate-x-1/2 text-sm font-bold mt-1">Ranking today</span>
-            <button className="absolute h-[19px] w-[19px] mt-[5px] right-[62px] rounded-full bg-[#360149]" onClick={onCloseCup}>
-                <img src={close} alt="Close" className="p-[3px]" />
+            <button className="absolute h-[19px] w-[19px] mt-[5px] pl-[2px] right-[62px] rounded-full bg-[#360149]" onClick={onCloseCup}>
+                <CloseIcon />
             </button>
-            <button className="absolute h-[19px] w-[19px] mt-[5px] right-[87px] rounded-full bg-[#360149]" onClick={() => onOpenModal("help")}>
-                <img src={help} alt="Help" className="p-[3px]" />
+            <button className="absolute h-[19px] w-[19px] mt-[5px] pl-[2px] right-[87px] rounded-full bg-[#360149]" onClick={() => onOpenModal("help")}>
+                <QuestionMarkIcon />
             </button>
             <div className="scrollbar-hidden absolute top-[30px] h-[312px] w-[393px] overflow-y-auto overflow-x-hidden pt-[15px]">
                 <div className="relative flex h-[40px] w-[393px]">

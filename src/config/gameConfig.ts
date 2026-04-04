@@ -99,4 +99,6 @@ export const GAME_ASSETS = {
   resultfirstposition: "result-1st-postion.svg",
   resultsecondposition: "result-2nd-postion.svg",
   resultthirdposition: "result-3rd-postion.svg",
+  rotatedInstances: "rotated-instances.svg",
+  selectround: "select-round.svg",
 } as const;

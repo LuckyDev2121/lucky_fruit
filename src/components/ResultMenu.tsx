@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import rectangle from "../assets/Modal/Rectangle.svg"
-import shine from "../assets/Modal/RotatedInstances.svg"
+
 import linel from "../assets/Modal/LineL.svg"
 import liner from "../assets/Modal/LineR.svg"
 import abatar from "../assets/Modal/abatar.svg"
@@ -100,7 +100,7 @@ export default function ResultMenu({ start = 5, onResultTimeUp, resultFruit }: R
             </span>
             <div className="absolute left-1/2 top-[57px] h-[117px] w-[117px] -translate-x-1/2 overflow-hidden rounded-full">
                 <motion.img
-                    src={shine}
+                    src={getAssetUrl(GAME_ASSETS.rotatedInstances)}
                     alt="Shine"
                     className="absolute inset-0 h-full w-full origin-center opacity-50"
                     animate={{ rotate: 360 }}

@@ -1,5 +1,5 @@
-import rectangle from "../assets/PlayBoard/chooserectangle.svg"
 import { useEffect, useRef, useState } from "react"
+import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
 // import { type GameElement, fetchGameElements } from '../api/gameElementApi';
 
 const fruits = [
@@ -59,7 +59,7 @@ export default function ChooseRectangle({ onChooseTimeUp, onResult }: { onChoose
 
     return (
         <div className="absolute z-40" style={{ top: `${fruits[(randomIndex + time) % fruits.length].top}px`, left: `${fruits[(randomIndex + time) % fruits.length].left}px` }}>
-            <img src={rectangle} alt="Choose Rectangle" className="relative" />
+            <img src={getAssetUrl(GAME_ASSETS.selectround)} alt="Choose Rectangle" className="relative" />
         </div>
     );
 }

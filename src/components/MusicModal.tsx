@@ -1,4 +1,4 @@
-import close from "../assets/TopMenu/X.svg";
+
 
 type MusicModalProps = {
     isMusicPlaying: boolean;
@@ -13,6 +13,26 @@ type ToggleRowProps = {
     isOn: boolean;
     onToggle: () => void;
 };
+
+function CloseIcon() {
+    return (
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
+            <path
+                d="M4.2 4.2L10.8 10.8"
+                stroke="white"
+                strokeWidth="1.4"
+                strokeLinecap="round"
+            />
+            <path
+                d="M10.8 4.2L4.2 10.8"
+                stroke="white"
+                strokeWidth="1.4"
+                strokeLinecap="round"
+            />
+        </svg>
+    );
+}
+
 function ToggleRow({ label, isOn, onToggle }: ToggleRowProps) {
     return (
         <div className="flex items-center justify-between">
@@ -57,17 +77,13 @@ export default function MusicModal({ isMusicPlaying,
                         padding: 0,
                     }}
                 >
-                    <div className="absolute inset-0 w-full h-full rounded-full" style={{
+                    <div className="absolute inset-0 w-full h-full rounded-full pt-[4px] pl-[4px]" style={{
                         backgroundColor: "#B026C7",
                         borderColor: "#E85BC5",
                         borderWidth: "1px",
-                    }}></div>
-
-                    <img
-                        src={close}
-                        alt="menu icon"
-                        className="relative w-[14px] h-[14px] object-contain m-auto"
-                    />
+                    }}>
+                        <CloseIcon />
+                    </div>
                 </button>
             </div>
             <div className="flex h-full flex-col justify-center gap-4">

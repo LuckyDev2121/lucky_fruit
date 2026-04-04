@@ -2,7 +2,7 @@ import React from "react";
 
 
 type MenuButtonProps = {
-    icon: string;
+    icon: React.ReactNode;
     background: string;
     onClick: () => void;
     size?: number;
@@ -38,11 +38,9 @@ const MenuButton: React.FC<MenuButtonProps> = ({
             }}></div>
 
             {/* Icon */}
-            <img
-                src={icon}
-                alt="menu icon"
-                className="relative w-[15px] h-[15px] object-contain m-auto"
-            />
+            <div className="relative flex h-full w-full items-center justify-center">
+                {icon}
+            </div>
         </button>
     );
 };
