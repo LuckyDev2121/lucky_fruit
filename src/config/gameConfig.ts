@@ -18,11 +18,13 @@ function getRuntimeOrigin(): string {
 
 const RUNTIME_ORIGIN = getRuntimeOrigin();
 export const APP_ORIGIN = RUNTIME_ORIGIN;
+export const BACKEND_ORIGIN =
+  import.meta.env.VITE_BACKEND_ORIGIN || "https://funint.site";
 
 
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ||
-  (import.meta.env.DEV ? "/api" : `${RUNTIME_ORIGIN}/api`);
+  (import.meta.env.DEV ? "/api" : `${BACKEND_ORIGIN}/api`);
 
 
 
@@ -44,18 +46,26 @@ export const REALTIME_PORT = Number(
 );
 export const FALLBACK_REFRESH_MS = 5_000;
 
-export const ASSET_BASE_URL ="https://funint.site/core/storage/app/public/";
+export const ASSET_BASE_URL = `${BACKEND_ORIGIN}/core/storage/app/public/`;
 
-export function getAssetUrl(fileName: string): string {
-  if (!fileName) {
+export function getAssetUrl(path: string): string {
+  if (!path) {
     return "";
   }
 
-  if (/^https?:\/\//i.test(fileName)) {
-    return fileName;
+  if (/^https?:\/\//i.test(path)) {
+    return path;
   }
 
-  return `${ASSET_BASE_URL}${fileName.replace(/^\/+/, "")}`;
+  const normalizedPath = path.replace(/^\/+/, "");
+  const storagePrefix = "core/storage/app/public/";
+  const storagePathIndex = normalizedPath.indexOf(storagePrefix);
+
+  if (storagePathIndex >= 0) {
+    return `${BACKEND_ORIGIN}/${normalizedPath.slice(storagePathIndex)}`;
+  }
+
+  return `${ASSET_BASE_URL}${normalizedPath}`;
 }
 
 export const CONNECTION_LABELS: Record<ConnectionState, string> = {
