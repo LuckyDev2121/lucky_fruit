@@ -23,7 +23,7 @@ export default function CupMenu({ onCloseCup, onOpenModal }: CupMenuProps) {
             <button className="absolute h-[19px] w-[19px] mt-[5px] right-[87px] rounded-full bg-[#360149]" onClick={() => onOpenModal("help")}>
                 <img src={help} alt="Help" className="p-[3px]" />
             </button>
-            <div className="absolute top-[30px] h-[312px] w-[393px] overflow-y-auto overflow-x-hidden pt-[15px]">
+            <div className="scrollbar-hidden absolute top-[30px] h-[312px] w-[393px] overflow-y-auto overflow-x-hidden pt-[15px]">
                 <div className="relative flex h-[40px] w-[393px]">
                     <img src={getAssetUrl(GAME_ASSETS.resultfirstposition)} alt="First" className="absolute my-[2px] ml-[23px] mr-[15px] " />
                     <img src={abatar} alt="Avatar" className="absolute left-[74px] h-[36px] w-[36px]" />
