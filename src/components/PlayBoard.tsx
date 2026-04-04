@@ -9,6 +9,7 @@ import ChooseTimer from "./ChooseTimer";
 import GameElements from "./GameElements";
 import HiddenTimer from "./HiddenTimer";
 import LedTimer from "./LedTimer";
+import { useGameDetails, resolveAssetUrl } from '../hooks/useGameDetails';
 
 type PlayBoardProps = {
     onOpenModal: (modal: string) => void;
@@ -28,6 +29,8 @@ export default function PlayBoard({
     const [showHiddenTimer, setShowHiddenTimer] = useState(false);
     const [showBoardOpacity, setShowBoardOpacity] = useState(false);
     const [showChooseRectangle, setShowChooseRectangle] = useState(false);
+
+    const { betAmounts } = useGameDetails();
 
     return (
         <div className="absolute z-20 object-contain" style={{ width: "100%", height: "100%" }}>
@@ -61,44 +64,24 @@ export default function PlayBoard({
                     <img src={repeat} alt="Repeat Icon" className="relative" />
                 </button>
                 <div
-                    className="absolute inset-0 top-[361px] z-20 flex justify-center"
+                    className="absolute inset-0 top-[361px] pt-[10px] z-20 flex justify-center"
                     style={{ pointerEvents: "auto" }}
                 >
-                    <button className="relative" onClick={() => setSelectBetMode(1)}>
-                        <img
-                            src={getAssetUrl(GAME_ASSETS.betAmount100)}
-                            alt="Level 1"
-                            className={`relative ${selectBetMode === 1 ? "pt-0" : "pt-0"}`}
-                        />
-                    </button>
-                    <button className="relative" onClick={() => setSelectBetMode(2)}>
-                        <img
-                            src={getAssetUrl(GAME_ASSETS.betAmount1000)}
-                            alt="Level 2"
-                            className={`relative ${selectBetMode === 2 ? "pt-0" : "pt-0"}`}
-                        />
-                    </button>
-                    <button className="relative" onClick={() => setSelectBetMode(3)}>
-                        <img
-                            src={getAssetUrl(GAME_ASSETS.betAmount10k)}
-                            alt="Level 3"
-                            className={`relative ${selectBetMode === 3 ? "pt-0" : "pt-0"}`}
-                        />
-                    </button>
-                    <button className="relative" onClick={() => setSelectBetMode(4)}>
-                        <img
-                            src={getAssetUrl(GAME_ASSETS.betAmount100k)}
-                            alt="Level 4"
-                            className={`relative ${selectBetMode === 4 ? "pt-0" : "pt-0"}`}
-                        />
-                    </button>
-                    <button className="relative" onClick={() => setSelectBetMode(5)}>
-                        <img
-                            src={getAssetUrl(GAME_ASSETS.betAmount1M)}
-                            alt="Level 5"
-                            className={`relative ${selectBetMode === 5 ? "pt-0" : "pt-0"}`}
-                        />
-                    </button>
+                    {betAmounts.map((element, index) => {
+                        return (
+                            <button
+                                key={element.id}
+                                className="relative"
+                                onClick={() => setSelectBetMode(index + 1)}
+                            >
+                                <img
+                                    src={resolveAssetUrl(element.icon)}
+                                    alt={`Bet amount ${element.amount}`}
+                                    className={`relative ${selectBetMode === index + 1 ? "pt-0" : "pt-0"}`}
+                                />
+                            </button>
+                        )
+                    })}
                 </div>
                 <img
                     src={bottomboard}

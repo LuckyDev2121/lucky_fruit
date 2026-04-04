@@ -32,6 +32,7 @@ type GameOption = {
 type BetAmount = {
   id: number;
   amount: string;
+  icon: string;
 };
 
 type GameDetailsData = {
