@@ -36,14 +36,14 @@ const GameElements = ({ controlButtons }: FruitBoardProps) => {
             {options.map((element, index) => {
                 // Custom grid positioning for each button
                 let gridPosition = '';
-                if (index === 0) gridPosition = 'col-start-2 row-start-1'; // 1st button
-                else if (index === 1) gridPosition = 'col-start-3 row-start-1'; // 2nd button
-                else if (index === 2) gridPosition = 'col-start-3 row-start-2'; // 3rd button
-                else if (index === 3) gridPosition = 'col-start-3 row-start-3'; // 4th button
-                else if (index === 4) gridPosition = 'col-start-2 row-start-3'; // 5th button
-                else if (index === 5) gridPosition = 'col-start-1 row-start-3'; // 6th button
-                else if (index === 6) gridPosition = 'col-start-1 row-start-2'; // 7th button
-                else if (index === 7) gridPosition = 'col-start-1 row-start-1'; // 8th button
+                if (index === 0) gridPosition = 'col-start-1 row-start-1'; // 1st button
+                else if (index === 1) gridPosition = 'col-start-2 row-start-1'; // 2nd button
+                else if (index === 2) gridPosition = 'col-start-3 row-start-1'; // 3rd button
+                else if (index === 3) gridPosition = 'col-start-3 row-start-2'; // 4th button
+                else if (index === 4) gridPosition = 'col-start-3 row-start-3'; // 5th button
+                else if (index === 5) gridPosition = 'col-start-2 row-start-3'; // 6th button
+                else if (index === 6) gridPosition = 'col-start-1 row-start-3'; // 7th button
+                else if (index === 7) gridPosition = 'col-start-1 row-start-2'; // 8th button
                 return (
                     <button
                         key={element.id}
