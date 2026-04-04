@@ -1,11 +1,9 @@
 import { useState } from "react";
 import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
-import bottomboard from "../assets/BottomBoard/bottomboard.svg";
-import opacityBoard from "../assets/PlayBoard/playboardopacity.svg";
+
 import repeat from "../assets/PlayBoard/repeat.svg";
 import ChooseRectangle from "./ChooseRectangle";
 import ChooseTimer from "./ChooseTimer";
-// import FruitBoard from "./FruitBoard";
 import GameElements from "./GameElements";
 import HiddenTimer from "./HiddenTimer";
 import LedTimer from "./LedTimer";
@@ -84,17 +82,14 @@ export default function PlayBoard({
                     })}
                 </div>
                 <img
-                    src={bottomboard}
+                    src={getAssetUrl(GAME_ASSETS.resultboardbg)}
                     className="absolute left-1/2 top-[442px] z-20 -translate-x-1/2 transform"
                 />
                 {showBoardOpacity && (
-                    <img
-                        src={opacityBoard}
-                        className="absolute left-1/2 top-[90px] z-30 -translate-x-1/2 transform opacity-70"
-                    />
+                    <div className="absolute w-[280px] h-[271px] rounded-[12px] border-[1px] border-[#FFB24C] left-1/2 top-[90px] z-30 bg-[#360149] -translate-x-1/2 transform opacity-70"></div>
                 )}
                 {showLedTimer && (
-                    <div className="absolute left-[calc(50%+1px)] top-[198px] z-50 -translate-x-1/2 transform">
+                    <div className="absolute  left-[calc(50%+1px)] top-[198px] z-50 -translate-x-1/2 transform">
                         <LedTimer
                             start={30}
                             onLedTimeUp={() => {

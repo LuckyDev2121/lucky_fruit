@@ -101,4 +101,6 @@ export const GAME_ASSETS = {
   resultthirdposition: "result-3rd-postion.svg",
   rotatedInstances: "Rotated-Instances.svg",
   selectround: "select-round.svg",
+  resultboardbg: "result-board-bg.svg",
+  newtag: "new-tag.svg",
 } as const;
