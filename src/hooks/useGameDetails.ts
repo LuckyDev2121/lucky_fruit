@@ -248,17 +248,16 @@ export function resolveAssetUrl(path: string): string {
 }
 
 export function useGameDetails() {
-  const [snapshot, setSnapshot] = useState(store);
+  const [snapshot, setSnapshot] = useState({...store});
 
   useEffect(() => {
     initializeStore();
 
     const listener = (nextState: GameDetailsStore) => {
-      setSnapshot(nextState);
+      setSnapshot({...nextState});
     };
 
     listeners.add(listener);
-    setSnapshot(store);
 
     return () => {
       listeners.delete(listener);

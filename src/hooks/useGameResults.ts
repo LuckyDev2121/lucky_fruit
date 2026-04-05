@@ -167,17 +167,16 @@ function initializeStore() {
 }
 
 export function useGameResults() {
-  const [snapshot, setSnapshot] = useState(store);
+  const [snapshot, setSnapshot] = useState({...store});
 
   useEffect(() => {
     initializeStore();
 
     const listener = (nextState: GameResultsStore) => {
-      setSnapshot(nextState);
+      setSnapshot({...nextState});
     };
 
     listeners.add(listener);
-    setSnapshot(store);
 
     return () => {
       listeners.delete(listener);

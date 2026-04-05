@@ -175,17 +175,16 @@ export function resolvePlayerAssetUrl(path: string): string {
 }
 
 export function usePlayerDetails() {
-  const [snapshot, setSnapshot] = useState(store);
+  const [snapshot, setSnapshot] = useState({...store});
 
   useEffect(() => {
     initializeStore();
 
     const listener = (nextState: PlayerStore) => {
-      setSnapshot(nextState);
+      setSnapshot({...nextState});
     };
 
     listeners.add(listener);
-    setSnapshot(store);
 
     return () => {
       listeners.delete(listener);
