@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import MusicPlayer from "./components/GameMusic";
+import { MusicPlayer, SoundPlayer } from "./components/GameMusic";
 import LoadingScreen from "./components/LoadingScrean";
 import LuckyFruitGame from "./components/LuckyFruitGame";
 import { GAME_ASSETS, getAssetUrl } from "./config/gameConfig";
@@ -35,6 +35,7 @@ async function preloadGameAssets(setProgress: (value: number) => void) {
 
 function App() {
   const [isMusicPlaying, setIsMusicPlaying] = useState(true);
+  const [isSoundPlaying, setIsSoundPlaying] = useState(true);
   const [progress, setProgress] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -50,10 +51,14 @@ function App() {
   return (
     <div className=" relative flex min-h-[100dvh] w-full items-end justify-center overflow-hidden ">
       <MusicPlayer isMusicPlaying={isMusicPlaying} />
+      <SoundPlayer isSoundPlaying={isSoundPlaying} />
       <LuckyFruitGame
         isMusicPlaying={isMusicPlaying}
+        isSoundPlaying={isSoundPlaying}
         onToggleMusic={() => setIsMusicPlaying((prev) => !prev)}
+        onToggleSound={() => setIsSoundPlaying((prev) => !prev)}
       />
+
     </div>
   );
 }

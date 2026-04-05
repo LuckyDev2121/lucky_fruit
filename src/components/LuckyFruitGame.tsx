@@ -17,15 +17,19 @@ const GAME_HEIGHT = 533;
 
 export default function LuckyFruitGame({
   onToggleMusic,
+  onToggleSound,
   isMusicPlaying,
+  isSoundPlaying,
 }: {
   onToggleMusic: () => void;
+  onToggleSound: () => void;
   isMusicPlaying: boolean;
+  isSoundPlaying: boolean;
 }) {
   const [resultFruit, setResultFruit] = useState<string | null>(null);
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const [activeAlert, setActiveAlert] = useState<string | null>(null);
-  const [isSoundEnabled, setIsSoundEnabled] = useState(true);
+  // const [isSoundEnabled, setIsSoundEnabled] = useState(true);
   const [scale, setScale] = useState(1);
   const isOverlayOpen = activeModal !== null || activeAlert !== null;
 
@@ -174,9 +178,9 @@ export default function LuckyFruitGame({
                 {activeAlert === "music" && (
                   <MusicModal
                     isMusicPlaying={isMusicPlaying}
-                    isSoundEnabled={isSoundEnabled}
+                    isSoundPlaying={isSoundPlaying}
                     onToggleMusic={onToggleMusic}
-                    onToggleSound={() => setIsSoundEnabled((prev) => !prev)}
+                    onToggleSound={onToggleSound}
                     onCloseMusicModal={() => setActiveAlert(null)}
                   />
                 )}

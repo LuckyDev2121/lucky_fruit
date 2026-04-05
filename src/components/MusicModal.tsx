@@ -2,7 +2,7 @@
 
 type MusicModalProps = {
     isMusicPlaying: boolean;
-    isSoundEnabled: boolean;
+    isSoundPlaying: boolean;
     onToggleMusic: () => void;
     onToggleSound: () => void;
     onCloseMusicModal: () => void;
@@ -58,7 +58,7 @@ function ToggleRow({ label, isOn, onToggle }: ToggleRowProps) {
 }
 
 export default function MusicModal({ isMusicPlaying,
-    isSoundEnabled,
+    isSoundPlaying,
     onToggleMusic,
     onToggleSound, onCloseMusicModal }: MusicModalProps) {
     return (
@@ -87,7 +87,7 @@ export default function MusicModal({ isMusicPlaying,
                 </button>
             </div>
             <div className="flex h-full flex-col justify-center gap-4">
-                <ToggleRow label="Sound" isOn={isSoundEnabled} onToggle={onToggleSound} />
+                <ToggleRow label="Sound" isOn={isSoundPlaying} onToggle={onToggleSound} />
                 <ToggleRow label="Music" isOn={isMusicPlaying} onToggle={onToggleMusic} />
             </div>
         </div>

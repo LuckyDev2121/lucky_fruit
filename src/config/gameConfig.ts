@@ -68,6 +68,33 @@ export function getAssetUrl(path: string): string {
   return `${ASSET_BASE_URL}${normalizedPath}`;
 }
 
+export const MUSIC_BASE_URL = `${BACKEND_ORIGIN}/core/storage/app/public/sound/`;
+
+export function getMusicUrl(path: string): string {
+  if (!path) {
+    return "";
+  }
+
+  if (/^https?:\/\//i.test(path)) {
+    return path;
+  }
+
+  const normalizedPath = path.replace(/^\/+/, "");
+  const storagePrefix = "core/storage/app/public/sound/";
+  const storagePathIndex = normalizedPath.indexOf(storagePrefix);
+
+  if (storagePathIndex >= 0) {
+    return `${BACKEND_ORIGIN}/${normalizedPath.slice(storagePathIndex)}`;
+  }
+
+  return `${MUSIC_BASE_URL}${normalizedPath}`;
+}
+
+export const GAME_MUSIC ={
+  music: "fruit-music.mp3",
+  sound: "fruit-sound.mp3",
+}
+
 export const CONNECTION_LABELS: Record<ConnectionState, string> = {
   connecting: "Connecting",
   connected: "Live",
