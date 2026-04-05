@@ -13,11 +13,12 @@ type ResultMenuProps = {
     onResultTimeUp?: () => void;
 };
 
-export default function ResultMenu({ start = 5, onResultTimeUp }: ResultMenuProps) {
+export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
 
     const { options } = useGameDetails();
     const { latestResult } = useGameResults();
-    const [time, setTime] = useState(start);
+    const initialTime = Math.max(0, start ?? 0);
+    const [time, setTime] = useState(initialTime);
     const onResultTimeUpRef = useRef(onResultTimeUp);
 
     const getResultOptionLogo = (optionId: number) => {
@@ -25,16 +26,24 @@ export default function ResultMenu({ start = 5, onResultTimeUp }: ResultMenuProp
         return matchedOption?.logo ? resolveAssetUrl(matchedOption.logo) : "";
     };
 
+    useEffect(() => {
+        onResultTimeUpRef.current = onResultTimeUp;
+    }, [onResultTimeUp]);
 
     useEffect(() => {
-        setTime(start);
-    }, [start]);
+        setTime(initialTime);
+    }, [initialTime]);
 
     useEffect(() => {
-        const timer = setInterval(() => {
+        if (initialTime <= 0) {
+            onResultTimeUpRef.current?.();
+            return;
+        }
+
+        const timer = window.setInterval(() => {
             setTime((prev) => {
                 if (prev <= 1) {
-                    clearInterval(timer);
+                    window.clearInterval(timer);
                     onResultTimeUpRef.current?.();
                     return 0;
                 }
@@ -42,10 +51,10 @@ export default function ResultMenu({ start = 5, onResultTimeUp }: ResultMenuProp
             });
         }, 1000);
 
-        return () => clearInterval(timer);
-    }, [start]);
+        return () => window.clearInterval(timer);
+    }, [initialTime]);
 
-    const formatted = time.toString().padStart(2, "0");
+    const formatted = String(time).padStart(2, "0");
 
     return (
         <div className="relative h-[342px] w-[393px] overflow-hidden rounded-t-[20px] bg-gradient-to-t from-[#7C00D5] to-[#5028C1]">

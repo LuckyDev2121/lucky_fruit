@@ -93,7 +93,7 @@ export default function PlayBoard({
                     className="absolute left-1/2 top-[442px] z-20 -translate-x-1/2 transform"
                 />
                 <div className="scrollbar-hidden absolute left-1/2 top-[442px] h-[40px] w-[280px] overflow-y-hidden overflow-x-auto z-20 -translate-x-1/2 transform">
-                    <div className="absolute top-[26px] w-[24px] h-[12px] z-50">
+                    <div className="absolute left-[3px] top-[26px] w-[24px] h-[12px] z-50">
                         <img src={getAssetUrl(GAME_ASSETS.newtag)} alt="Result Board Frame" className="absolute inset-0 h-full w-full" />
                     </div>
                     {results.map((result, index) => (
