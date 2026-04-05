@@ -26,7 +26,6 @@ export default function LuckyFruitGame({
   isMusicPlaying: boolean;
   isSoundPlaying: boolean;
 }) {
-  const [resultFruit, setResultFruit] = useState<string | null>(null);
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const [activeAlert, setActiveAlert] = useState<string | null>(null);
   // const [isSoundEnabled, setIsSoundEnabled] = useState(true);
@@ -95,7 +94,6 @@ export default function LuckyFruitGame({
             <PlayBoard
               onOpenModal={(modal) => setActiveModal(modal)}
               onOpenAlert={(alert) => setActiveAlert(alert)}
-              onResult={(fruit) => setResultFruit(fruit)}
             />
           </div>
 
@@ -138,7 +136,6 @@ export default function LuckyFruitGame({
                 )}
                 {activeModal === "result" && (
                   <ResultMenu
-                    resultFruit={resultFruit}
                     start={5}
                     onResultTimeUp={() => {
                       setActiveModal(null);

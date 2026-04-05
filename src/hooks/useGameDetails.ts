@@ -128,6 +128,9 @@ export function resolveAssetUrl(path: string): string {
   return getAssetUrl(path);
 }
 
+
+
+
 export function useGameDetails() {
     
     const [gameDetails, setGameDetails] = useState<GameDetailsData | null>(null);

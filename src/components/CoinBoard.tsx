@@ -1,11 +1,15 @@
 // import dimond from "../assets/CoinBoard/dimond.svg";
 import rectangle from "../assets/CoinBoard/Rectangle 4.svg";
 import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
+import { usePlayerDetails } from "../hooks/usePlayerDetails";
+
 type CoinBoardProps = {
   onOpenModal: (modal: string) => void;
 };
 
 export default function CoinBoard({ onOpenModal }: CoinBoardProps) {
+  const { balance, isLoading } = usePlayerDetails();
+
   return (
     <div className="z-[530] flex items-center" style={{ height: "26px" }}>
       <div className="flex items-center relative" style={{ width: "107px", height: "26px" }}>
@@ -15,7 +19,7 @@ export default function CoinBoard({ onOpenModal }: CoinBoardProps) {
             <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" />
           </div>
           <span className="pointer-events-none absolute inset-0 flex items-center justify-center font-bold">
-            129454
+            {isLoading ? "***" : balance}
           </span>
           <button className="ml-auto mr-[7px]"
             onClick={() => onOpenModal("recharge")}>

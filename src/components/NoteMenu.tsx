@@ -1,15 +1,6 @@
 import rectangle from "../assets/Modal/Rectangle.svg"
 import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
-// import cherry from "../assets/fruits/cherry.svg"
-// import grape from "../assets/fruits/grapes.svg"
-// import lemon from "../assets/fruits/lemon.svg"
-// import orange from "../assets/fruits/orange.svg"
-// import strawberry from "../assets/fruits/strawberry.svg"
-// import watermelon from "../assets/fruits/watermelon.svg"
-// import tomato from "../assets/fruits/tomato.svg"
-// import kiwi from "../assets/fruits/kiwi.svg"
-import { type GameElement, fetchGameElements } from '../api/gameElementApi';
-import { useEffect, useState } from "react";
+import { useGameDetails } from "../hooks/useGameDetails";
 
 type NoteMenuProps = {
     onCloseNote: () => void;
@@ -53,16 +44,8 @@ function CloseIcon() {
 export default function NoteMenu({ onCloseNote, onOpenModal }: NoteMenuProps) {
 
 
+    const { options } = useGameDetails();
 
-    const [gameElements, setGameElements] = useState<GameElement[]>([]);
-
-    useEffect(() => {
-        const loadGameElements = async () => {
-            const data = await fetchGameElements();
-            setGameElements(data);
-        };
-        loadGameElements();
-    }, []);
 
     return (
         <div className="h-[342px] bg-gradient-to-t from-[#7C00D5] to-[#5028C1] w-[393px] rounded-t-[20px]">
@@ -97,10 +80,10 @@ export default function NoteMenu({ onCloseNote, onOpenModal }: NoteMenuProps) {
                     </div>
                     <span>Mine</span>
                     <div className="grid grid-cols-4 grid-rows-2 gap-1">
-                        {gameElements.map((element) => {
+                        {options.map((element) => {
                             return (
                                 <div className="justify-center items-center flex " >
-                                    <img src={element.element_icon} alt={element.element_name} className="h-4 w-4 mr-[2px]" />
+                                    <img src={element.logo} alt={element.name} className="h-4 w-4 mr-[2px]" />
                                     <div className=" justify-center items-center content-center h-[14px] w-[10px]">
                                         <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" className="h-[9px] w-[16px] mr-[3px]" />
                                     </div>

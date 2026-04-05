@@ -8,18 +8,19 @@ import GameElements from "./GameElements";
 import HiddenTimer from "./HiddenTimer";
 import LedTimer from "./LedTimer";
 import { useGameDetails, resolveAssetUrl } from '../hooks/useGameDetails';
+import { useGameResults } from "../hooks/useGameResults";
 
 type PlayBoardProps = {
     onOpenModal: (modal: string) => void;
     onOpenAlert: (alert: string) => void;
-    onResult: (fruit: string) => void;
 };
 
 export default function PlayBoard({
     onOpenModal,
     onOpenAlert,
-    onResult,
 }: PlayBoardProps) {
+
+
     const [selectBetMode, setSelectBetMode] = useState(2);
     const [blockClick, setBlockClick] = useState<"auto" | "none">("auto");
     const [showLedTimer, setShowLedTimer] = useState(true);
@@ -28,7 +29,13 @@ export default function PlayBoard({
     const [showBoardOpacity, setShowBoardOpacity] = useState(false);
     const [showChooseRectangle, setShowChooseRectangle] = useState(false);
 
-    const { betAmounts } = useGameDetails();
+    const { betAmounts, options } = useGameDetails();
+    const { results } = useGameResults();
+
+    const getResultOptionLogo = (optionId: number) => {
+        const matchedOption = options.find((element) => element.id === optionId);
+        return matchedOption?.logo ? resolveAssetUrl(matchedOption.logo) : "";
+    };
 
     return (
         <div className="absolute z-20 object-contain" style={{ width: "100%", height: "100%" }}>
@@ -85,8 +92,22 @@ export default function PlayBoard({
                     src={getAssetUrl(GAME_ASSETS.resultboardbg)}
                     className="absolute left-1/2 top-[442px] z-20 -translate-x-1/2 transform"
                 />
+                <div className="scrollbar-hidden absolute left-1/2 top-[442px] h-[40px] w-[280px] overflow-y-hidden overflow-x-auto z-20 -translate-x-1/2 transform">
+                    <div className="absolute top-[26px] w-[24px] h-[12px] z-50">
+                        <img src={getAssetUrl(GAME_ASSETS.newtag)} alt="Result Board Frame" className="absolute inset-0 h-full w-full" />
+                    </div>
+                    {results.map((result, index) => (
+                        <div key={index} className="relative flex top-[4px] h-[30px] w-[30px] z-40">
+                            <img
+                                src={getResultOptionLogo(result.option_id)}
+                                alt={result.option_name || `Result ${index + 1}`}
+                                className="absolute inset-0 h-full w-full"
+                            />
+                        </div>
+                    ))}
+                </div>
                 {showBoardOpacity && (
-                    <div className="absolute w-[280px] h-[271px] rounded-[12px] border-[1px] border-[#FFB24C] left-1/2 top-[90px] z-30 bg-[#360149] -translate-x-1/2 transform opacity-70"></div>
+                    <div className="absolute w-[280px] h-[271px]  rounded-[12px] border-[1px] border-[#FFB24C] left-1/2 top-[90px] z-30 bg-[#360149] -translate-x-1/2 transform opacity-70"></div>
                 )}
                 {showLedTimer && (
                     <div className="absolute  left-[calc(50%+1px)] top-[198px] z-50 -translate-x-1/2 transform">
@@ -131,9 +152,6 @@ export default function PlayBoard({
                     <ChooseRectangle
                         onChooseTimeUp={() => {
                             setShowChooseRectangle(false);
-                        }}
-                        onResult={(fruit) => {
-                            onResult(fruit);
                         }}
                     />
                 )}

@@ -14,12 +14,11 @@ const fruits = [
 ];
 
 
-export default function ChooseRectangle({ onChooseTimeUp, onResult }: { onChooseTimeUp?: () => void; onResult?: (fruit: string) => void }) {
+export default function ChooseRectangle({ onChooseTimeUp }: { onChooseTimeUp?: () => void; onResult?: (fruit: string) => void }) {
     const [time, setTime] = useState(0);
     const [second, setSecond] = useState(10000);
     const [randomIndex] = useState(() => Math.floor(Math.random() * fruits.length));
     const onChooseTimeUpRef = useRef(onChooseTimeUp);
-    const onResultRef = useRef(onResult);
     const currentFruit = fruits[(randomIndex + time - 1) % fruits.length];
     // const [gameElements, setGameElements] = useState<GameElement[]>([]);
 
@@ -36,13 +35,8 @@ export default function ChooseRectangle({ onChooseTimeUp, onResult }: { onChoose
     }, [onChooseTimeUp]);
 
     useEffect(() => {
-        onResultRef.current = onResult;
-    }, [onResult]);
-
-    useEffect(() => {
 
         if (second - 10 * time < 100) {
-            onResultRef.current?.(currentFruit.element_name);
             onChooseTimeUpRef.current?.(); // trigger notification
             return;
         }
