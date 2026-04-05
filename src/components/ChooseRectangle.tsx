@@ -16,7 +16,7 @@ const fruits = [
 
 export default function ChooseRectangle({ onChooseTimeUp }: { onChooseTimeUp?: () => void; onResult?: (fruit: string) => void }) {
     const [time, setTime] = useState(0);
-    const [second, setSecond] = useState(10000);
+    const [second, setSecond] = useState(5000);
     const [randomIndex] = useState(() => Math.floor(Math.random() * fruits.length));
     const onChooseTimeUpRef = useRef(onChooseTimeUp);
     const currentFruit = fruits[(randomIndex + time - 1) % fruits.length];

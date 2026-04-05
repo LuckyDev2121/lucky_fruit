@@ -136,7 +136,7 @@ export default function LuckyFruitGame({
                 )}
                 {activeModal === "result" && (
                   <ResultMenu
-                    start={5}
+                    start={3}
                     onResultTimeUp={() => {
                       setActiveModal(null);
                     }}

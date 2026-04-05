@@ -1,4 +1,4 @@
-import { useEffect, useEffectEvent, useState } from "react";
+import { useEffect, useState } from "react";
 import Echo from "laravel-echo";
 import Pusher from "pusher-js";
 
@@ -42,6 +42,12 @@ type FetchPlayerOptions = {
   showLoading?: boolean;
 };
 
+type PlayerStore = {
+  connectionState: ConnectionState;
+  isLoading: boolean;
+  playerDetails: PlayerDetailsData | null;
+};
+
 async function fetchPlayerDetails(): Promise<PlayerDetailsData> {
   const response = await fetch(PLAYER_API_URL, {
     headers: {
@@ -66,106 +72,135 @@ const windowWithPusher = window as Window & {
   Pusher?: typeof Pusher;
 };
 
+const listeners = new Set<(state: PlayerStore) => void>();
+
+let store: PlayerStore = {
+  connectionState: "connecting",
+  isLoading: true,
+  playerDetails: null,
+};
+
+let hasInitialized = false;
+
+function emit() {
+  listeners.forEach((listener) => listener(store));
+}
+
+function updateStore(partial: Partial<PlayerStore>) {
+  store = {
+    ...store,
+    ...partial,
+  };
+  emit();
+}
+
+async function runFetchPlayer({
+  preservePlayerOnError = false,
+  showLoading = false,
+}: FetchPlayerOptions = {}) {
+  if (showLoading) {
+    updateStore({ isLoading: true });
+  }
+
+  try {
+    const nextPlayer = await fetchPlayerDetails();
+    updateStore({ playerDetails: nextPlayer });
+  } catch {
+    if (!preservePlayerOnError) {
+      updateStore({ playerDetails: null });
+    }
+  } finally {
+    updateStore({ isLoading: false });
+  }
+}
+
+function initializeStore() {
+  if (hasInitialized) {
+    return;
+  }
+
+  hasInitialized = true;
+  void runFetchPlayer({ showLoading: true });
+
+  windowWithPusher.Pusher = Pusher;
+
+  const echo = new Echo({
+    broadcaster: "reverb",
+    key: REVERB_KEY,
+    wsHost: REALTIME_HOST,
+    httpHost: REALTIME_HOST,
+    wsPort: REALTIME_PORT,
+    httpPort: REALTIME_PORT,
+    wssPort: REALTIME_PORT,
+    httpsPort: REALTIME_PORT,
+    forceTLS: USE_TLS,
+    enabledTransports: USE_TLS ? ["wss"] : ["ws"],
+    disableStats: true,
+    cluster: "",
+    namespace: false,
+  });
+
+  const stopListeningToConnection = echo.connector.onConnectionChange(
+    (status) => {
+      updateStore({ connectionState: status });
+    },
+  );
+
+  const channel = echo.channel(REALTIME_CHANNEL);
+  const eventName = `.${REALTIME_EVENT}`;
+
+  channel.listen(eventName, () => {
+    void runFetchPlayer({ preservePlayerOnError: true });
+  });
+  channel.error(() => {
+    updateStore({ connectionState: "failed" });
+  });
+
+  window.setInterval(() => {
+    if (store.connectionState !== "connected") {
+      void runFetchPlayer({ preservePlayerOnError: true });
+    }
+  }, FALLBACK_REFRESH_MS);
+
+  window.addEventListener("beforeunload", () => {
+    channel.stopListening(eventName);
+    stopListeningToConnection();
+    echo.leaveChannel(REALTIME_CHANNEL);
+    echo.disconnect();
+  });
+}
+
 export function resolvePlayerAssetUrl(path: string): string {
   return getAssetUrl(path);
 }
 
 export function usePlayerDetails() {
-  const [playerDetails, setPlayerDetails] = useState<PlayerDetailsData | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [connectionState, setConnectionState] =
-    useState<ConnectionState>("connecting");
-
-  const fetchPlayer = useEffectEvent(
-    async ({
-      preservePlayerOnError = false,
-      showLoading = false,
-    }: FetchPlayerOptions = {}) => {
-      if (showLoading) {
-        setIsLoading(true);
-      }
-
-      try {
-        const nextPlayer = await fetchPlayerDetails();
-        setPlayerDetails(nextPlayer);
-      } catch {
-        if (!preservePlayerOnError) {
-          setPlayerDetails(null);
-        }
-      } finally {
-        setIsLoading(false);
-      }
-    },
-  );
-
-  const handleRealtimeUpdate = useEffectEvent(() => {
-    void fetchPlayer({ preservePlayerOnError: true });
-  });
+  const [snapshot, setSnapshot] = useState(store);
 
   useEffect(() => {
-    void fetchPlayer({ showLoading: true });
-  }, []);
+    initializeStore();
 
-  useEffect(() => {
-    windowWithPusher.Pusher = Pusher;
+    const listener = (nextState: PlayerStore) => {
+      setSnapshot(nextState);
+    };
 
-    const echo = new Echo({
-      broadcaster: "reverb",
-      key: REVERB_KEY,
-      wsHost: REALTIME_HOST,
-      httpHost: REALTIME_HOST,
-      wsPort: REALTIME_PORT,
-      httpPort: REALTIME_PORT,
-      wssPort: REALTIME_PORT,
-      httpsPort: REALTIME_PORT,
-      forceTLS: USE_TLS,
-      enabledTransports: USE_TLS ? ["wss"] : ["ws"],
-      disableStats: true,
-      cluster: "",
-      namespace: false,
-    });
-
-    const stopListeningToConnection = echo.connector.onConnectionChange(
-      (status) => {
-        setConnectionState(status);
-      },
-    );
-
-    const channel = echo.channel(REALTIME_CHANNEL);
-    const eventName = `.${REALTIME_EVENT}`;
-
-    channel.listen(eventName, handleRealtimeUpdate);
-    channel.error(() => {
-      setConnectionState("failed");
-    });
+    listeners.add(listener);
+    setSnapshot(store);
 
     return () => {
-      channel.stopListening(eventName, handleRealtimeUpdate);
-      stopListeningToConnection();
-      echo.leaveChannel(REALTIME_CHANNEL);
-      echo.disconnect();
+      listeners.delete(listener);
     };
   }, []);
-
-  useEffect(() => {
-    const intervalId = window.setInterval(() => {
-      if (connectionState !== "connected") {
-        void fetchPlayer({ preservePlayerOnError: true });
-      }
-    }, FALLBACK_REFRESH_MS);
-
-    return () => {
-      window.clearInterval(intervalId);
-    };
-  }, [connectionState]);
 
   return {
-    avatar: playerDetails?.avater ? resolvePlayerAssetUrl(playerDetails.avater) : "",
-    balance: playerDetails?.balance ?? "0.00",
-    connectionLabel: CONNECTION_LABELS[connectionState],
-    connectionState,
-    isLoading,
-    playerDetails,
-    username: playerDetails?.username ?? "",
+    avatar: snapshot.playerDetails?.avater
+      ? resolvePlayerAssetUrl(snapshot.playerDetails.avater)
+      : "",
+    balance: snapshot.playerDetails?.balance ?? "0.00",
+    connectionLabel: CONNECTION_LABELS[snapshot.connectionState],
+    connectionState: snapshot.connectionState,
+    isLoading: snapshot.isLoading,
+    playerDetails: snapshot.playerDetails,
+    username: snapshot.playerDetails?.username ?? "",
   };
 }

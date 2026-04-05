@@ -1,4 +1,4 @@
-import { useEffect, useEffectEvent, useState } from "react";
+import { useEffect, useState } from "react";
 import Echo from "laravel-echo";
 import Pusher from "pusher-js";
 
@@ -38,6 +38,12 @@ type FetchGameResultsOptions = {
   showLoading?: boolean;
 };
 
+type GameResultsStore = {
+  connectionState: ConnectionState;
+  isLoading: boolean;
+  results: GameResultItem[];
+};
+
 async function fetchGameResults(): Promise<GameResultItem[]> {
   const response = await fetch(GAME_RESULTS_API_URL, {
     headers: {
@@ -62,100 +68,127 @@ const windowWithPusher = window as Window & {
   Pusher?: typeof Pusher;
 };
 
-export function useGameResults() {
-  const [results, setResults] = useState<GameResultItem[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [connectionState, setConnectionState] =
-    useState<ConnectionState>("connecting");
+const listeners = new Set<(state: GameResultsStore) => void>();
 
-  const fetchResults = useEffectEvent(
-    async ({
-      preserveResultsOnError = false,
-      showLoading = false,
-    }: FetchGameResultsOptions = {}) => {
-      if (showLoading) {
-        setIsLoading(true);
-      }
+let store: GameResultsStore = {
+  connectionState: "connecting",
+  isLoading: true,
+  results: [],
+};
 
-      try {
-        const nextResults = await fetchGameResults();
-        setResults(nextResults);
-      } catch {
-        if (!preserveResultsOnError) {
-          setResults([]);
-        }
-      } finally {
-        setIsLoading(false);
-      }
+let hasInitialized = false;
+
+function emit() {
+  listeners.forEach((listener) => listener(store));
+}
+
+function updateStore(partial: Partial<GameResultsStore>) {
+  store = {
+    ...store,
+    ...partial,
+  };
+  emit();
+}
+
+async function runFetchResults({
+  preserveResultsOnError = false,
+  showLoading = false,
+}: FetchGameResultsOptions = {}) {
+  if (showLoading) {
+    updateStore({ isLoading: true });
+  }
+
+  try {
+    const nextResults = await fetchGameResults();
+    updateStore({ results: nextResults });
+  } catch {
+    if (!preserveResultsOnError) {
+      updateStore({ results: [] });
+    }
+  } finally {
+    updateStore({ isLoading: false });
+  }
+}
+
+function initializeStore() {
+  if (hasInitialized) {
+    return;
+  }
+
+  hasInitialized = true;
+  void runFetchResults({ showLoading: true });
+
+  windowWithPusher.Pusher = Pusher;
+
+  const echo = new Echo({
+    broadcaster: "reverb",
+    key: REVERB_KEY,
+    wsHost: REALTIME_HOST,
+    httpHost: REALTIME_HOST,
+    wsPort: REALTIME_PORT,
+    httpPort: REALTIME_PORT,
+    wssPort: REALTIME_PORT,
+    httpsPort: REALTIME_PORT,
+    forceTLS: USE_TLS,
+    enabledTransports: USE_TLS ? ["wss"] : ["ws"],
+    disableStats: true,
+    cluster: "",
+    namespace: false,
+  });
+
+  const stopListeningToConnection = echo.connector.onConnectionChange(
+    (status) => {
+      updateStore({ connectionState: status });
     },
   );
 
-  const handleRealtimeUpdate = useEffectEvent(() => {
-    void fetchResults({ preserveResultsOnError: true });
+  const channel = echo.channel(REALTIME_CHANNEL);
+  const eventName = `.${REALTIME_EVENT}`;
+
+  channel.listen(eventName, () => {
+    void runFetchResults({ preserveResultsOnError: true });
+  });
+  channel.error(() => {
+    updateStore({ connectionState: "failed" });
   });
 
-  useEffect(() => {
-    void fetchResults({ showLoading: true });
-  }, []);
+  window.setInterval(() => {
+    if (store.connectionState !== "connected") {
+      void runFetchResults({ preserveResultsOnError: true });
+    }
+  }, FALLBACK_REFRESH_MS);
+
+  window.addEventListener("beforeunload", () => {
+    channel.stopListening(eventName);
+    stopListeningToConnection();
+    echo.leaveChannel(REALTIME_CHANNEL);
+    echo.disconnect();
+  });
+}
+
+export function useGameResults() {
+  const [snapshot, setSnapshot] = useState(store);
 
   useEffect(() => {
-    windowWithPusher.Pusher = Pusher;
+    initializeStore();
 
-    const echo = new Echo({
-      broadcaster: "reverb",
-      key: REVERB_KEY,
-      wsHost: REALTIME_HOST,
-      httpHost: REALTIME_HOST,
-      wsPort: REALTIME_PORT,
-      httpPort: REALTIME_PORT,
-      wssPort: REALTIME_PORT,
-      httpsPort: REALTIME_PORT,
-      forceTLS: USE_TLS,
-      enabledTransports: USE_TLS ? ["wss"] : ["ws"],
-      disableStats: true,
-      cluster: "",
-      namespace: false,
-    });
+    const listener = (nextState: GameResultsStore) => {
+      setSnapshot(nextState);
+    };
 
-    const stopListeningToConnection = echo.connector.onConnectionChange(
-      (status) => {
-        setConnectionState(status);
-      },
-    );
-
-    const channel = echo.channel(REALTIME_CHANNEL);
-    const eventName = `.${REALTIME_EVENT}`;
-
-    channel.listen(eventName, handleRealtimeUpdate);
-    channel.error(() => {
-      setConnectionState("failed");
-    });
+    listeners.add(listener);
+    setSnapshot(store);
 
     return () => {
-      channel.stopListening(eventName, handleRealtimeUpdate);
-      stopListeningToConnection();
-      echo.leaveChannel(REALTIME_CHANNEL);
-      echo.disconnect();
+      listeners.delete(listener);
     };
   }, []);
-
-  useEffect(() => {
-    const intervalId = window.setInterval(() => {
-      if (connectionState !== "connected") {
-        void fetchResults({ preserveResultsOnError: true });
-      }
-    }, FALLBACK_REFRESH_MS);
-
-    return () => {
-      window.clearInterval(intervalId);
-    };
-  }, [connectionState]);
 
   return {
-    connectionLabel: CONNECTION_LABELS[connectionState],
-    connectionState,
-    isLoading,
-    latestResult: results[0] ?? null,
-    results: results,
+    connectionLabel: CONNECTION_LABELS[snapshot.connectionState],
+    connectionState: snapshot.connectionState,
+    isLoading: snapshot.isLoading,
+    latestResult: snapshot.results[0] ?? null,
+    results: snapshot.results,
   };
 }

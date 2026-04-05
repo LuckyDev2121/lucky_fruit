@@ -4,6 +4,9 @@ import { MusicPlayer, SoundPlayer } from "./components/GameMusic";
 import LoadingScreen from "./components/LoadingScrean";
 import LuckyFruitGame from "./components/LuckyFruitGame";
 import { GAME_ASSETS, getAssetUrl } from "./config/gameConfig";
+import { useGameDetails } from "./hooks/useGameDetails";
+import { useGameResults } from "./hooks/useGameResults";
+import { usePlayerDetails } from "./hooks/usePlayerDetails";
 
 async function preloadGameAssets(setProgress: (value: number) => void) {
   const assets = Object.values(GAME_ASSETS).map((fileName) =>
@@ -37,16 +40,33 @@ function App() {
   const [isMusicPlaying, setIsMusicPlaying] = useState(true);
   const [isSoundPlaying, setIsSoundPlaying] = useState(true);
   const [progress, setProgress] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isAssetsLoading, setIsAssetsLoading] = useState(true);
+  const { isLoading: isGameDetailsLoading } = useGameDetails();
+  const { isLoading: isGameResultsLoading } = useGameResults();
+  const { isLoading: isPlayerLoading } = usePlayerDetails();
 
   useEffect(() => {
     preloadGameAssets(setProgress).then(() => {
-      setIsLoading(false);
+      setIsAssetsLoading(false);
     });
   }, []);
 
+  const isLoading =
+    isAssetsLoading ||
+    isGameDetailsLoading ||
+    isGameResultsLoading ||
+    isPlayerLoading;
+
   if (isLoading) {
-    return <LoadingScreen progress={progress} />;
+    const dataReadyCount = [
+      !isGameDetailsLoading,
+      !isGameResultsLoading,
+      !isPlayerLoading,
+    ].filter(Boolean).length;
+    const dataProgress = Math.round((dataReadyCount / 3) * 100);
+    const loadingProgress = Math.round((progress + dataProgress) / 2);
+
+    return <LoadingScreen progress={loadingProgress} />;
   }
   return (
     <div className=" relative flex min-h-[100dvh] w-full items-end justify-center overflow-hidden ">
