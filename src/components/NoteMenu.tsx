@@ -83,7 +83,7 @@ export default function NoteMenu({ onCloseNote, onOpenModal }: NoteMenuProps) {
                         {options.map((element) => {
                             return (
                                 <div className="justify-center items-center flex " >
-                                    <img src={element.logo} alt={element.name} className="h-4 w-4 mr-[2px]" />
+                                    <img src={getAssetUrl(element.logo)} alt={element.name} className="h-4 w-4 mr-[2px]" />
                                     <div className=" justify-center items-center content-center h-[14px] w-[10px]">
                                         <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" className="h-[9px] w-[16px] mr-[3px]" />
                                     </div>
