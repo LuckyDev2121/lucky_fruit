@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
 
 import ChooseRectangle from "./ChooseRectangle";
@@ -8,6 +8,7 @@ import HiddenTimer from "./HiddenTimer";
 import LedTimer from "./LedTimer";
 import { useGameDetails, resolveAssetUrl } from '../hooks/useGameDetails';
 import { useGameResults } from "../hooks/useGameResults";
+import { useMakeGameResult } from "../hooks/useMakeResult";
 
 type PlayBoardProps = {
     onOpenModal: (modal: string) => void;
@@ -29,11 +30,19 @@ export default function PlayBoard({
     const [currentBetAmount, setCurrentBetAmount] = useState(100);
     const { betAmounts, options } = useGameDetails();
     const { results } = useGameResults();
+    const { makeResult } = useMakeGameResult();
+    // const getResultOptionLogo = (optionId: number) => {
+    //     const matchedOption = options.find((element) => element.id === optionId);
+    //     return matchedOption?.logo ? resolveAssetUrl(matchedOption.logo) : "";
+    // };
+    const optionMap = useMemo(() => {
+        return Object.fromEntries(
+            options.map(o => [o.id, o.logo])
+        );
+    }, [options]);
 
-    const getResultOptionLogo = (optionId: number) => {
-        const matchedOption = options.find((element) => element.id === optionId);
-        return matchedOption?.logo ? resolveAssetUrl(matchedOption.logo) : "";
-    };
+    const getResultOptionLogo = (id: number) =>
+        optionMap[id] ? resolveAssetUrl(optionMap[id]) : "";
 
     return (
         <div className="absolute z-20 object-contain" style={{ width: "100%", height: "100%" }}>
@@ -131,6 +140,7 @@ export default function PlayBoard({
                         <ChooseTimer
                             start={5}
                             onChooseTimeUp={() => {
+                                makeResult();
                                 setShowChooseTimer(false);
                                 setShowHiddenTimer(true);
                                 onOpenModal("result");

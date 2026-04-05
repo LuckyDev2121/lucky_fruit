@@ -39,6 +39,7 @@ async function placeBet(betId: number, amount: number): Promise<string> {
 export function usePlaceBet() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [result, setResult] = useState<string | null>(null);
+    const [error, setError] = useState<string | null>(null);
 
   const place = async (betId: number, amount: number) => {
     setIsProcessing(true);
@@ -47,13 +48,13 @@ export function usePlaceBet() {
       const data = await placeBet(betId, amount);
       setResult(data);
     } catch (err) {
-      console.error(err);
+      setError((err as Error).message);
     } finally {
       setIsProcessing(false);
     }
   };
 
-  return { place, isProcessing, result };
+  return { place, isProcessing, result, error };
 }
 // export function usePlaceBet(betId: number, amount: number) {
 //   const [isProcessing, setIsProcessing] = useState(false);

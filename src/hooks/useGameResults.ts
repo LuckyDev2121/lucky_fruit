@@ -4,7 +4,7 @@ import Pusher from "pusher-js";
 
 import {
   CONNECTION_LABELS,
-  FALLBACK_REFRESH_MS,
+  // FALLBACK_REFRESH_MS,
   GAME_RESULTS_API_URL,
   REALTIME_CHANNEL,
   REALTIME_EVENT,
@@ -145,19 +145,28 @@ function initializeStore() {
   const channel = echo.channel(REALTIME_CHANNEL);
   const eventName = `.${REALTIME_EVENT}`;
 
+  // channel.listen(eventName, () => {
+  //   void runFetchResults({ preserveResultsOnError: true });
+  // });
   channel.listen(eventName, () => {
-    void runFetchResults({ preserveResultsOnError: true });
+  updateStore({
+    // results: payload.data ?? payload,
   });
+});
   channel.error(() => {
     updateStore({ connectionState: "failed" });
   });
 
-  window.setInterval(() => {
-    if (store.connectionState !== "connected") {
-      void runFetchResults({ preserveResultsOnError: true });
-    }
-  }, FALLBACK_REFRESH_MS);
-
+  // window.setInterval(() => {
+  //   if (store.connectionState !== "connected") {
+  //     void runFetchResults({ preserveResultsOnError: true });
+  //   }
+  // }, FALLBACK_REFRESH_MS);
+window.setInterval(() => {
+  if (store.connectionState === "failed") {
+    void runFetchResults({ preserveResultsOnError: true });
+  }
+}, 30000);
   window.addEventListener("beforeunload", () => {
     channel.stopListening(eventName);
     stopListeningToConnection();

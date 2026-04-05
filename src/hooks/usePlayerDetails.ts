@@ -4,7 +4,6 @@ import Pusher from "pusher-js";
 
 import {
   CONNECTION_LABELS,
-  FALLBACK_REFRESH_MS,
   PLAYER_API_URL,
   REALTIME_CHANNEL,
   REALTIME_EVENT,
@@ -149,18 +148,23 @@ function initializeStore() {
   const channel = echo.channel(REALTIME_CHANNEL);
   const eventName = `.${REALTIME_EVENT}`;
 
+  // channel.listen(eventName, () => {
+  //   void runFetchPlayer({ preservePlayerOnError: true });
+  // });
   channel.listen(eventName, () => {
-    void runFetchPlayer({ preservePlayerOnError: true });
+  updateStore({
+    // playerDetails: payload.data ?? payload
   });
+});
   channel.error(() => {
     updateStore({ connectionState: "failed" });
   });
 
   window.setInterval(() => {
-    if (store.connectionState !== "connected") {
+    if (store.connectionState === "failed") {
       void runFetchPlayer({ preservePlayerOnError: true });
     }
-  }, FALLBACK_REFRESH_MS);
+  }, 30000);
 
   window.addEventListener("beforeunload", () => {
     channel.stopListening(eventName);
@@ -181,7 +185,7 @@ export function usePlayerDetails() {
     initializeStore();
 
     const listener = (nextState: PlayerStore) => {
-      setSnapshot({...nextState});
+      setSnapshot(nextState);
     };
 
     listeners.add(listener);

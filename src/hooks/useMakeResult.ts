@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 /* ================= CONFIG ================= */
 
 import { MAKE_RESULT_API_URL } from "../config/gameConfig";
@@ -42,17 +42,36 @@ async function makeGameResult(): Promise<ResultData> {
 /* ================= HOOK ================= */
 
 export function useMakeGameResult() {
-  const [isProcessing, setIsProcessing] = useState(false);
+//   const [isProcessing, setIsProcessing] = useState(false);
+//   const [result, setResult] = useState<ResultData | null>(null);
+
+//   /* ================= TIMER ================= */
+
+//  useEffect(() => {
+//   const handleRoundEnd = async () => {
+//     setIsProcessing(true);
+
+//     try {
+//       const data = await makeGameResult();
+//       setResult(data);
+//     } catch (err) {
+//       console.error("API error:", err);
+//     } finally {
+//       setIsProcessing(false);
+//     }
+//   };
+
+//   handleRoundEnd();
+// }, []); // ✅ EMPTY dependency
+
+  /* ================= ROUND ================= */
+const [isProcessing, setIsProcessing] = useState(false);
   const [result, setResult] = useState<ResultData | null>(null);
 
-  /* ================= TIMER ================= */
-
-  useEffect(() => {
-    const handleRoundEnd = async () => {
-    if (isProcessing) return;
+  const makeResult = async () => {
+    if (isProcessing) return; // ✅ prevent spam
 
     setIsProcessing(true);
-
     try {
       const data = await makeGameResult();
       setResult(data);
@@ -62,15 +81,9 @@ export function useMakeGameResult() {
       setIsProcessing(false);
     }
   };
-  handleRoundEnd(); // Start first round immediately
-  }, [isProcessing]);
-
-  /* ================= ROUND ================= */
-
-  
-
   return {
     isProcessing,
     result,
+    makeResult
   };
 }

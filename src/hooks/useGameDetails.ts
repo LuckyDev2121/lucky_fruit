@@ -5,7 +5,7 @@ import Pusher from "pusher-js";
 import {
   GAME_DETAILS_API_URL,
   CONNECTION_LABELS,
-  FALLBACK_REFRESH_MS,
+  // FALLBACK_REFRESH_MS,
   REALTIME_CHANNEL,
   REALTIME_EVENT,
   REALTIME_HOST,
@@ -121,15 +121,15 @@ function normalizeRealtimePayload(
   return isGameRecord(payload) ? payload : null;
 }
 
-function mergeGame(
-  currentGame: GameDetailsData | null,
-  nextGame: GameDetailsData,
-): GameDetailsData {
-  return {
-    ...(currentGame ?? {}),
-    ...nextGame,
-  };
-}
+// function mergeGame(
+//   currentGame: GameDetailsData | null,
+//   nextGame: GameDetailsData,
+// ): GameDetailsData {
+//   return {
+//     ...(currentGame ?? {}),
+//     ...nextGame,
+//   };
+// }
 
 const listeners = new Set<(state: GameDetailsStore) => void>();
 
@@ -175,18 +175,28 @@ async function runFetchGame({
   }
 }
 
+// function handleRealtimeUpdate(payload: RealtimePayload) {
+//   const nextGame = normalizeRealtimePayload(payload);
+
+//   if (!nextGame) {
+//     void runFetchGame({ preserveGameOnError: true });
+//     return;
+//   }
+
+//   updateStore({
+//     gameDetails: mergeGame(store.gameDetails, nextGame),
+//   });
+//   void runFetchGame({ preserveGameOnError: true });
+// }
 function handleRealtimeUpdate(payload: RealtimePayload) {
   const nextGame = normalizeRealtimePayload(payload);
 
-  if (!nextGame) {
-    void runFetchGame({ preserveGameOnError: true });
-    return;
-  }
+  if (!nextGame) return;
 
   updateStore({
-    gameDetails: mergeGame(store.gameDetails, nextGame),
+    // gameDetails: mergeGame(store.gameDetails, nextGame),
+     gameDetails: nextGame 
   });
-  void runFetchGame({ preserveGameOnError: true });
 }
 
 function initializeStore() {
@@ -229,11 +239,11 @@ function initializeStore() {
     updateStore({ connectionState: "failed" });
   });
 
-  window.setInterval(() => {
-    if (store.connectionState !== "connected") {
-      void runFetchGame({ preserveGameOnError: true });
-    }
-  }, FALLBACK_REFRESH_MS);
+  // window.setInterval(() => {
+  //   if (store.connectionState !== "connected") {
+  //     void runFetchGame({ preserveGameOnError: true });
+  //   }
+  // }, FALLBACK_REFRESH_MS);
 
   window.addEventListener("beforeunload", () => {
     channel.stopListening(eventName, handleRealtimeUpdate);

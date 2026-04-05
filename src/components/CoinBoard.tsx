@@ -1,4 +1,4 @@
-// import dimond from "../assets/CoinBoard/dimond.svg";
+import { useEffect } from "react";
 import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
 import { usePlayerDetails } from "../hooks/usePlayerDetails";
 import CoinBoardPlate from "./CoinBoardPlate";
@@ -8,7 +8,14 @@ type CoinBoardProps = {
 };
 
 export default function CoinBoard({ onOpenModal }: CoinBoardProps) {
-  const { balance, isLoading } = usePlayerDetails();
+  const { balance, isLoading, avatar } = usePlayerDetails();
+
+  useEffect(() => {
+    if (avatar) {
+      const img = new Image();
+      img.src = avatar;
+    }
+  }, [avatar]);
 
   return (
     <div className="z-[530] flex items-center" style={{ height: "26px" }}>
