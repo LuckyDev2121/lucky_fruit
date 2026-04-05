@@ -1,15 +1,19 @@
 // import React, { useEffect, useState } from 'react';
 // import { type GameElement, fetchGameElements } from '../api/gameElementApi';
+import { useEffect } from 'react';
 import { useGameDetails, resolveAssetUrl } from '../hooks/useGameDetails';
+import { usePlaceBet } from '../hooks/usePlaceBet';
 
 type FruitBoardProps = {
     controlButtons: "auto" | "none";
+    currentBetAmount: number;
 };
 
-const GameElements = ({ controlButtons }: FruitBoardProps) => {
+const GameElements = ({ controlButtons, currentBetAmount }: FruitBoardProps) => {
 
     const { options } = useGameDetails();
-
+    // const [selectedButtonId, setSelectedButtonId] = useState<number>(0);
+    const { place, result } = usePlaceBet();
     // const [gameElements, setGameElements] = useState<GameElement[]>([]);
     // const [error, setError] = useState<string | null>(null);
 
@@ -28,7 +32,9 @@ const GameElements = ({ controlButtons }: FruitBoardProps) => {
     //     };
     //     loadGameElements();
     // }, []);
-
+    useEffect(() => {
+        console.log("result updated:", result);
+    }, [result]);
     return (
         <div className='relative top-[90px] h-[271px] w-[280px] z-30 grid grid-cols-3 grid-rows-3 left-1/2 transform -translate-x-1/2' style={{ pointerEvents: controlButtons }}>
             {/* {error && <p style={{ color: 'red' }}>{error}</p>} */}
@@ -48,7 +54,10 @@ const GameElements = ({ controlButtons }: FruitBoardProps) => {
                     <button
                         key={element.id}
                         style={{ cursor: 'pointer' }}
-                        onClick={() => console.log(`Clicked on ${element.id}`)}
+                        onClick={() => {
+                            // setSelectedButtonId(element.id);
+                            place(element.id, currentBetAmount);
+                        }}
                         className={`relative ${gridPosition} `}>
                         <img
                             src={resolveAssetUrl(element.logo)}
@@ -59,7 +68,7 @@ const GameElements = ({ controlButtons }: FruitBoardProps) => {
                     </button>
                 );
             })}
-        </div>
+        </div >
     );
 };
 

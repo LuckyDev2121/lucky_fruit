@@ -20,14 +20,13 @@ export default function PlayBoard({
 }: PlayBoardProps) {
 
 
-    const [selectBetMode, setSelectBetMode] = useState(2);
     const [blockClick, setBlockClick] = useState<"auto" | "none">("auto");
     const [showLedTimer, setShowLedTimer] = useState(true);
     const [showChooseTimer, setShowChooseTimer] = useState(false);
     const [showHiddenTimer, setShowHiddenTimer] = useState(false);
     const [showBoardOpacity, setShowBoardOpacity] = useState(false);
     const [showChooseRectangle, setShowChooseRectangle] = useState(false);
-
+    const [currentBetAmount, setCurrentBetAmount] = useState(100);
     const { betAmounts, options } = useGameDetails();
     const { results } = useGameResults();
 
@@ -52,7 +51,7 @@ export default function PlayBoard({
                     src={getAssetUrl(GAME_ASSETS.fruitContainerFrame)}
                     className="absolute left-1/2 top-[90px] z-20 -translate-x-1/2 transform"
                 />
-                <GameElements controlButtons={blockClick} />
+                <GameElements controlButtons={blockClick} currentBetAmount={currentBetAmount} />
                 <img
                     src={getAssetUrl(GAME_ASSETS.timeCountingBoard)}
                     className="absolute left-[calc(50%-1px)] top-[183px] z-40 -translate-x-1/2 transform"
@@ -81,12 +80,12 @@ export default function PlayBoard({
                             <button
                                 key={element.id}
                                 className="relative"
-                                onClick={() => setSelectBetMode(index + 1)}
+                                onClick={() => setCurrentBetAmount(100 ** (index + 1))}
                             >
                                 <img
                                     src={resolveAssetUrl(element.icon)}
                                     alt={`Bet amount ${element.amount}`}
-                                    className={`relative ${selectBetMode === index + 1 ? "pt-0" : "pt-0"}`}
+                                    className={`relative "pt-0"}`}
                                 />
                             </button>
                         )

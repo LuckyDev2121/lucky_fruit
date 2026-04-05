@@ -6,6 +6,7 @@ type MusicPlayerProps = {
 
 type SoundPlayerProps = {
     isSoundPlaying: boolean;
+    isOpenResultMenu: boolean;
 }
 
 function useAudioPlayback(
@@ -61,14 +62,32 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({ isMusicPlaying }) => {
     );
 };
 
-export const SoundPlayer: React.FC<SoundPlayerProps> = ({ isSoundPlaying }) => {
+export const SoundPlayer: React.FC<SoundPlayerProps> = ({
+    isSoundPlaying,
+    isOpenResultMenu,
+}) => {
     const audioRef = useRef<HTMLAudioElement>(null);
 
-    useAudioPlayback(audioRef, isSoundPlaying);
+    useEffect(() => {
+        if (!isSoundPlaying) return;
+        if (!isOpenResultMenu) return;
+
+        const audio = audioRef.current;
+        if (!audio) return;
+
+        // 🔥 restart sound every time result opens
+        audio.currentTime = 0;
+
+        audio.play().catch((err) => {
+            console.warn("Sound blocked:", err);
+        });
+    }, [isOpenResultMenu, isSoundPlaying]);
 
     return (
-        <>
-            <audio ref={audioRef} src={getMusicUrl(GAME_MUSIC.sound)} loop preload="auto" />
-        </>
+        <audio
+            ref={audioRef}
+            src={getMusicUrl(GAME_MUSIC.sound)}
+            preload="auto"
+        />
     );
 };

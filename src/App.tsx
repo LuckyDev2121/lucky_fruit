@@ -39,11 +39,14 @@ async function preloadGameAssets(setProgress: (value: number) => void) {
 function App() {
   const [isMusicPlaying, setIsMusicPlaying] = useState(true);
   const [isSoundPlaying, setIsSoundPlaying] = useState(true);
+  const [isOpenResultMenu, setIsOpenResultMenu] = useState(false);
   const [progress, setProgress] = useState(0);
   const [isAssetsLoading, setIsAssetsLoading] = useState(true);
   const { isLoading: isGameDetailsLoading } = useGameDetails();
   const { isLoading: isGameResultsLoading } = useGameResults();
   const { isLoading: isPlayerLoading } = usePlayerDetails();
+  const openResultMenu = () => setIsOpenResultMenu(true);
+  const closeResultMenu = () => setIsOpenResultMenu(false);
 
   useEffect(() => {
     preloadGameAssets(setProgress).then(() => {
@@ -71,8 +74,10 @@ function App() {
   return (
     <div className=" relative flex min-h-[100dvh] w-full items-end justify-center overflow-hidden ">
       <MusicPlayer isMusicPlaying={isMusicPlaying} />
-      <SoundPlayer isSoundPlaying={isSoundPlaying} />
+      <SoundPlayer isSoundPlaying={isSoundPlaying} isOpenResultMenu={isOpenResultMenu} />
       <LuckyFruitGame
+        onOpenResultMenu={openResultMenu}
+        onCloseResultMenu={closeResultMenu}
         isMusicPlaying={isMusicPlaying}
         isSoundPlaying={isSoundPlaying}
         onToggleMusic={() => setIsMusicPlaying((prev) => !prev)}
