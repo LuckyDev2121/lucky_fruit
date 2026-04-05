@@ -1,13 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import rectangle from "../assets/Modal/Rectangle.svg"
 
-import linel from "../assets/Modal/LineL.svg"
-import liner from "../assets/Modal/LineR.svg"
 import abatar from "../assets/Modal/abatar.svg"
 import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
 import { useGameResults } from "../hooks/useGameResults";
 import { useGameDetails, resolveAssetUrl } from '../hooks/useGameDetails';
+import ModalHeaderPlate from "./ModalHeaderPlate";
+import ResultMenuDivider from "./ResultMenuDivider";
 type ResultMenuProps = {
     start?: number;
     onResultTimeUp?: () => void;
@@ -59,7 +58,7 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
     return (
         <div className="relative h-[342px] w-[393px] overflow-hidden rounded-t-[20px] bg-gradient-to-t from-[#7C00D5] to-[#5028C1]">
 
-            <img src={rectangle} alt="Rectangle" className="absolute left-1/2 transform -translate-x-1/2" />
+            <ModalHeaderPlate className="absolute left-1/2 -translate-x-1/2" />
             <span className="absolute  left-1/2 transform -translate-x-1/2 text-sm font-bold mt-1">Round 178 of Today</span>
             <span className="absolute h-[19px] w-[19px] mt-[5px] right-[62px] rounded-full " >
                 {formatted}
@@ -85,8 +84,8 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
             <span className="absolute left-1/2 -translate-x-1/2 top-[191px]">
                 {latestResult ? `Latest result: ${latestResult.option_name}` : "Did not Participant in the round"}
             </span>
-            <img src={linel} alt="Line" className="absolute left-[61px] top-[221px]" />
-            <img src={liner} alt="Line" className="absolute left-[281px] top-[221px]" />
+            <ResultMenuDivider className="absolute left-[61px] top-[221px]" direction="left" />
+            <ResultMenuDivider className="absolute left-[281px] top-[221px]" direction="right" />
             <span className="absolute left-1/2 -translate-x-1/2 top-[215px] text-[#FFFFFF]/60">Biggest winning of the round</span>
             <div className="absolute grid grid-cols-3 top-[244px] w-[300px] h-[100px] left-1/2 -translate-x-1/2 ">
                 <div className="relative h-[100px] w-[100px]">

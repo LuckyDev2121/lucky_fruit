@@ -1,9 +1,9 @@
-import rectangle from "../assets/Modal/Rectangle.svg"
 import abatar from "../assets/Modal/abatar.svg";
 // import first from "../assets/Modal/result-1st-postion.svg";
 // import second from "../assets/Modal/result-2nd-postion.svg";
 // import third from "../assets/Modal/result-3rd-postion.svg";
 import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
+import ModalHeaderPlate from "./ModalHeaderPlate";
 
 type CupMenuProps = {
     onCloseCup: () => void;
@@ -47,7 +47,7 @@ function CloseIcon() {
 export default function CupMenu({ onCloseCup, onOpenModal }: CupMenuProps) {
     return (
         <div className="h-[342px] bg-gradient-to-t from-[#7C00D5] to-[#5028C1] w-[393px] rounded-t-[20px]">
-            <img src={rectangle} alt="Rectangle" className="absolute left-1/2 transform -translate-x-1/2" />
+            <ModalHeaderPlate className="absolute left-1/2 -translate-x-1/2" />
             <span className="absolute  left-1/2 transform -translate-x-1/2 text-sm font-bold mt-1">Ranking today</span>
             <button className="absolute h-[19px] w-[19px] mt-[5px] pl-[2px] right-[62px] rounded-full bg-[#360149]" onClick={onCloseCup}>
                 <CloseIcon />

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
 
-import repeat from "../assets/PlayBoard/repeat.svg";
 import ChooseRectangle from "./ChooseRectangle";
 import ChooseTimer from "./ChooseTimer";
 import GameElements from "./GameElements";
@@ -64,9 +63,14 @@ export default function PlayBoard({
                         pointerEvents: "auto",
                     }}
                     onClick={() => onOpenAlert("repeat")}
-                    className="absolute left-[calc(78%-0px)] top-[320px] z-20 h-fit w-full"
+                    className="absolute left-[calc(78%-0px)] top-[324px] z-20 h-fit"
                 >
-                    <img src={repeat} alt="Repeat Icon" className="relative" />
+                    <div className="relative ml-[20px] flex h-[30px] w-[80px] items-center justify-center overflow-hidden rounded-[15px] border border-[#b889d0] bg-gradient-to-b from-[#7f4a93] via-[#5f2e72] to-[#3b163f] shadow-[inset_0_1px_0_rgba(255,255,255,0.55),inset_0_-2px_0_rgba(46,13,55,0.8)]">
+                        <div className="absolute left-[2px] top-[2px] h-[11px] w-[76px] rounded-[12px] bg-gradient-to-b from-[#dbc5e7] via-[#a66bb8] to-transparent opacity-80"></div>
+                        <div className="absolute inset-x-[3px] bottom-[3px] h-[12px] rounded-[10px] bg-[#43204c] opacity-90"></div>
+                        <div className="absolute inset-[1px] rounded-[14px] border border-white/15"></div>
+                        <span className="relative text-[16px] font-medium leading-none text-white [text-shadow:0_1px_2px_rgba(46,13,55,0.9)]">Repeat</span>
+                    </div>
                 </button>
                 <div
                     className="absolute inset-0 top-[361px] pt-[10px] z-20 flex justify-center"
