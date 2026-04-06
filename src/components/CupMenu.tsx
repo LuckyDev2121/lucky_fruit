@@ -1,6 +1,3 @@
-// import first from "../assets/Modal/result-1st-postion.svg";
-// import second from "../assets/Modal/result-2nd-postion.svg";
-// import third from "../assets/Modal/result-3rd-postion.svg";
 import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
 import ModalHeaderPlate from "./ModalHeaderPlate";
 
@@ -57,7 +54,7 @@ export default function CupMenu({ onCloseCup, onOpenModal }: CupMenuProps) {
             <div className="scrollbar-hidden absolute top-[30px] h-[312px] w-[393px] overflow-y-auto overflow-x-hidden pt-[15px]">
                 <div className="relative flex h-[40px] w-[393px]">
                     <img src={getAssetUrl(GAME_ASSETS.resultfirstposition)} alt="First" className="absolute my-[2px] ml-[23px] mr-[15px] " />
-                    <img src={abatar} alt="Avatar" className="absolute left-[74px] h-[36px] w-[36px]" />
+                    {/* <img src={ } alt="Avatar" className="absolute left-[74px] h-[36px] w-[36px]" /> */}
                     <div className="absolute left-[123px] flex h-[40px] w-[198px] flex-col justify-center">
                         <span className="text-[20px] leading-none my-[2px]">Name: C</span>
                         <span className="text-[10px] leading-none my-[2px]">ID:234</span>
@@ -71,7 +68,7 @@ export default function CupMenu({ onCloseCup, onOpenModal }: CupMenuProps) {
                 </div>
                 <div className="relative flex h-[40px] w-[393px]">
                     <img src={getAssetUrl(GAME_ASSETS.resultsecondposition)} alt="Second" className="absolute my-[2px] ml-[23px] mr-[15px] " />
-                    <img src={abatar} alt="Avatar" className="absolute left-[74px] h-[36px] w-[36px]" />
+                    {/* <img src={ } alt="Avatar" className="absolute left-[74px] h-[36px] w-[36px]" /> */}
                     <div className="absolute left-[123px] flex h-[40px] w-[198px] flex-col justify-center">
                         <span className="text-[20px] leading-none my-[2px]">Name: D</span>
                         <span className="text-[10px] leading-none my-[2px]">ID:235</span>
@@ -85,7 +82,7 @@ export default function CupMenu({ onCloseCup, onOpenModal }: CupMenuProps) {
                 </div>
                 <div className="relative flex h-[40px] w-[393px]">
                     <img src={getAssetUrl(GAME_ASSETS.resultthirdposition)} alt="Third" className="absolute my-[2px] ml-[23px] mr-[15px] " />
-                    <img src={abatar} alt="Avatar" className="absolute left-[74px] h-[36px] w-[36px]" />
+                    {/* <img src={ } alt="Avatar" className="absolute left-[74px] h-[36px] w-[36px]" /> */}
                     <div className="absolute left-[123px] flex h-[40px] w-[198px] flex-col justify-center">
                         <span className="text-[20px] leading-none my-[2px]">Name: D</span>
                         <span className="text-[10px] leading-none my-[2px]">ID:235</span>
@@ -100,7 +97,7 @@ export default function CupMenu({ onCloseCup, onOpenModal }: CupMenuProps) {
                 {Array.from({ length: 7 }).map((_, index) => (
                     <div key={index} className="relative flex h-[40px] w-[393px]">
                         <span className=" absolute inline-flex h-[36px] w-[36px] ml-[23px] mr-[15px]  items-center justify-center">{index + 4}</span>
-                        <img src={abatar} alt="Avatar" className="absolute left-[74px] h-[36px] w-[36px]" />
+                        {/* <img src={ } alt="Avatar" className="absolute left-[74px] h-[36px] w-[36px]" /> */}
                         <div className="absolute left-[123px] flex h-[40px] w-[198px] flex-col justify-center">
                             <span className="text-[20px] leading-none my-[2px]">Name: {String.fromCharCode(65 + index + 3)}</span>
                             <span className="text-[10px] leading-none my-[2px]">ID: {234 + index + 3}</span>

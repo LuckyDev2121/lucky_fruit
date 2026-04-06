@@ -11,19 +11,19 @@ export default function ChooseTimer({ start, onChooseTimeUp }: LedTimerProps) {
     const [time, setTime] = useState(initialTime);
     const onChooseTimeUpRef = useRef(onChooseTimeUp);
 
+
     useEffect(() => {
         onChooseTimeUpRef.current = onChooseTimeUp;
     }, [onChooseTimeUp]);
 
     useEffect(() => {
-        setTime(initialTime);
-    }, [initialTime]);
-
-    useEffect(() => {
         if (initialTime <= 0) {
             onChooseTimeUpRef.current?.();
+
             return;
         }
+
+
 
         const timer = window.setInterval(() => {
             setTime((prev) => {
@@ -49,7 +49,6 @@ export default function ChooseTimer({ start, onChooseTimeUp }: LedTimerProps) {
                     initial={{ opacity: 1, scale: 1 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 1 }}
-                    // transition={{ duration: 1 }}
                     style={{ fontFamily: "MyBoldFont", letterSpacing: "2px" }}
                     className={`relative text-[39px] font-mono font-bold text-yellow-300 drop-shadow-[0_0_12px_#FFE600] ${time <= 5 ? "animate-pulse" : ""
                         }`}

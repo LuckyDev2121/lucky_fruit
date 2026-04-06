@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-// import { useGameDetails, resolveAssetUrl } from '../hooks/useGameDetails';
 import { usePlaceBet } from '../hooks/usePlaceBet';
 import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
 import { useGame, resolveAssetUrl } from '../hooks/useGameHook';

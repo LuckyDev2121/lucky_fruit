@@ -5,9 +5,9 @@ import ChooseTimer from "./ChooseTimer";
 import GameElements from "./GameElements";
 import HiddenTimer from "./HiddenTimer";
 import LedTimer from "./LedTimer";
-import { useGameDetails, resolveAssetUrl } from '../hooks/useGameDetails';
-import { useGameResults } from "../hooks/useGameResults";
-import { useMakeGameResult } from "../hooks/useMakeResult";
+import { useGame, resolveAssetUrl } from "../hooks/useGameHook";
+// import { useGameResults } from "../hooks/useGameResults";
+// import { useMakeGameResult } from "../hooks/useMakeResult";
 import MovingHand from "./MoveHand";
 
 type PlayBoardProps = {
@@ -33,9 +33,7 @@ export default function PlayBoard({
     const [currentBetAmount, setCurrentBetAmount] = useState(100);
     // const [bet, setBet] = useState(false)
     const [resetKey, setResetKey] = useState(0)
-    const { betAmounts, options } = useGameDetails();
-    const { results } = useGameResults();
-    const { makeResult } = useMakeGameResult();
+    const { betAmounts, options, results } = useGame();
     const optionMap = useMemo(() => {
         return Object.fromEntries(
             options.map(o => [o.id, o.logo])
@@ -126,7 +124,7 @@ export default function PlayBoard({
 
                 <div className="scrollbar-hidden absolute flex left-1/2 top-[442px] h-[40px] w-[280px] overflow-y-hidden overflow-x-auto z-20 -translate-x-1/2 transform">
                     <div className="flex items-center h-full whitespace-nowrap ">
-                        {results.map((result, index) => (
+                        {results?.data?.map((result, index) => (
                             <div key={index} className=" flex-shrink-0 relative h-[30px] w-[30px] mt-[3px] mr-[12px]">
                                 <img
                                     src={getResultOptionLogo(result.option_id)}
@@ -166,7 +164,6 @@ export default function PlayBoard({
                         <ChooseTimer
                             start={5}
                             onChooseTimeUp={() => {
-                                makeResult();
                                 setShowChooseTimer(false);
                                 setShowHiddenTimer(true);
                                 onOpenModal("result");

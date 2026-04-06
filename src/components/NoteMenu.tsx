@@ -1,6 +1,6 @@
 import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
-import { useGameDetails } from "../hooks/useGameDetails";
 import ModalHeaderPlate from "./ModalHeaderPlate";
+import { useGame } from "../hooks/useGameHook";
 
 type NoteMenuProps = {
     onCloseNote: () => void;
@@ -44,7 +44,7 @@ function CloseIcon() {
 export default function NoteMenu({ onCloseNote, onOpenModal }: NoteMenuProps) {
 
 
-    const { options } = useGameDetails();
+    const { options } = useGame();
 
 
     return (

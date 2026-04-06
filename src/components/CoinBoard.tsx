@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
-import { usePlayerDetails } from "../hooks/usePlayerDetails";
+// import { usePlayerDetails } from "../hooks/usePlayerDetails";
+import { useGame } from "../hooks/useGameHook";
 import CoinBoardPlate from "./CoinBoardPlate";
 
 type CoinBoardProps = {
@@ -8,14 +9,14 @@ type CoinBoardProps = {
 };
 
 export default function CoinBoard({ onOpenModal }: CoinBoardProps) {
-  const { balance, isLoading, avatar } = usePlayerDetails();
+  const { playerInfo } = useGame();
 
   useEffect(() => {
-    if (avatar) {
+    if (playerInfo?.avater) {
       const img = new Image();
-      img.src = avatar;
+      img.src = playerInfo?.avater;
     }
-  }, [avatar]);
+  }, [playerInfo?.avater]);
 
   return (
     <div className="z-[530] flex items-center" style={{ height: "26px" }}>
@@ -26,7 +27,7 @@ export default function CoinBoard({ onOpenModal }: CoinBoardProps) {
             <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" />
           </div>
           <span className="pointer-events-none absolute inset-0 flex items-center justify-center font-bold">
-            {isLoading ? "***" : balance}
+            {playerInfo?.balance ? playerInfo?.balance : "0"}
           </span>
           <button className="ml-auto mr-[7px]"
             onClick={() => onOpenModal("recharge")}>
