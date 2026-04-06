@@ -73,10 +73,11 @@ const GameElements = ({ controlButtons, currentBetAmount, removeBet }: FruitBoar
                             className='absolute top-[4px] m-auto justify-center left-0 right-0'
                         />
                         <span className='absolute top-[68px] m-auto justify-center font-bold left-0 right-0'>{element.name}</span>
-                        {betAmount[index] > 0 && (< div className='absolute top-[45px] left-1/2 -translate-x-1/2 bg-black/30 flex'>
-                            <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" className="flex h-[9px] w-[16px] mr-[3px] mt-1" />
-                            <span className='flex '>{formatNumber(betAmount[index])}</span>
-                        </div>)}
+                        {betAmount[index] > 0 && (
+                            < div className='absolute h-[87px] w-[87px] top-[2px] left-[3px] bg-black/50 flex items-center justify-center rounded-[8px]'>
+                                <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" className="flex h-[9px] w-[16px] mr-[3px] mt-1" />
+                                <span className='flex '>{formatNumber(betAmount[index])}</span>
+                            </div>)}
                     </button>
                 );
             })}
