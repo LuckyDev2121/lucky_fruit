@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { echo } from "./echo";
 import { fetchGameDetail,
     fetchPlayerInfo,
@@ -35,32 +35,47 @@ export function useGame() {
 
 
 //================= REAL-TIME SOCKET =================
-useEffect(() => {
-  const channel = echo.channel(REALTIME_CHANNEL);
+const refreshGameData = useCallback(async () => {
+    const [gameDetail, player, gameResults] = await Promise.all([
+      fetchGameDetail(),
+      fetchPlayerInfo(),
+      fetchGameResults(),
+    ]);
 
-    channel.listen(REALTIME_EVENT, async () => {
-        const gameDetail = await fetchGameDetail();
-        const playerInfo = await fetchPlayerInfo();
-        const gameResults = await fetchGameResults();
-        const createRoundData = await createRound();
-        // const placeBetData = await placeBet();
-        const makeRusultData = await makeGameResult();
-        setResults(gameResults);
-        setPlayerInfo(playerInfo);
-        setGameDetails(gameDetail);
-        setRoundData(createRoundData);
-        setMakeResult(makeRusultData)
-        // setPlaceBetAmount(placeBetData)
+    setGameDetails(gameDetail);
+    setPlayerInfo(player);
+    setResults(gameResults);
+  }, []);
+
+
+useEffect(() => {
+  void refreshGameData();
+
+  const channel = echo.channel(REALTIME_CHANNEL);
+  const eventName = `.${REALTIME_EVENT}`;
+
+    channel.listen(eventName, async () => {
+      await refreshGameData();
     });
 
     return () => {
-    echo.leaveChannel("game-channel");
+    channel.stopListening(eventName);
+    echo.leaveChannel(REALTIME_CHANNEL);
   };
-}, []);
+}, [refreshGameData]);
 
 // ================= ACTIONS =================
+const handleCreateRound = useCallback(async () => {
+    const data = await createRound();
+    setRoundData(data);
+    return data;
+  }, []);
 
-
+  const handleMakeResult = useCallback(async () => {
+    const data = await makeGameResult();
+    setMakeResult(data);
+    return data;
+  }, []);
 //================= RETURN =================
 
 return{
@@ -71,6 +86,9 @@ return{
     results,
     roundData,
     makeResult,
+    refreshGameData,
+    createRound: handleCreateRound,
+    makeGameResult: handleMakeResult,
     // placeBetAmount,
 }
 }

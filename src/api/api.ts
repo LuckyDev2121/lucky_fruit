@@ -40,7 +40,7 @@ export const fetchGameDetail = async (): Promise<GameDetailsData> => {
     throw new Error(response.data.message || "API returned false status");
   }
 
-  return response.data;
+  return response.data.data as GameDetailsData;
 };
 
 

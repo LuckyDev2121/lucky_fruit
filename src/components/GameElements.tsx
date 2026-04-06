@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useGameDetails, resolveAssetUrl } from '../hooks/useGameDetails';
+// import { useGameDetails, resolveAssetUrl } from '../hooks/useGameDetails';
 import { usePlaceBet } from '../hooks/usePlaceBet';
 import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
+import { useGame, resolveAssetUrl } from '../hooks/useGameHook';
 
 type FruitBoardProps = {
     controlButtons: "auto" | "none";
@@ -24,7 +25,7 @@ function formatNumber(num: number): string {
 
 const GameElements = ({ controlButtons, currentBetAmount, removeBet }: FruitBoardProps) => {
 
-    const { options } = useGameDetails();
+    const { options } = useGame();
     const { place, } = usePlaceBet();
     const [betAmount, setBetAmount] = useState<number[]>([0, 0, 0, 0, 0, 0, 0, 0])
 

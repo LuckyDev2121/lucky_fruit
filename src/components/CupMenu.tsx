@@ -1,4 +1,3 @@
-import abatar from "../assets/Modal/abatar.svg";
 // import first from "../assets/Modal/result-1st-postion.svg";
 // import second from "../assets/Modal/result-2nd-postion.svg";
 // import third from "../assets/Modal/result-3rd-postion.svg";
