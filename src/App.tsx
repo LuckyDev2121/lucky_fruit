@@ -7,7 +7,6 @@ import { GAME_ASSETS, getAssetUrl } from "./config/gameConfig";
 import { useGameDetails } from "./hooks/useGameDetails";
 import { useGameResults } from "./hooks/useGameResults";
 import { usePlayerDetails } from "./hooks/usePlayerDetails";
-// import { createRound } from "./hooks/useCreateRound";
 import { useGame } from "./hooks/useGameHook";
 
 async function preloadGameAssets(setProgress: (value: number) => void) {
