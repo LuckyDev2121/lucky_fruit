@@ -9,6 +9,19 @@ type FruitBoardProps = {
     removeBet: number;
 };
 
+function formatNumber(num: number): string {
+    if (num >= 1_000_000_000) {
+        return (num / 1_000_000_000).toFixed(1).replace(/\.0$/, '') + 'B';
+    }
+    if (num >= 1_000_000) {
+        return (num / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'M';
+    }
+    if (num >= 1_000) {
+        return (num / 1_000).toFixed(1).replace(/\.0$/, '') + 'K';
+    }
+    return num.toString();
+}
+
 const GameElements = ({ controlButtons, currentBetAmount, removeBet }: FruitBoardProps) => {
 
     const { options } = useGameDetails();
@@ -62,7 +75,7 @@ const GameElements = ({ controlButtons, currentBetAmount, removeBet }: FruitBoar
                         <span className='absolute top-[68px] m-auto justify-center font-bold left-0 right-0'>{element.name}</span>
                         {betAmount[index] > 0 && (< div className='absolute top-[45px] left-1/2 -translate-x-1/2 bg-black/30 flex'>
                             <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" className="flex h-[9px] w-[16px] mr-[3px] mt-1" />
-                            <span className='flex '>{betAmount[index]}</span>
+                            <span className='flex '>{formatNumber(betAmount[index])}</span>
                         </div>)}
                     </button>
                 );

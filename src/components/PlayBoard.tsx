@@ -93,7 +93,7 @@ export default function PlayBoard({
                             <button
                                 key={element.id}
                                 className="relative"
-                                onClick={() => setCurrentBetAmount(100 ** (index + 1))}
+                                onClick={() => setCurrentBetAmount(10 ** (index + 2))}
                             >
                                 <img
                                     src={resolveAssetUrl(element.icon)}
