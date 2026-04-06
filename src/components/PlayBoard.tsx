@@ -6,8 +6,6 @@ import GameElements from "./GameElements";
 import HiddenTimer from "./HiddenTimer";
 import LedTimer from "./LedTimer";
 import { useGame, resolveAssetUrl } from "../hooks/useGameHook";
-// import { useGameResults } from "../hooks/useGameResults";
-// import { useMakeGameResult } from "../hooks/useMakeResult";
 import MovingHand from "./MoveHand";
 
 type PlayBoardProps = {
@@ -21,7 +19,6 @@ export default function PlayBoard({
     onOpenAlert,
     RoundId,
 }: PlayBoardProps) {
-
 
     const [blockClick, setBlockClick] = useState<"auto" | "none">("auto");
     const [showLedTimer, setShowLedTimer] = useState(true);
@@ -142,7 +139,7 @@ export default function PlayBoard({
                 </div>
 
                 {showBoardOpacity && (
-                    <div className="absolute w-[280px] h-[271px]  rounded-[12px] border-[1px] border-[#FFB24C] left-1/2 top-[90px] z-30 bg-[#360149] -translate-x-1/2 transform opacity-70"></div>
+                    <div className="absolute w-[280px] h-[271px]  rounded-[12px] border-[1px] border-[#FFB24C] left-1/2 top-[90px] z-30 bg-[#360149] -translate-x-1/2 transform opacity-40"></div>
                 )}
                 {showLedTimer && (
                     <div className="absolute  left-[calc(50%+1px)] top-[198px] z-50 -translate-x-1/2 transform">
@@ -164,6 +161,7 @@ export default function PlayBoard({
                         <ChooseTimer
                             start={5}
                             onChooseTimeUp={() => {
+                                setShowChooseRectangle(false);
                                 setShowChooseTimer(false);
                                 setShowHiddenTimer(true);
                                 onOpenModal("result");

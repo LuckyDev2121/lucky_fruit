@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
-// import { type GameElement, fetchGameElements } from '../api/gameElementApi';
+import { useGame } from "../hooks/useGameHook";
 
 const fruits = [
     { id: 0, element_name: "G", top: 94, left: 154 },
@@ -17,39 +17,122 @@ const fruits = [
 export default function ChooseRectangle({ onChooseTimeUp }: { onChooseTimeUp?: () => void; onResult?: (fruit: string) => void }) {
     const [time, setTime] = useState(0);
     const [second, setSecond] = useState(5000);
+    const [add, setAdd] = useState(0);
     const [randomIndex] = useState(() => Math.floor(Math.random() * fruits.length));
     const onChooseTimeUpRef = useRef(onChooseTimeUp);
-    const currentFruit = fruits[(randomIndex + time - 1) % fruits.length];
-    // const [gameElements, setGameElements] = useState<GameElement[]>([]);
-
-    // useEffect(() => {
-    //     const loadGameElements = async () => {
-    //         const data = await fetchGameElements();
-    //         setGameElements(data);
-    //     };
-    //     loadGameElements();
-    // }, []);
-
+    const currentFruit = fruits[(randomIndex + time) % fruits.length];
+    const { makeGameResult, makeResult } = useGame();
+    const [steps, setSteps] = useState(0);
     useEffect(() => {
         onChooseTimeUpRef.current = onChooseTimeUp;
     }, [onChooseTimeUp]);
 
     useEffect(() => {
 
-        if (second - 10 * time < 100) {
+        if (second < 220) {
             onChooseTimeUpRef.current?.(); // trigger notification
             return;
         }
 
         const timer = setInterval(() => {
-            setSecond((s) => s - 100 - 10 * time);
-            setTime((t) => t + 1);
-        }, 100 + 10 * time);
+            if (second >= 2000) {
+                setSecond((s) => s - 100);
+                setTime((t) => t + 1);
+            }
+            if (second === 2000) {
+                makeGameResult();
+                setSteps(((makeResult?.winning_option_id ? makeResult.winning_option_id : 0) + 3 - currentFruit.id) % fruits.length);
+            }
+
+            if (second < 2000) {
+                if (second === 1900) { console.log("steps", makeResult?.winning_option_id, "====", steps, "====", currentFruit.id); }
+                if (steps === 0) {
+                    if (second < 700) {
+                        setSecond((s) => s - 100 - 100 * add);
+                        setTime((t) => t + 1);
+                        setAdd((a) => a + 1);
+                    } else {
+                        setSecond((s) => s - 100);
+                        setTime((t) => t + 1);
+                    }
+                }
+                if (steps === 1) {
+                    if (second < 1600) {
+                        setSecond((s) => s - 100 - 100 * add);
+                        setTime((t) => t + 1);
+                        setAdd((a) => a + 1);
+                    } else {
+                        setSecond((s) => s - 100);
+                        setTime((t) => t + 1);
+                    }
+                }
+                if (steps === 2) {
+                    if (second < 1600) {
+                        setSecond((s) => s - 100 - 90 * add);
+                        setTime((t) => t + 1);
+                        setAdd((a) => a + 1);
+                    } else {
+                        setSecond((s) => s - 100);
+                        setTime((t) => t + 1);
+                    }
+                }
+                if (steps === 3) {
+                    if (second < 1550) {
+                        setSecond((s) => s - 100 - 50 * add);
+                        setTime((t) => t + 1);
+                        setAdd((a) => a + 1);
+                    } else {
+                        setSecond((s) => s - 100);
+                        setTime((t) => t + 1);
+                    }
+                }
+                if (steps === 4) {
+                    if (second < 1200) {
+                        setSecond((s) => s - 100 - 100 * add);
+                        setTime((t) => t + 1);
+                        setAdd((a) => a + 1);
+                    } else {
+                        setSecond((s) => s - 100);
+                        setTime((t) => t + 1);
+                    }
+                }
+                if (steps === 5) {
+                    if (second < 1100) {
+                        setSecond((s) => s - 100 - 100 * add);
+                        setTime((t) => t + 1);
+                        setAdd((a) => a + 1);
+                    } else {
+                        setSecond((s) => s - 100);
+                        setTime((t) => t + 1);
+                    }
+                }
+                if (steps === 6) {
+                    if (second < 600) {
+                        setSecond((s) => s - 100 - 300);
+                        setTime((t) => t + 1);
+                        setAdd((a) => a + 1);
+                    } else {
+                        setSecond((s) => s - 100 - 100 * add);
+                        setTime((t) => t + 1);
+                    }
+                }
+                if (steps === 7) {
+                    if (second < 800) {
+                        setSecond((s) => s - 100 - 100 * add);
+                        setTime((t) => t + 1);
+                        setAdd((a) => a + 1);
+                    } else {
+                        setSecond((s) => s - 100);
+                        setTime((t) => t + 1);
+                    }
+                }
+            }
+        }, 100);
 
         return () => {
             clearInterval(timer)
         };
-    }, [time, second, currentFruit.element_name]);
+    }, [time, second]);
 
     return (
         <div className="absolute z-40" style={{ top: `${fruits[(randomIndex + time) % fruits.length].top}px`, left: `${fruits[(randomIndex + time) % fruits.length].left}px` }}>
