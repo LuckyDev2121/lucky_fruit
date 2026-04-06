@@ -98,8 +98,23 @@ export default function PlayBoard({
                                 <img
                                     src={resolveAssetUrl(element.icon)}
                                     alt={`Bet amount ${element.amount}`}
-                                    className={`relative "pt-0"}`}
+                                    className="relative pt-0"
                                 />
+                                {currentBetAmount === 100 && index === 0 && (
+                                    <div className="absolute left-[1px] top-[0px] h-[41px] w-[54px] bg-[#ffae00]/50 rounded-full"></div>
+                                )}
+                                {currentBetAmount === 1000 && index === 1 && (
+                                    <div className="absolute left-[5px] top-[0px] h-[41px] w-[54px] bg-[#ffae00]/50 rounded-full"></div>
+                                )}
+                                {currentBetAmount === 10000 && index === 2 && (
+                                    <div className="absolute left-[6px] top-[1px] h-[42px] w-[52px] bg-[#ffae00]/50 rounded-full"></div>
+                                )}
+                                {currentBetAmount === 100000 && index === 3 && (
+                                    <div className="absolute left-[6px] top-[1px] h-[41px] w-[53px] bg-[#ffae00]/50 rounded-full"></div>
+                                )}
+                                {currentBetAmount === 1000000 && index === 4 && (
+                                    <div className="absolute left-[2px] top-[0px] h-[42px] w-[53px] bg-[#ffae00]/50 rounded-full"></div>
+                                )}
                             </button>
                         )
                     })}
