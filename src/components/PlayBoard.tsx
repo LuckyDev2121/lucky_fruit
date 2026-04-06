@@ -108,12 +108,12 @@ export default function PlayBoard({
                     src={getAssetUrl(GAME_ASSETS.resultboardbg)}
                     className="absolute left-1/2 top-[442px] z-20 -translate-x-1/2 transform"
                 />
-                <div className="scrollbar-hidden absolute left-1/2 top-[442px] h-[40px] w-[280px] overflow-y-hidden overflow-x-auto z-20 -translate-x-1/2 transform">
+                <div className="scrollbar-hidden absolute flex left-1/2 top-[442px] h-[40px] w-[280px] overflow-y-hidden overflow-x-auto z-20 -translate-x-1/2 transform">
                     <div className="absolute left-[3px] top-[26px] w-[24px] h-[12px] z-50">
                         <img src={getAssetUrl(GAME_ASSETS.newtag)} alt="Result Board Frame" className="absolute inset-0 h-full w-full" />
                     </div>
                     {results.map((result, index) => (
-                        <div key={index} className="relative flex top-[4px] h-[30px] w-[30px] z-40">
+                        <div key={index} className="relative flex top-[7px] h-[30px] w-[30px] mr-[12px] z-40">
                             <img
                                 src={getResultOptionLogo(result.option_id)}
                                 alt={result.option_name || `Result ${index + 1}`}
