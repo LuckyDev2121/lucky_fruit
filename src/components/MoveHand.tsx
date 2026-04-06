@@ -4,13 +4,13 @@ import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
 
 const points = [
     { top: "125px", left: "90px" },
-    { top: "125px", left: "190px" },
-    { top: "125px", left: "290px" },
-    { top: "225px", left: "290px" },
-    { top: "325px", left: "290px" },
-    { top: "325px", left: "190px" },
-    { top: "325px", left: "90px" },
-    { top: "225px", left: "90px" },
+    { top: "125px", left: "185px" },
+    { top: "125px", left: "280px" },
+    { top: "220px", left: "280px" },
+    { top: "315px", left: "280px" },
+    { top: "315px", left: "185px" },
+    { top: "315px", left: "90px" },
+    { top: "220px", left: "90px" },
     { top: "125px", left: "90px" },
 ];
 

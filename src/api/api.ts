@@ -109,13 +109,18 @@ export const placeBet = async (betId: number, amount: number): Promise<string> =
 
   return response.data.message || "Bet placed successfully";
 };
-
-
+  
+type Winners = {
+  id: number;
+  username: string;
+  balance: number;
+  avater: string;
+}
 export type ResultData = {
   round_id: number;
   round_no: number;
   winning_option_id: number;
-  winner_user_ids: number[];
+  winners: Winners[];
 };
 
 export type MakeResultResponse = {

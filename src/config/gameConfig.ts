@@ -32,7 +32,7 @@ const API_BASE_URL =
 export const GAME_DETAILS_API_URL = `${API_BASE_URL.replace(/\/$/, "")}/game-details/${GAME_ID}`;
 export const PLAYER_API_URL = `${API_BASE_URL.replace(/\/$/, "")}/player`;
 export const GAME_RESULTS_API_URL = `${API_BASE_URL.replace(/\/$/, "")}/game/${GAME_ID}/results`;
-export const MAKE_RESULT_API_URL = `${API_BASE_URL.replace(/\/$/, "")}/game/${GAME_ID}/make-result`;
+export const MAKE_RESULT_API_URL = `${API_BASE_URL.replace(/\/$/, "")}/make-result`;
 export const PLACE_BET_API_URL = `${API_BASE_URL.replace(/\/$/, "")}/place-bet`;
 export const CREAT_ROUND_API_URL = `${API_BASE_URL.replace(/\/$/, "")}/create-round`;
 

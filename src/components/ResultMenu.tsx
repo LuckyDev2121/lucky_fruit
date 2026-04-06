@@ -1,8 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import abatar from "../assets/Modal/abatar.svg"
 import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
-// import { useGameDetails, resolveAssetUrl } from '../hooks/useGameDetails';
 import ModalHeaderPlate from "./ModalHeaderPlate";
 import ResultMenuDivider from "./ResultMenuDivider";
 import { useGame, resolveAssetUrl } from "../hooks/useGameHook";
@@ -18,8 +16,7 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
     const [time, setTime] = useState(initialTime);
     const [result, setResult] = useState<ResultData | null>(null);
     const onResultTimeUpRef = useRef(onResultTimeUp);
-    const { options } = useGame();
-    const { makeResult } = useGame()
+    const { options, makeResult } = useGame();
     const optionMap = useMemo(() => {
         return Object.fromEntries(options.map(o => [o.id, o.logo]));
     }, [options]);
@@ -93,21 +90,21 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
             </div>
             {result && (
                 <img
-                    src={getResultOptionLogo(result.winning_option_id ?? 0)}
+                    src={getResultOptionLogo(result.winning_option_id)}
                     alt="selectedFruit"
                     className={`absolute left-1/2 -translate-x-1/2 top-[70px] h-[85px] w-[85px]`}
                 />
             )}
             <span className="absolute left-1/2 -translate-x-1/2 top-[191px]">
-                {result ? `Latest result: ${result.winning_option_id ?? 0}` : "Did not Participant in the round"}
+                {result ? `Latest result: ${result.winning_option_id}` : "Did not Participant in the round"}
             </span>
             <ResultMenuDivider className="absolute left-[61px] top-[221px]" direction="left" />
             <ResultMenuDivider className="absolute left-[281px] top-[221px]" direction="right" />
             <span className="absolute left-1/2 -translate-x-1/2 top-[215px] text-[#FFFFFF]/60">Biggest winning of the round</span>
             <div className="absolute grid grid-cols-3 top-[244px] w-[300px] h-[100px] left-1/2 -translate-x-1/2 ">
                 <div className="relative h-[100px] w-[100px]">
-                    <img src={abatar} alt="abatar" className="absolute w-[50px] h-[50px] left-1/2 -translate-x-1/2" />
-                    <span className="absolute top-[50px] w-[100px] text-center">{result?.winner_user_ids?.[0] ?? "N/A"}</span>
+                    <img src={resolveAssetUrl(result?.winners?.[0]?.avater ?? "")} alt="abatar" className="absolute w-[50px] h-[50px] left-1/2 -translate-x-1/2" />
+                    <span className="absolute top-[50px] w-[100px] text-center">{result?.winners?.[0]?.id ?? "N/A"}</span>
                     <div className="absolute flex top-[70px] w-[100px] items-center justify-center">
                         <div className="relative ">
                             <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" className="h-[9px] w-[16px] mr-[3px]" />
@@ -116,8 +113,8 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
                     </div>
                 </div>
                 <div className="relative h-[100px] w-[100px]">
-                    <img src={abatar} alt="abatar" className="absolute w-[50px] h-[50px] left-1/2 -translate-x-1/2" />
-                    <span className="absolute top-[50px] w-[100px] text-center">{result?.winner_user_ids?.[1] ?? "N/A"}</span>
+                    <img src={resolveAssetUrl(result?.winners?.[1]?.avater ?? "")} alt="abatar" className="absolute w-[50px] h-[50px] left-1/2 -translate-x-1/2" />
+                    <span className="absolute top-[50px] w-[100px] text-center">{result?.winners?.[1]?.id ?? "N/A"}</span>
                     <div className="absolute flex top-[70px] w-[100px] items-center justify-center">
                         <div className="relative ">
                             <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" className="h-[9px] w-[16px] mr-[3px]" />
@@ -126,8 +123,8 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
                     </div>
                 </div>
                 <div className="relative h-[100px] w-[100px]">
-                    <img src={abatar} alt="image" className="absolute w-[50px] h-[50px] left-1/2 -translate-x-1/2" />
-                    <span className="absolute top-[50px] w-[100px] text-center">{result?.winner_user_ids?.[2] ?? "N/A"}</span>
+                    <img src={resolveAssetUrl(result?.winners?.[2]?.avater ?? "")} alt="image" className="absolute w-[50px] h-[50px] left-1/2 -translate-x-1/2" />
+                    <span className="absolute top-[50px] w-[100px] text-center">{result?.winners?.[2]?.id ?? "N/A"}</span>
                     <div className="absolute flex top-[70px] w-[100px] items-center justify-center">
                         <div className="relative ">
                             <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" className="h-[9px] w-[16px] mr-[3px]" />
