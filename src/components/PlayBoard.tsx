@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
-
 import ChooseRectangle from "./ChooseRectangle";
 import ChooseTimer from "./ChooseTimer";
 import GameElements from "./GameElements";
@@ -9,15 +8,18 @@ import LedTimer from "./LedTimer";
 import { useGameDetails, resolveAssetUrl } from '../hooks/useGameDetails';
 import { useGameResults } from "../hooks/useGameResults";
 import { useMakeGameResult } from "../hooks/useMakeResult";
+import MovingHand from "./MoveHand";
 
 type PlayBoardProps = {
     onOpenModal: (modal: string) => void;
     onOpenAlert: (alert: string) => void;
+    RoundId: number | null;
 };
 
 export default function PlayBoard({
     onOpenModal,
     onOpenAlert,
+    RoundId,
 }: PlayBoardProps) {
 
 
@@ -26,15 +28,12 @@ export default function PlayBoard({
     const [showChooseTimer, setShowChooseTimer] = useState(false);
     const [showHiddenTimer, setShowHiddenTimer] = useState(false);
     const [showBoardOpacity, setShowBoardOpacity] = useState(false);
+    const [showHand, setShowHand] = useState(true);
     const [showChooseRectangle, setShowChooseRectangle] = useState(false);
     const [currentBetAmount, setCurrentBetAmount] = useState(100);
     const { betAmounts, options } = useGameDetails();
     const { results } = useGameResults();
     const { makeResult } = useMakeGameResult();
-    // const getResultOptionLogo = (optionId: number) => {
-    //     const matchedOption = options.find((element) => element.id === optionId);
-    //     return matchedOption?.logo ? resolveAssetUrl(matchedOption.logo) : "";
-    // };
     const optionMap = useMemo(() => {
         return Object.fromEntries(
             options.map(o => [o.id, o.logo])
@@ -54,7 +53,7 @@ export default function PlayBoard({
                 />
                 <img src={getAssetUrl(GAME_ASSETS.fruitBgFrame)} className="absolute inset-0 mt-[7px]" />
                 <span className="absolute left-1/2 top-[70px] h-[18px] w-[124px] -translate-x-1/2 transform justify-center rounded-full bg-[#3D005C] text-center font-regular">
-                    Round 1526 of today
+                    {RoundId ? (`Round ${RoundId} of today`) : (`Please wait next round`)}
                 </span>
                 <img
                     src={getAssetUrl(GAME_ASSETS.fruitContainerFrame)}
@@ -118,6 +117,9 @@ export default function PlayBoard({
                         </div>
                     ))}
                 </div>
+                {showHand && (
+                    <MovingHand />
+                )}
                 {showBoardOpacity && (
                     <div className="absolute w-[280px] h-[271px]  rounded-[12px] border-[1px] border-[#FFB24C] left-1/2 top-[90px] z-30 bg-[#360149] -translate-x-1/2 transform opacity-70"></div>
                 )}
@@ -131,6 +133,7 @@ export default function PlayBoard({
                                 setShowBoardOpacity(true);
                                 setBlockClick("none");
                                 setShowChooseRectangle(true);
+                                setShowHand(false);
                             }}
                         />
                     </div>
@@ -157,6 +160,7 @@ export default function PlayBoard({
                                 setShowLedTimer(true);
                                 setBlockClick("auto");
                                 setShowBoardOpacity(false);
+                                setShowHand(true);
                             }}
                         />
                     </div>
@@ -168,6 +172,7 @@ export default function PlayBoard({
                         }}
                     />
                 )}
+
             </div>
         </div>
     );

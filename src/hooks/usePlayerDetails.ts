@@ -27,7 +27,6 @@ type PlayerDetailsData = {
   username?: string;
   avater?: string;
   balance?: string;
-  [key: string]: unknown;
 };
 
 type PlayerDetails = {

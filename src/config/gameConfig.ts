@@ -135,4 +135,6 @@ export const GAME_ASSETS = {
   selectround: "select-round.svg",
   resultboardbg: "result-board-bg.svg",
   newtag: "new-tag.svg",
+  gamelogo: "game-logo.svg",
+  hand: "hand.svg",
 } as const;

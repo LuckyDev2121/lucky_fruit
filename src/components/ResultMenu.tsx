@@ -2,10 +2,11 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import abatar from "../assets/Modal/abatar.svg"
 import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
-import { useGameDetails, resolveAssetUrl } from '../hooks/useGameDetails';
-import { useMakeGameResult } from '../hooks/useMakeResult';
+// import { useGameDetails, resolveAssetUrl } from '../hooks/useGameDetails';
 import ModalHeaderPlate from "./ModalHeaderPlate";
 import ResultMenuDivider from "./ResultMenuDivider";
+import { useGame, resolveAssetUrl } from "../hooks/useGameHook";
+import { type ResultData } from "../api/api";
 type ResultMenuProps = {
     start?: number;
     onResultTimeUp?: () => void;
@@ -13,12 +14,12 @@ type ResultMenuProps = {
 
 export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
 
-    const { result } = useMakeGameResult();
-    const { options } = useGameDetails();
     const initialTime = Math.max(0, start ?? 0);
     const [time, setTime] = useState(initialTime);
+    const [result, setResult] = useState<ResultData | null>(null);
     const onResultTimeUpRef = useRef(onResultTimeUp);
-
+    const { options } = useGame();
+    const { makeResult } = useGame()
     const optionMap = useMemo(() => {
         return Object.fromEntries(options.map(o => [o.id, o.logo]));
     }, [options]);
@@ -27,6 +28,19 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
             ? resolveAssetUrl(optionMap[optionId])
             : "";
     };
+
+    useEffect(() => {
+        const start = async () => {
+            try {
+                const res = makeResult;
+                console.log("CREATE ROUND:", res);
+                setResult(res);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+        start();
+    }, [makeResult]);
 
     useEffect(() => {
         onResultTimeUpRef.current = onResultTimeUp;
@@ -62,7 +76,7 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
         <div className="relative h-[342px] w-[393px] overflow-hidden rounded-t-[20px] bg-gradient-to-t from-[#7C00D5] to-[#5028C1]">
 
             <ModalHeaderPlate className="absolute left-1/2 -translate-x-1/2" />
-            <span className="absolute  left-1/2 transform -translate-x-1/2 text-sm font-bold mt-1">Round {result?.round_no ?? 0} of Today</span>
+            <span className="absolute  left-1/2 transform -translate-x-1/2 text-sm font-bold mt-1">Round {result?.round_no} of Today</span>
             <span className="absolute h-[19px] w-[19px] mt-[5px] right-[62px] rounded-full " >
                 {formatted}
             </span>

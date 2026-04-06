@@ -7,6 +7,8 @@ import { GAME_ASSETS, getAssetUrl } from "./config/gameConfig";
 import { useGameDetails } from "./hooks/useGameDetails";
 import { useGameResults } from "./hooks/useGameResults";
 import { usePlayerDetails } from "./hooks/usePlayerDetails";
+// import { createRound } from "./hooks/useCreateRound";
+import { useGame } from "./hooks/useGameHook";
 
 async function preloadGameAssets(setProgress: (value: number) => void) {
   const assets = Object.values(GAME_ASSETS).map((fileName) =>
@@ -42,17 +44,40 @@ function App() {
   const [isOpenResultMenu, setIsOpenResultMenu] = useState(false);
   const [progress, setProgress] = useState(0);
   const [isAssetsLoading, setIsAssetsLoading] = useState(true);
+  const [roundId, setRoundId] = useState<number | null>(null);
   const { isLoading: isGameDetailsLoading } = useGameDetails();
   const { isLoading: isGameResultsLoading } = useGameResults();
   const { isLoading: isPlayerLoading } = usePlayerDetails();
   const openResultMenu = () => setIsOpenResultMenu(true);
   const closeResultMenu = () => setIsOpenResultMenu(false);
-
+  const { roundData } = useGame()
   useEffect(() => {
     preloadGameAssets(setProgress).then(() => {
       setIsAssetsLoading(false);
     });
   }, []);
+
+  useEffect(() => {
+    const start = async () => {
+      try {
+        const res = roundData;
+
+        console.log("CREATE ROUND:", res);
+
+        if (!res?.status) {
+          setRoundId(0);
+          return;
+        }
+
+        // ✅ new round started
+        setRoundId(res.data.round_no);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    start();
+  }, [roundData]);
+
 
   const isLoading =
     isAssetsLoading ||
@@ -68,14 +93,15 @@ function App() {
     ].filter(Boolean).length;
     const dataProgress = Math.round((dataReadyCount / 3) * 100);
     const loadingProgress = Math.round((progress + dataProgress) / 2);
-
     return <LoadingScreen progress={loadingProgress} />;
   }
+
   return (
-    <div className=" relative flex min-h-[100dvh] w-full items-end justify-center overflow-hidden ">
+    < div className=" relative flex min-h-[100dvh] w-full items-end justify-center overflow-hidden " >
       <MusicPlayer isMusicPlaying={isMusicPlaying} />
       <SoundPlayer isSoundPlaying={isSoundPlaying} isOpenResultMenu={isOpenResultMenu} />
       <LuckyFruitGame
+        TodaysRoundId={roundId}
         onOpenResultMenu={openResultMenu}
         onCloseResultMenu={closeResultMenu}
         isMusicPlaying={isMusicPlaying}
@@ -83,8 +109,7 @@ function App() {
         onToggleMusic={() => setIsMusicPlaying((prev) => !prev)}
         onToggleSound={() => setIsSoundPlaying((prev) => !prev)}
       />
-
-    </div>
+    </div >
   );
 }
 

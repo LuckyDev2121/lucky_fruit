@@ -10,7 +10,6 @@ import RepeatModal from "./RepeatModal";
 import MusicModal from "./MusicModal";
 import ResultMenu from "./ResultMenu";
 import TopMenu from "./TopMenu";
-// import { useGameRealtime } from "../hooks/useGameRealtime";
 
 const GAME_WIDTH = 393;
 const GAME_HEIGHT = 533;
@@ -22,6 +21,7 @@ export default function LuckyFruitGame({
   isSoundPlaying,
   onOpenResultMenu,
   onCloseResultMenu,
+  TodaysRoundId,
 }: {
   onToggleMusic: () => void;
   isMusicPlaying: boolean;
@@ -29,6 +29,7 @@ export default function LuckyFruitGame({
   isSoundPlaying: boolean;
   onOpenResultMenu: () => void;
   onCloseResultMenu: () => void;
+  TodaysRoundId: number | null;
 }) {
 
   const [activeModal, setActiveModal] = useState<string | null>(null);
@@ -36,18 +37,6 @@ export default function LuckyFruitGame({
   const [scale, setScale] = useState(1);
   const isOverlayOpen = activeModal !== null || activeAlert !== null;
 
-  // const {
-  //   countdownSeconds,
-  //   latestResultFruit,
-  //   latestResultIcon,
-  //   playerBalance,
-  //   winList,
-  //   jackpotAmount,
-  //   connectionStatus,
-  //   lastError,
-  //   reconnectAttempts,
-  //   retryConnection,
-  // } = useGameRealtime();
   useEffect(() => {
     if (activeModal === "result") {
       onOpenResultMenu();
@@ -103,6 +92,7 @@ export default function LuckyFruitGame({
 
           <div className="bottom-0 left-0 right-0">
             <PlayBoard
+              RoundId={TodaysRoundId}
               onOpenModal={(modal) => setActiveModal(modal)}
               onOpenAlert={(alert) => setActiveAlert(alert)}
             />

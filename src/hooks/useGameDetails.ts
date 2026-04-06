@@ -190,7 +190,7 @@ async function runFetchGame({
 // }
 function handleRealtimeUpdate(payload: RealtimePayload) {
   const nextGame = normalizeRealtimePayload(payload);
-
+console.log(`Next Game: ${JSON.stringify(nextGame)}`);
   if (!nextGame) return;
 
   updateStore({
