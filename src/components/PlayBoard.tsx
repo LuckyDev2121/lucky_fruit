@@ -31,6 +31,8 @@ export default function PlayBoard({
     const [showHand, setShowHand] = useState(true);
     const [showChooseRectangle, setShowChooseRectangle] = useState(false);
     const [currentBetAmount, setCurrentBetAmount] = useState(100);
+    // const [bet, setBet] = useState(false)
+    const [resetKey, setResetKey] = useState(0)
     const { betAmounts, options } = useGameDetails();
     const { results } = useGameResults();
     const { makeResult } = useMakeGameResult();
@@ -59,7 +61,10 @@ export default function PlayBoard({
                     src={getAssetUrl(GAME_ASSETS.fruitContainerFrame)}
                     className="absolute left-1/2 top-[90px] z-20 -translate-x-1/2 transform"
                 />
-                <GameElements controlButtons={blockClick} currentBetAmount={currentBetAmount} />
+                {showHand && (
+                    <MovingHand />
+                )}
+                <GameElements removeBet={resetKey} controlButtons={blockClick} currentBetAmount={currentBetAmount} />
                 <img
                     src={getAssetUrl(GAME_ASSETS.timeCountingBoard)}
                     className="absolute left-[calc(50%-1px)] top-[183px] z-40 -translate-x-1/2 transform"
@@ -117,9 +122,7 @@ export default function PlayBoard({
                         </div>
                     ))}
                 </div>
-                {showHand && (
-                    <MovingHand />
-                )}
+
                 {showBoardOpacity && (
                     <div className="absolute w-[280px] h-[271px]  rounded-[12px] border-[1px] border-[#FFB24C] left-1/2 top-[90px] z-30 bg-[#360149] -translate-x-1/2 transform opacity-70"></div>
                 )}
@@ -147,6 +150,7 @@ export default function PlayBoard({
                                 setShowChooseTimer(false);
                                 setShowHiddenTimer(true);
                                 onOpenModal("result");
+                                setResetKey(prev => prev + 1);
                             }}
                         />
                     </div>
@@ -161,6 +165,7 @@ export default function PlayBoard({
                                 setBlockClick("auto");
                                 setShowBoardOpacity(false);
                                 setShowHand(true);
+                                // setBet(false)
                             }}
                         />
                     </div>

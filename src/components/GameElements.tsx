@@ -1,39 +1,35 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useGameDetails, resolveAssetUrl } from '../hooks/useGameDetails';
 import { usePlaceBet } from '../hooks/usePlaceBet';
+import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
 
 type FruitBoardProps = {
     controlButtons: "auto" | "none";
     currentBetAmount: number;
+    removeBet: number;
 };
 
-const GameElements = ({ controlButtons, currentBetAmount }: FruitBoardProps) => {
+const GameElements = ({ controlButtons, currentBetAmount, removeBet }: FruitBoardProps) => {
 
     const { options } = useGameDetails();
-    const { place, isProcessing } = usePlaceBet();
-    // useEffect(() => {
-    //     options.forEach((element) => {
-    //         const img = new Image();
-    //         img.src = resolveAssetUrl(element.logo);
-    //     });
-    // }, [options]);
+    const { place, } = usePlaceBet();
+    const [betAmount, setBetAmount] = useState<number[]>([0, 0, 0, 0, 0, 0, 0, 0])
+
     useEffect(() => {
         if (!options.length) return;
-
         options.forEach((element) => {
             const img = new Image();
             img.src = resolveAssetUrl(element.logo);
         });
     }, []);
-    // useEffect(() => {
-    //     console.log("result updated:", result);
-    // }, [result]);
+
+    useEffect(() => {
+        setBetAmount(Array(options.length).fill(0));
+    }, [removeBet, options.length]);
     return (
         <div className='relative top-[90px] h-[271px] w-[280px] z-30 grid grid-cols-3 grid-rows-3 left-1/2 transform -translate-x-1/2' style={{ pointerEvents: controlButtons }}>
-            {/* {error && <p style={{ color: 'red' }}>{error}</p>} */}
 
             {options.map((element, index) => {
-                // Custom grid positioning for each button
                 let gridPosition = '';
                 if (index === 0) gridPosition = 'col-start-1 row-start-1'; // 1st button
                 else if (index === 1) gridPosition = 'col-start-2 row-start-1'; // 2nd button
@@ -48,8 +44,14 @@ const GameElements = ({ controlButtons, currentBetAmount }: FruitBoardProps) => 
                         key={element.id}
                         style={{ cursor: 'pointer' }}
                         onClick={() => {
-                            if (isProcessing) return;
+                            // if (isProcessing) return;
                             place(element.id, currentBetAmount);
+                            setBetAmount((prev) => {
+
+                                const newArr = [...prev];
+                                newArr[index] += currentBetAmount;
+                                return newArr;
+                            });
                         }}
                         className={`relative ${gridPosition} `}>
                         <img
@@ -58,6 +60,10 @@ const GameElements = ({ controlButtons, currentBetAmount }: FruitBoardProps) => 
                             className='absolute top-[4px] m-auto justify-center left-0 right-0'
                         />
                         <span className='absolute top-[68px] m-auto justify-center font-bold left-0 right-0'>{element.name}</span>
+                        {betAmount[index] > 0 && (< div className='absolute top-[45px] left-1/2 -translate-x-1/2 bg-black/30 flex'>
+                            <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" className="flex h-[9px] w-[16px] mr-[3px] mt-1" />
+                            <span className='flex '>{betAmount[index]}</span>
+                        </div>)}
                     </button>
                 );
             })}
