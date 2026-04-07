@@ -18,6 +18,7 @@ export default function ChooseRectangle({ onChooseTimeUp }: { onChooseTimeUp?: (
     const [time, setTime] = useState(0);
     const [second, setSecond] = useState(0);
     const [add, setAdd] = useState(0);
+    // const [timer, setTimer] = useState(100);
     // const [randomIndex] = useState(() => Math.floor(Math.random() * fruits.length));
     const onChooseTimeUpRef = useRef(onChooseTimeUp);
     const currentFruit = fruits[(8 + time) % fruits.length];
@@ -33,11 +34,11 @@ export default function ChooseRectangle({ onChooseTimeUp }: { onChooseTimeUp?: (
             onChooseTimeUpRef.current?.(); // trigger notification
             return;
         }
-
         const timer = setInterval(() => {
             if (second <= 2000) {
                 setSecond((s) => s + 100);
                 setTime((t) => t + 1);
+
             }
             if (second === 2000) {
                 makeGameResult();
@@ -126,8 +127,8 @@ export default function ChooseRectangle({ onChooseTimeUp }: { onChooseTimeUp?: (
                     setAdd((a) => a + 1);
                 }
             }
-        }, 100);
 
+        }, second);
         return () => {
             clearInterval(timer)
         };
