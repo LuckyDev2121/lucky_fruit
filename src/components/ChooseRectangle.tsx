@@ -41,7 +41,7 @@ export default function ChooseRectangle({ onChooseTimeUp }: { onChooseTimeUp?: (
             }
             if (second === 2000) {
                 makeGameResult();
-                setSteps(((makeResult?.winning_option_id ? makeResult.winning_option_id : 0) + 3 - currentFruit.id) % fruits.length);
+                setSteps(((makeResult?.winning_option_id ? makeResult.winning_option_id : 0) - currentFruit.id + 8) % fruits.length);
             }
             if (second >= 3820 && second < 4820) {
                 setSecond((s) => s + 100);
