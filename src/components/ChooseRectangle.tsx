@@ -141,7 +141,6 @@ export default function ChooseRectangle({ onChooseTimeUp }: { onChooseTimeUp?: (
                     }
                 }
             }
-
         }, timestep);
         return () => {
             clearInterval(timer)

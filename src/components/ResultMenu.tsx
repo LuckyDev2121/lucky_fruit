@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { use, useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
 import ModalHeaderPlate from "./ModalHeaderPlate";
@@ -25,6 +25,7 @@ function formatDiamondAmount(amount: number): string {
 }
 
 export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
+    const [showIcon, setShowIcon] = useState(false);
     const [consol, setConsol] = useState(0);
     const initialTime = Math.max(0, start ?? 0);
     const [time, setTime] = useState(initialTime);
@@ -71,6 +72,11 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
             setConsol(1);
         }
     }, [consol]);
+
+    useEffect(() => {
+        if (winningDiamondAmount > 0) setShowIcon(true);
+        else setShowIcon(false);
+    }, [winningDiamondAmount]);
 
     useEffect(() => {
         setTime(initialTime);
@@ -126,12 +132,16 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
             )}
             <div className="absolute left-1/2 top-[191px] flex -translate-x-1/2 items-center justify-center gap-1 whitespace-nowrap">
                 <span>{resultMessage}</span>
-                <img
-                    src={getAssetUrl(GAME_ASSETS.diamondIcon)}
-                    alt="Diamond Icon"
-                    className="h-[9px] w-[16px]"
-                />
-                <span>{winningDiamondAmount > 0 ? formatDiamondAmount(winningDiamondAmount) : "0"}</span>
+                {showIcon && (
+                    <>
+                        <img
+                            src={getAssetUrl(GAME_ASSETS.diamondIcon)}
+                            alt="Diamond Icon"
+                            className="h-[9px] w-[16px]"
+                        />
+                        <span>{winningDiamondAmount > 0 ? formatDiamondAmount(winningDiamondAmount) : "0"}</span>
+                    </>
+                )}
             </div>
             <ResultMenuDivider className="absolute left-[61px] top-[221px]" direction="left" />
             <ResultMenuDivider className="absolute left-[281px] top-[221px]" direction="right" />
