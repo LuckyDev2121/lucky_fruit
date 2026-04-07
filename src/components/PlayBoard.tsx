@@ -40,6 +40,7 @@ export default function PlayBoard({
             options.map(o => [o.id, o.logo])
         );
     }, [options]);
+    const roundKey = RoundId ?? "waiting";
 
     const getResultOptionLogo = (id: number) =>
         optionMap[id] ? resolveAssetUrl(optionMap[id]) : "";
@@ -171,6 +172,7 @@ export default function PlayBoard({
                 {showLedTimer && (
                     <div className="absolute  left-[calc(50%+1px)] top-[198px] z-50 -translate-x-1/2 transform">
                         <LedTimer
+                            key={`led-${roundKey}`}
                             start={30}
                             onLedTimeUp={() => {
                                 setShowChooseTimer(true);
@@ -186,6 +188,7 @@ export default function PlayBoard({
                 {showChooseTimer && (
                     <div className="absolute left-[calc(50%+1px)] top-[198px] z-50 -translate-x-1/2 transform">
                         <ChooseTimer
+                            key={`choose-${roundKey}`}
                             start={5}
                             onChooseTimeUp={() => {
                                 setShowChooseRectangle(false);
@@ -200,6 +203,7 @@ export default function PlayBoard({
                 {showHiddenTimer && (
                     <div className="absolute left-1/2 top-[197px] z-30 -translate-x-1/2 transform">
                         <HiddenTimer
+                            key={`hidden-${roundKey}`}
                             start={3}
                             onHiddenTimeUp={() => {
                                 setShowHiddenTimer(false);

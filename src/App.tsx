@@ -60,10 +60,6 @@ function App() {
   const openResultMenu = () => setIsOpenResultMenu(true);
   const closeResultMenu = () => setIsOpenResultMenu(false);
   const { createRound } = useGame();
-  const handleRoundFinished = useCallback(() => {
-    setRoundId(null);
-    setIsRoundRunning(false);
-  }, []);
 
   const attemptStartRound = useCallback(async () => {
     try {
@@ -72,8 +68,6 @@ function App() {
       console.log("CREATE ROUND:", res);
 
       if (!res?.status || !res.data) {
-        setRoundId(null);
-        setIsRoundRunning(false);
         return false;
       }
 
@@ -82,10 +76,15 @@ function App() {
       return true;
     } catch (err) {
       console.error(err);
-      setIsRoundRunning(false);
       return false;
     }
   }, [createRound]);
+
+  const handleRoundFinished = useCallback(() => {
+    setRoundId(null);
+    setIsRoundRunning(false);
+    void attemptStartRound();
+  }, [attemptStartRound]);
 
   useEffect(() => {
     let cancelled = false;
