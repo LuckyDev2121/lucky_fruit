@@ -25,7 +25,7 @@ function formatDiamondAmount(amount: number): string {
 }
 
 export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
-
+    const [consol, setConsol] = useState(0);
     const initialTime = Math.max(0, start ?? 0);
     const [time, setTime] = useState(initialTime);
     const onResultTimeUpRef = useRef(onResultTimeUp);
@@ -64,6 +64,13 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
     useEffect(() => {
         onResultTimeUpRef.current = onResultTimeUp;
     }, [onResultTimeUp]);
+
+    useEffect(() => {
+        if (consol === 0) {
+            console.log("result", result);
+            setConsol(1);
+        }
+    }, [consol]);
 
     useEffect(() => {
         setTime(initialTime);

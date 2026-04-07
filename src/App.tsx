@@ -65,7 +65,7 @@ function App() {
     try {
       const res = await createRound();
 
-      console.log("CREATE ROUND:", res);
+      // console.log("CREATE ROUND:", res);
 
       if (!res?.status || !res.data) {
         return false;
@@ -109,7 +109,7 @@ function App() {
           return;
         }
 
-        console.log("CREATE ROUND:", res);
+        // console.log("CREATE ROUND:", res);
 
         if (!res?.status || !res.data) {
           setRoundId(null);
