@@ -101,7 +101,7 @@ export type PlaceBet = {
   message?: string;
 };
 
-export const placeBet = async (betId: number, amount: number): Promise<string> => {
+export const placeBet = async (betId: number, amount: number): Promise<PlaceBet> => {
   const response = await axios.post<PlaceBet>(PLACE_BET_API_URL, {
     game_id: 5,
     option_id: betId,
@@ -112,7 +112,7 @@ export const placeBet = async (betId: number, amount: number): Promise<string> =
     throw new Error(response.data.message || "Failed to place bet");
   }
 
-  return response.data.message || "Bet placed successfully";
+  return response.data;
 };
   
 type Winners = {

@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
-// import { usePlaceBet } from '../hooks/usePlaceBet';
 import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
 import { useGame, resolveAssetUrl } from '../hooks/useGameHook';
-import { placeBet } from '../api/api';
+
 type FruitBoardProps = {
     controlButtons: "auto" | "none";
     currentBetAmount: number;
@@ -24,10 +23,9 @@ function formatNumber(num: number): string {
 
 const GameElements = ({ controlButtons, currentBetAmount, removeBet }: FruitBoardProps) => {
 
-    const { options } = useGame();
-    // const { place, } = usePlaceBet();
-    const place = placeBet;
+    const { options, playerInfo, placeBet } = useGame();
     const [betAmount, setBetAmount] = useState<number[]>([0, 0, 0, 0, 0, 0, 0, 0]);
+    const [isPlacingBet, setIsPlacingBet] = useState(false);
 
     useEffect(() => {
         if (!options.length) return;
@@ -35,11 +33,14 @@ const GameElements = ({ controlButtons, currentBetAmount, removeBet }: FruitBoar
             const img = new Image();
             img.src = resolveAssetUrl(element.logo);
         });
-    }, []);
+    }, [options]);
 
     useEffect(() => {
         setBetAmount(Array(options.length).fill(0));
     }, [removeBet, options.length]);
+
+    const balance = Number.parseFloat(playerInfo?.balance ?? "0");
+
     return (
         <div className='relative top-[90px] h-[271px] w-[280px] z-30 grid grid-cols-3 grid-rows-3 left-1/2 transform -translate-x-1/2' style={{ pointerEvents: controlButtons }}>
 
@@ -56,16 +57,31 @@ const GameElements = ({ controlButtons, currentBetAmount, removeBet }: FruitBoar
                 return (
                     <button
                         key={element.id}
-                        style={{ cursor: 'pointer' }}
-                        onClick={() => {
-                            // if (isProcessing) return;
-                            place(element.id, currentBetAmount);
-                            setBetAmount((prev) => {
+                        disabled={controlButtons === "none" || isPlacingBet || balance < currentBetAmount}
+                        style={{ cursor: controlButtons === "none" || isPlacingBet || balance < currentBetAmount ? 'default' : 'pointer' }}
+                        onClick={async () => {
+                            if (controlButtons === "none" || isPlacingBet) {
+                                return;
+                            }
 
-                                const newArr = [...prev];
-                                newArr[index] += currentBetAmount;
-                                return newArr;
-                            });
+                            if (balance < currentBetAmount) {
+                                return;
+                            }
+
+                            setIsPlacingBet(true);
+
+                            try {
+                                await placeBet(element.id, currentBetAmount);
+                                setBetAmount((prev) => {
+                                    const newArr = [...prev];
+                                    newArr[index] += currentBetAmount;
+                                    return newArr;
+                                });
+                            } catch (error) {
+                                console.error(error);
+                            } finally {
+                                setIsPlacingBet(false);
+                            }
                         }}
                         className={`relative ${gridPosition} `}>
                         <img
