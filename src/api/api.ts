@@ -19,9 +19,14 @@ type BetAmount = {
   icon: string;
 };
 
+type HowToPlay = {
+  rules?: string;
+};
+
 export type GameDetailsData = {
   id?: number;
   name?: string;
+  how_to_play?: HowToPlay;
   options?: GameOption[];
   bet_amounts?: BetAmount[];
   [key: string]: unknown;

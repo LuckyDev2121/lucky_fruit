@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
 import ChooseRectangle from "./ChooseRectangle";
 import ChooseTimer from "./ChooseTimer";
@@ -12,20 +12,24 @@ type PlayBoardProps = {
     onOpenModal: (modal: string) => void;
     onOpenAlert: (alert: string) => void;
     RoundId: number | null;
+    isRoundRunning: boolean;
+    onRoundFinished: () => void;
 };
 
 export default function PlayBoard({
     onOpenModal,
     onOpenAlert,
     RoundId,
+    isRoundRunning,
+    onRoundFinished,
 }: PlayBoardProps) {
 
-    const [blockClick, setBlockClick] = useState<"auto" | "none">("auto");
-    const [showLedTimer, setShowLedTimer] = useState(true);
+    const [blockClick, setBlockClick] = useState<"auto" | "none">("none");
+    const [showLedTimer, setShowLedTimer] = useState(false);
     const [showChooseTimer, setShowChooseTimer] = useState(false);
     const [showHiddenTimer, setShowHiddenTimer] = useState(false);
     const [showBoardOpacity, setShowBoardOpacity] = useState(false);
-    const [showHand, setShowHand] = useState(true);
+    const [showHand, setShowHand] = useState(false);
     const [showChooseRectangle, setShowChooseRectangle] = useState(false);
     const [currentBetAmount, setCurrentBetAmount] = useState(100);
     // const [bet, setBet] = useState(false)
@@ -39,6 +43,27 @@ export default function PlayBoard({
 
     const getResultOptionLogo = (id: number) =>
         optionMap[id] ? resolveAssetUrl(optionMap[id]) : "";
+
+    useEffect(() => {
+        if (!isRoundRunning || !RoundId) {
+            setBlockClick("none");
+            setShowLedTimer(false);
+            setShowChooseTimer(false);
+            setShowHiddenTimer(false);
+            setShowBoardOpacity(false);
+            setShowChooseRectangle(false);
+            setShowHand(false);
+            return;
+        }
+
+        setBlockClick("auto");
+        setShowLedTimer(true);
+        setShowChooseTimer(false);
+        setShowHiddenTimer(false);
+        setShowBoardOpacity(false);
+        setShowChooseRectangle(false);
+        setShowHand(true);
+    }, [RoundId, isRoundRunning]);
 
     return (
         <div className="absolute z-20 object-contain" style={{ width: "100%", height: "100%" }}>
@@ -84,11 +109,13 @@ export default function PlayBoard({
                     style={{ pointerEvents: "auto" }}
                 >
                     {betAmounts.map((element, index) => {
+                        const amountValue = Number.parseInt(element.amount, 10);
+
                         return (
                             <button
                                 key={element.id}
                                 className="relative"
-                                onClick={() => setCurrentBetAmount(10 ** (index + 2))}
+                                onClick={() => setCurrentBetAmount(amountValue)}
                             >
                                 <img
                                     src={resolveAssetUrl(element.icon)}
@@ -176,11 +203,10 @@ export default function PlayBoard({
                             start={3}
                             onHiddenTimeUp={() => {
                                 setShowHiddenTimer(false);
-                                setShowLedTimer(true);
-                                setBlockClick("auto");
                                 setShowBoardOpacity(false);
-                                setShowHand(true);
-                                // setBet(false)
+                                setShowHand(false);
+                                setBlockClick("none");
+                                onRoundFinished();
                             }}
                         />
                     </div>
