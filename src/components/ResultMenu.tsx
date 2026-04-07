@@ -95,7 +95,7 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
         <div className="relative h-[342px] w-[393px] overflow-hidden rounded-t-[20px] bg-gradient-to-t from-[#7C00D5] to-[#5028C1]">
 
             <ModalHeaderPlate className="absolute left-1/2 -translate-x-1/2" />
-            <span className="absolute  left-1/2 transform -translate-x-1/2 text-sm font-bold mt-1">{resultMessage}</span>
+            <span className="absolute  left-1/2 transform -translate-x-1/2 text-sm font-bold mt-1">Round {result?.round_no} of Today</span>
             <span className="absolute h-[19px] w-[19px] mt-[5px] right-[62px] rounded-full " >
                 {formatted}
             </span>
@@ -118,6 +118,7 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
                 />
             )}
             <div className="absolute left-1/2 top-[191px] flex -translate-x-1/2 items-center justify-center gap-1 whitespace-nowrap">
+                <span>{resultMessage}</span>
                 <img
                     src={getAssetUrl(GAME_ASSETS.diamondIcon)}
                     alt="Diamond Icon"
