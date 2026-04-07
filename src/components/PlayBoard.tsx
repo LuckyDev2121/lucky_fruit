@@ -195,7 +195,7 @@ export default function PlayBoard({
                     <div className="absolute left-[calc(50%+1px)] top-[198px] z-50 -translate-x-1/2 transform">
                         <ChooseTimer
                             key={`choose-${roundKey}`}
-                            start={5}
+                            start={4}
                             onChooseTimeUp={() => {
                                 setShowChooseRectangle(false);
                                 setShowChooseTimer(false);
@@ -210,7 +210,7 @@ export default function PlayBoard({
                     <div className="absolute left-1/2 top-[197px] z-30 -translate-x-1/2 transform">
                         <HiddenTimer
                             key={`hidden-${roundKey}`}
-                            start={3}
+                            start={2}
                             onHiddenTimeUp={() => {
                                 setShowHiddenTimer(false);
                                 setShowBoardOpacity(false);
