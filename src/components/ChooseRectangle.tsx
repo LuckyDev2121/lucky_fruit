@@ -18,9 +18,9 @@ export default function ChooseRectangle({ onChooseTimeUp }: { onChooseTimeUp?: (
     const [time, setTime] = useState(0);
     const [second, setSecond] = useState(0);
     const [add, setAdd] = useState(0);
-    const [randomIndex] = useState(() => Math.floor(Math.random() * fruits.length));
+    // const [randomIndex] = useState(() => Math.floor(Math.random() * fruits.length));
     const onChooseTimeUpRef = useRef(onChooseTimeUp);
-    const currentFruit = fruits[(randomIndex + time) % fruits.length];
+    const currentFruit = fruits[(8 + time) % fruits.length];
     const { makeGameResult, makeResult } = useGame();
     const [steps, setSteps] = useState(0);
     useEffect(() => {
@@ -110,6 +110,7 @@ export default function ChooseRectangle({ onChooseTimeUp }: { onChooseTimeUp?: (
                     }
                 }
                 if (steps === 6) {
+
                     if (second > 2900) {
                         setSecond((s) => s + 400);
                         setTime((t) => t + 1);
@@ -133,7 +134,7 @@ export default function ChooseRectangle({ onChooseTimeUp }: { onChooseTimeUp?: (
     }, [time, second]);
 
     return (
-        <div className="absolute z-40" style={{ top: `${fruits[(randomIndex + time) % fruits.length].top}px`, left: `${fruits[(randomIndex + time) % fruits.length].left}px` }}>
+        <div className="absolute z-40" style={{ top: `${fruits[(8 + time) % fruits.length].top}px`, left: `${fruits[(8 + time) % fruits.length].left}px` }}>
             <img src={getAssetUrl(GAME_ASSETS.selectround)} alt="Choose Rectangle" className="relative" />
         </div>
     );
