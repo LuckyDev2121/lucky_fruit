@@ -18,7 +18,7 @@ export default function ChooseRectangle({ onChooseTimeUp }: { onChooseTimeUp?: (
     const [time, setTime] = useState(0);
     const [second, setSecond] = useState(0);
     const [add, setAdd] = useState(0);
-    // const [timer, setTimer] = useState(100);
+    const [timestep, setTimestep] = useState(100);
     // const [randomIndex] = useState(() => Math.floor(Math.random() * fruits.length));
     const onChooseTimeUpRef = useRef(onChooseTimeUp);
     const currentFruit = fruits[(8 + time) % fruits.length];
@@ -38,7 +38,7 @@ export default function ChooseRectangle({ onChooseTimeUp }: { onChooseTimeUp?: (
             if (second <= 2000) {
                 setSecond((s) => s + 100);
                 setTime((t) => t + 1);
-
+                setTimestep(100);
             }
             if (second === 2000) {
                 makeGameResult();
@@ -47,6 +47,7 @@ export default function ChooseRectangle({ onChooseTimeUp }: { onChooseTimeUp?: (
             if (second >= 3820 && second < 4820) {
                 setSecond((s) => s + 100);
                 setTime((t) => t);
+                setTimestep(100);
             }
             if (second > 2000 && second < 3820) {
                 if (second === 2100) { console.log("steps", makeResult?.winning_option_id, "====", steps, "====", currentFruit.id); }
@@ -55,9 +56,11 @@ export default function ChooseRectangle({ onChooseTimeUp }: { onChooseTimeUp?: (
                         setSecond((s) => s + 100 + 100 * add);
                         setTime((t) => t + 1);
                         setAdd((a) => a + 1);
+                        setTimestep(100 + 100 * add);
                     } else {
                         setSecond((s) => s + 100);
                         setTime((t) => t + 1);
+                        setTimestep(100);
                     }
                 }
                 if (steps === 1) {
@@ -65,9 +68,11 @@ export default function ChooseRectangle({ onChooseTimeUp }: { onChooseTimeUp?: (
                         setSecond((s) => s + 100 + 90 * add);
                         setTime((t) => t + 1);
                         setAdd((a) => a + 1);
+                        setTimestep(100 + 90 * add);
                     } else {
                         setSecond((s) => s + 100);
                         setTime((t) => t + 1);
+                        setTimestep(100);
                     }
                 }
                 if (steps === 2) {
@@ -75,9 +80,11 @@ export default function ChooseRectangle({ onChooseTimeUp }: { onChooseTimeUp?: (
                         setSecond((s) => s + 100 + 80 * add);
                         setTime((t) => t + 1);
                         setAdd((a) => a + 1);
+                        setTimestep(100 + 80 * add);
                     } else {
                         setSecond((s) => s + 100);
                         setTime((t) => t + 1);
+                        setTimestep(100);
                     }
                 }
                 if (steps === 3) {
@@ -85,9 +92,11 @@ export default function ChooseRectangle({ onChooseTimeUp }: { onChooseTimeUp?: (
                         setSecond((s) => s + 200);
                         setTime((t) => t + 1);
                         setAdd((a) => a + 1);
+                        setTimestep(200);
                     } else {
                         setSecond((s) => s + 100);
                         setTime((t) => t + 1);
+                        setTimestep(100);
                     }
                 }
                 if (steps === 4) {
@@ -95,9 +104,12 @@ export default function ChooseRectangle({ onChooseTimeUp }: { onChooseTimeUp?: (
                         setSecond((s) => s + 200);
                         setTime((t) => t + 1);
                         setAdd((a) => a + 1);
+                        setTimestep(200);
                     } else {
                         setSecond((s) => s + 100);
                         setTime((t) => t + 1);
+                        setTimestep(100);
+
                     }
                 }
                 if (steps === 5) {
@@ -105,30 +117,34 @@ export default function ChooseRectangle({ onChooseTimeUp }: { onChooseTimeUp?: (
                         setSecond((s) => s + 200);
                         setTime((t) => t + 1);
                         setAdd((a) => a + 1);
+                        setTimestep(200);
                     } else {
                         setSecond((s) => s + 100);
                         setTime((t) => t + 1);
+                        setTimestep(100);
                     }
                 }
                 if (steps === 6) {
-
                     if (second > 2900) {
                         setSecond((s) => s + 400);
                         setTime((t) => t + 1);
                         setAdd((a) => a + 1);
+                        setTimestep(400);
                     } else {
                         setSecond((s) => s + 300);
                         setTime((t) => t + 1);
+                        setTimestep(300);
                     }
                 }
                 if (steps === 7) {
                     setSecond((s) => s + 100 + 100 * add);
                     setTime((t) => t + 1);
                     setAdd((a) => a + 1);
+                    setTimestep(100 + 100 * add);
                 }
             }
 
-        }, second);
+        }, timestep);
         return () => {
             clearInterval(timer)
         };
