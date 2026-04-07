@@ -10,15 +10,51 @@ type ResultMenuProps = {
     onResultTimeUp?: () => void;
 };
 
+function formatDiamondAmount(amount: number): string {
+    if (amount >= 1_000_000_000) {
+        return `${(amount / 1_000_000_000).toFixed(1).replace(/\.0$/, "")}B`;
+    }
+    if (amount >= 1_000_000) {
+        return `${(amount / 1_000_000).toFixed(1).replace(/\.0$/, "")}M`;
+    }
+    if (amount >= 1_000) {
+        return `${(amount / 1_000).toFixed(1).replace(/\.0$/, "")}K`;
+    }
+
+    return amount.toString();
+}
+
 export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
 
     const initialTime = Math.max(0, start ?? 0);
     const [time, setTime] = useState(initialTime);
     const onResultTimeUpRef = useRef(onResultTimeUp);
-    const { options, makeResult: result } = useGame();
+    const { options, makeResult: result, currentRoundBets } = useGame();
     const optionMap = useMemo(() => {
         return Object.fromEntries(options.map(o => [o.id, o.logo]));
     }, [options]);
+    const totalBetAmount = useMemo(() => {
+        return Object.values(currentRoundBets).reduce((sum, amount) => sum + amount, 0);
+    }, [currentRoundBets]);
+    const winningDiamondAmount = useMemo(() => {
+        if (!result) {
+            return 0;
+        }
+
+        return currentRoundBets[result.winning_option_id] ?? 0;
+    }, [currentRoundBets, result]);
+    const resultMessage = useMemo(() => {
+        if (totalBetAmount === 0) {
+            return "Did not participate in this round";
+        }
+
+        if (winningDiamondAmount > 0) {
+            return "Congratelations on getting diamonds";
+        }
+
+        return "Sorry, didn't win this round";
+    }, [totalBetAmount, winningDiamondAmount]);
+
     const getResultOptionLogo = (optionId: number) => {
         return optionMap[optionId]
             ? resolveAssetUrl(optionMap[optionId])
@@ -59,7 +95,7 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
         <div className="relative h-[342px] w-[393px] overflow-hidden rounded-t-[20px] bg-gradient-to-t from-[#7C00D5] to-[#5028C1]">
 
             <ModalHeaderPlate className="absolute left-1/2 -translate-x-1/2" />
-            <span className="absolute  left-1/2 transform -translate-x-1/2 text-sm font-bold mt-1">Round {result?.round_no} of Today</span>
+            <span className="absolute  left-1/2 transform -translate-x-1/2 text-sm font-bold mt-1">{resultMessage}</span>
             <span className="absolute h-[19px] w-[19px] mt-[5px] right-[62px] rounded-full " >
                 {formatted}
             </span>
@@ -81,9 +117,14 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
                     className={`absolute left-1/2 -translate-x-1/2 top-[70px] h-[85px] w-[85px]`}
                 />
             )}
-            <span className="absolute left-1/2 -translate-x-1/2 top-[191px]">
-                {result ? `Latest result: ${result.winning_option_id}` : "Did not Participant in the round"}
-            </span>
+            <div className="absolute left-1/2 top-[191px] flex -translate-x-1/2 items-center justify-center gap-1 whitespace-nowrap">
+                <img
+                    src={getAssetUrl(GAME_ASSETS.diamondIcon)}
+                    alt="Diamond Icon"
+                    className="h-[9px] w-[16px]"
+                />
+                <span>{winningDiamondAmount > 0 ? formatDiamondAmount(winningDiamondAmount) : "0"}</span>
+            </div>
             <ResultMenuDivider className="absolute left-[61px] top-[221px]" direction="left" />
             <ResultMenuDivider className="absolute left-[281px] top-[221px]" direction="right" />
             <span className="absolute left-1/2 -translate-x-1/2 top-[215px] text-[#FFFFFF]/60">Biggest winning of the round</span>
@@ -95,7 +136,7 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
                         <div className="relative ">
                             <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" className="h-[9px] w-[16px] mr-[3px]" />
                         </div>
-                        <span >1000</span>
+                        <span >{result?.winners?.[0]?.balance ?? "***"}</span>
                     </div>
                 </div>
                 <div className="relative h-[100px] w-[100px]">
@@ -105,7 +146,7 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
                         <div className="relative ">
                             <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" className="h-[9px] w-[16px] mr-[3px]" />
                         </div>
-                        <span >1000</span>
+                        <span >{result?.winners?.[1]?.balance ?? "***"}</span>
                     </div>
                 </div>
                 <div className="relative h-[100px] w-[100px]">
@@ -115,7 +156,7 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
                         <div className="relative ">
                             <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" className="h-[9px] w-[16px] mr-[3px]" />
                         </div>
-                        <span >1000</span>
+                        <span >{result?.winners?.[2]?.balance ?? "***"}</span>
                     </div>
                 </div>
             </div>

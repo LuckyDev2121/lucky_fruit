@@ -32,6 +32,7 @@ type GameStore = {
   results: GameResults | null;
   roundData: CreateRoundResponse | null;
   makeResult: ResultData | null;
+  currentRoundBets: Record<number, number>;
   isLoading: boolean;
   lastBetMessage: string | null;
   isMusicEnabled: boolean;
@@ -46,6 +47,7 @@ let store: GameStore = {
   results: null,
   roundData: null,
   makeResult: null,
+  currentRoundBets: {},
   isLoading: true,
   lastBetMessage: null,
   isMusicEnabled: true,
@@ -158,6 +160,10 @@ export function useGame() {
 
     const response: PlaceBet = await placeBetRequest(optionId, amount);
     const nextBalance = Math.max(0, currentBalance - amount);
+    const nextRoundBets = {
+      ...store.currentRoundBets,
+      [optionId]: (store.currentRoundBets[optionId] ?? 0) + amount,
+    };
 
     updateStore({
       playerInfo: store.playerInfo
@@ -166,6 +172,7 @@ export function useGame() {
             balance: nextBalance.toFixed(2),
           }
         : store.playerInfo,
+      currentRoundBets: nextRoundBets,
       lastBetMessage: response.message ?? null,
     });
 
@@ -183,6 +190,10 @@ export function useGame() {
     updateStore({ isMusicEnabled: nextValue });
   }, []);
 
+  const clearCurrentRoundBets = useCallback(() => {
+    updateStore({ currentRoundBets: {} });
+  }, []);
+
   return {
     betAmounts: snapshot.gameDetails?.bet_amounts ?? [],
     options: snapshot.gameDetails?.options ?? [],
@@ -191,6 +202,7 @@ export function useGame() {
     results: snapshot.results,
     roundData: snapshot.roundData,
     makeResult: snapshot.makeResult,
+    currentRoundBets: snapshot.currentRoundBets,
     isLoading: snapshot.isLoading,
     lastBetMessage: snapshot.lastBetMessage,
     isMusicEnabled: snapshot.isMusicEnabled,
@@ -200,5 +212,6 @@ export function useGame() {
     makeGameResult: handleMakeResult,
     placeBet: handlePlaceBet,
     setMusicEnabled: handleSetMusicEnabled,
+    clearCurrentRoundBets,
   };
 }

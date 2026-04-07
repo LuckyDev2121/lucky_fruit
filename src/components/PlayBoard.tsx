@@ -34,7 +34,7 @@ export default function PlayBoard({
     const [currentBetAmount, setCurrentBetAmount] = useState(100);
     // const [bet, setBet] = useState(false)
     const [resetKey, setResetKey] = useState(0)
-    const { betAmounts, options, results } = useGame();
+    const { betAmounts, options, results, clearCurrentRoundBets } = useGame();
     const optionMap = useMemo(() => {
         return Object.fromEntries(
             options.map(o => [o.id, o.logo])
@@ -65,6 +65,12 @@ export default function PlayBoard({
         setShowChooseRectangle(false);
         setShowHand(true);
     }, [RoundId, isRoundRunning]);
+
+    useEffect(() => {
+        if (isRoundRunning && RoundId) {
+            clearCurrentRoundBets();
+        }
+    }, [RoundId, isRoundRunning, clearCurrentRoundBets]);
 
     return (
         <div className="absolute z-20 object-contain" style={{ width: "100%", height: "100%" }}>
