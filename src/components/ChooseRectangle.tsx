@@ -29,7 +29,7 @@ export default function ChooseRectangle({ onChooseTimeUp }: { onChooseTimeUp?: (
 
     useEffect(() => {
 
-        if (second < 4820) {
+        if (second >= 4820) {
             onChooseTimeUpRef.current?.(); // trigger notification
             return;
         }
@@ -44,7 +44,7 @@ export default function ChooseRectangle({ onChooseTimeUp }: { onChooseTimeUp?: (
                 setSteps(((makeResult?.winning_option_id ? makeResult.winning_option_id : 0) + 3 - currentFruit.id) % fruits.length);
             }
             if (second >= 3820 && second < 4820) {
-                setSecond((s) => s);
+                setSecond((s) => s + 100);
                 setTime((t) => t);
             }
             if (second > 2000 && second < 3820) {
