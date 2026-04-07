@@ -59,7 +59,7 @@ function App() {
   const [isRoundRunning, setIsRoundRunning] = useState(false);
   const openResultMenu = () => setIsOpenResultMenu(true);
   const closeResultMenu = () => setIsOpenResultMenu(false);
-  const { createRound, isMusicEnabled, setMusicEnabled } = useGame();
+  const { createRound, isMusicEnabled, setMusicEnabled, makeGameResult } = useGame();
 
   const attemptStartRound = useCallback(async () => {
     try {
@@ -73,6 +73,7 @@ function App() {
 
       setRoundId(res.data.round_no);
       setIsRoundRunning(true);
+      makeGameResult();
       return true;
     } catch (err) {
       console.error(err);
@@ -82,6 +83,7 @@ function App() {
 
   const handleRoundFinished = useCallback(() => {
     setRoundId(null);
+    console.log("====================round Id");
     setIsRoundRunning(false);
     void attemptStartRound();
   }, [attemptStartRound]);
@@ -124,6 +126,8 @@ function App() {
         if (!cancelled) {
           setProgress(100);
           setIsBootLoading(false);
+          makeGameResult()
+          console.log("===================makeGameResult");
         }
       }
     };
@@ -148,6 +152,7 @@ function App() {
   }, [attemptStartRound, isBootLoading, isRoundRunning]);
 
   if (isBootLoading) {
+
     return <LoadingScreen progress={progress} />;
   }
 

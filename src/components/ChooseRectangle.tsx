@@ -22,7 +22,7 @@ export default function ChooseRectangle({ onChooseTimeUp }: { onChooseTimeUp?: (
     // const [randomIndex] = useState(() => Math.floor(Math.random() * fruits.length));
     const onChooseTimeUpRef = useRef(onChooseTimeUp);
     const currentFruit = fruits[(8 + time) % fruits.length];
-    const { makeGameResult, makeResult } = useGame();
+    const { makeResult } = useGame();
     const [steps, setSteps] = useState(0);
     useEffect(() => {
         onChooseTimeUpRef.current = onChooseTimeUp;
@@ -41,7 +41,6 @@ export default function ChooseRectangle({ onChooseTimeUp }: { onChooseTimeUp?: (
                 setTimestep(100);
             }
             if (second === 2000) {
-                makeGameResult();
                 setSteps(((makeResult?.winning_option_id ? makeResult.winning_option_id : 0) - currentFruit.id + 8) % fruits.length);
             }
             if (second >= 3820 && second < 4820) {
