@@ -35,6 +35,8 @@ export const GAME_RESULTS_API_URL = `${API_BASE_URL.replace(/\/$/, "")}/game/${G
 export const MAKE_RESULT_API_URL = `${API_BASE_URL.replace(/\/$/, "")}/make-result`;
 export const PLACE_BET_API_URL = `${API_BASE_URL.replace(/\/$/, "")}/place-bet`;
 export const CREAT_ROUND_API_URL = `${API_BASE_URL.replace(/\/$/, "")}/create-round`;
+export const SOUND_SETTING_GAME_API_URL = `${API_BASE_URL.replace(/\/$/, "")}/sound-setting/${GAME_ID}`;
+export const SOUND_SETTING_API_URL = `${API_BASE_URL.replace(/\/$/, "")}/sound-setting`;
 
 export const REVERB_KEY =
   import.meta.env.VITE_REVERB_APP_KEY || "k6dbocgucm0at6gwak3y";

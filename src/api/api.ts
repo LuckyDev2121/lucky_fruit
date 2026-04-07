@@ -6,6 +6,8 @@ import {
   PLACE_BET_API_URL,
   CREAT_ROUND_API_URL,
   MAKE_RESULT_API_URL,
+  SOUND_SETTING_API_URL,
+  SOUND_SETTING_GAME_API_URL,
 } from "../config/gameConfig";
 type GameOption = {
   id: number;
@@ -165,3 +167,41 @@ export const createRound = async (): Promise<CreateRoundResponse> => {
   });
   return response.data;
 }
+
+type SoundSettingResponse = {
+  status?: boolean;
+  data?: number;
+  message?: string;
+};
+
+export const fetchSoundSetting = async (): Promise<boolean> => {
+  const response = await axios.get<SoundSettingResponse>(SOUND_SETTING_GAME_API_URL);
+
+  if (!response.data.status) {
+    throw new Error(response.data.message || "Failed to load sound setting");
+  }
+
+  return response.data.data === 1;
+};
+
+type SaveSoundSettingResponse = {
+  status?: boolean;
+  message?: string;
+};
+
+export const saveSoundSetting = async (
+  playerId: number,
+  isMusicOn: boolean,
+): Promise<SaveSoundSettingResponse> => {
+  const response = await axios.post<SaveSoundSettingResponse>(SOUND_SETTING_API_URL, {
+    game_id: 5,
+    player_id: playerId,
+    status: isMusicOn ? 1 : 0,
+  });
+
+  if (!response.data.status) {
+    throw new Error(response.data.message || "Failed to save sound setting");
+  }
+
+  return response.data;
+};

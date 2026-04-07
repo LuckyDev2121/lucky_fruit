@@ -8,6 +8,7 @@ import {
   fetchGameDetail,
   fetchGameResults,
   fetchPlayerInfo,
+  fetchSoundSetting,
 } from "./api/api";
 import { useGame } from "./hooks/useGameHook";
 
@@ -50,7 +51,6 @@ async function preloadGameAssets(setProgress: (value: number) => void) {
 }
 
 function App() {
-  const [isMusicPlaying, setIsMusicPlaying] = useState(true);
   const [isSoundPlaying, setIsSoundPlaying] = useState(true);
   const [isOpenResultMenu, setIsOpenResultMenu] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -59,7 +59,7 @@ function App() {
   const [isRoundRunning, setIsRoundRunning] = useState(false);
   const openResultMenu = () => setIsOpenResultMenu(true);
   const closeResultMenu = () => setIsOpenResultMenu(false);
-  const { createRound } = useGame();
+  const { createRound, isMusicEnabled, setMusicEnabled } = useGame();
 
   const attemptStartRound = useCallback(async () => {
     try {
@@ -98,10 +98,11 @@ function App() {
 
         setProgress(85);
 
-        const [, , , res] = await Promise.all([
+        const [, , , , res] = await Promise.all([
           fetchGameDetail(),
           fetchPlayerInfo(),
           fetchGameResults(),
+          fetchSoundSetting(),
           createRound(),
         ]);
         if (cancelled) {
@@ -152,7 +153,7 @@ function App() {
 
   return (
     <div className="relative flex min-h-[100dvh] w-full items-end justify-center overflow-hidden">
-      <MusicPlayer isMusicPlaying={isMusicPlaying} />
+      <MusicPlayer isMusicPlaying={isMusicEnabled} />
       <SoundPlayer
         isSoundPlaying={isSoundPlaying}
         isOpenResultMenu={isOpenResultMenu}
@@ -163,9 +164,11 @@ function App() {
         onRoundFinished={handleRoundFinished}
         onOpenResultMenu={openResultMenu}
         onCloseResultMenu={closeResultMenu}
-        isMusicPlaying={isMusicPlaying}
+        isMusicPlaying={isMusicEnabled}
         isSoundPlaying={isSoundPlaying}
-        onToggleMusic={() => setIsMusicPlaying((prev) => !prev)}
+        onToggleMusic={() => {
+          void setMusicEnabled(!isMusicEnabled);
+        }}
         onToggleSound={() => setIsSoundPlaying((prev) => !prev)}
       />
     </div>

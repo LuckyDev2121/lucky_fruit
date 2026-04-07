@@ -7,6 +7,8 @@ import {
   createRound,
   placeBet as placeBetRequest,
   makeGameResult,
+  fetchSoundSetting,
+  saveSoundSetting,
   type GameDetailsData,
   type PlayerDetailsData,
   type GameResults,
@@ -32,6 +34,8 @@ type GameStore = {
   makeResult: ResultData | null;
   isLoading: boolean;
   lastBetMessage: string | null;
+  isMusicEnabled: boolean;
+  isMusicSettingLoading: boolean;
 };
 
 const listeners = new Set<(state: GameStore) => void>();
@@ -44,6 +48,8 @@ let store: GameStore = {
   makeResult: null,
   isLoading: true,
   lastBetMessage: null,
+  isMusicEnabled: true,
+  isMusicSettingLoading: true,
 };
 
 let hasInitialized = false;
@@ -61,23 +67,26 @@ function updateStore(partial: Partial<GameStore>) {
 }
 
 async function runRefreshGameData() {
-  updateStore({ isLoading: true });
+  updateStore({ isLoading: true, isMusicSettingLoading: true });
 
   try {
-    const [gameDetail, player, gameResults] = await Promise.all([
+    const [gameDetail, player, gameResults, isMusicEnabled] = await Promise.all([
       fetchGameDetail(),
       fetchPlayerInfo(),
       fetchGameResults(),
+      fetchSoundSetting(),
     ]);
 
     updateStore({
       gameDetails: gameDetail,
       playerInfo: player,
       results: gameResults,
+      isMusicEnabled,
       isLoading: false,
+      isMusicSettingLoading: false,
     });
   } catch (error) {
-    updateStore({ isLoading: false });
+    updateStore({ isLoading: false, isMusicSettingLoading: false });
     throw error;
   }
 }
@@ -163,6 +172,17 @@ export function useGame() {
     return response;
   }, []);
 
+  const handleSetMusicEnabled = useCallback(async (nextValue: boolean) => {
+    const playerId = store.playerInfo?.id;
+
+    if (!playerId) {
+      throw new Error("Player information is not loaded");
+    }
+
+    await saveSoundSetting(playerId, nextValue);
+    updateStore({ isMusicEnabled: nextValue });
+  }, []);
+
   return {
     betAmounts: snapshot.gameDetails?.bet_amounts ?? [],
     options: snapshot.gameDetails?.options ?? [],
@@ -173,9 +193,12 @@ export function useGame() {
     makeResult: snapshot.makeResult,
     isLoading: snapshot.isLoading,
     lastBetMessage: snapshot.lastBetMessage,
+    isMusicEnabled: snapshot.isMusicEnabled,
+    isMusicSettingLoading: snapshot.isMusicSettingLoading,
     refreshGameData,
     createRound: handleCreateRound,
     makeGameResult: handleMakeResult,
     placeBet: handlePlaceBet,
+    setMusicEnabled: handleSetMusicEnabled,
   };
 }
