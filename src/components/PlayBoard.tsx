@@ -179,7 +179,7 @@ export default function PlayBoard({
                     <div className="absolute  left-[calc(50%+1px)] top-[198px] z-50 -translate-x-1/2 transform">
                         <LedTimer
                             key={`led-${roundKey}`}
-                            start={30}
+                            start={29}
                             onLedTimeUp={() => {
                                 setShowChooseTimer(true);
                                 setShowLedTimer(false);
@@ -195,7 +195,7 @@ export default function PlayBoard({
                     <div className="absolute left-[calc(50%+1px)] top-[198px] z-50 -translate-x-1/2 transform">
                         <ChooseTimer
                             key={`choose-${roundKey}`}
-                            start={4}
+                            start={5}
                             onChooseTimeUp={() => {
                                 setShowChooseRectangle(false);
                                 setShowChooseTimer(false);
@@ -210,7 +210,7 @@ export default function PlayBoard({
                     <div className="absolute left-1/2 top-[197px] z-30 -translate-x-1/2 transform">
                         <HiddenTimer
                             key={`hidden-${roundKey}`}
-                            start={2}
+                            start={3}
                             onHiddenTimeUp={() => {
                                 setShowHiddenTimer(false);
                                 setShowBoardOpacity(false);
