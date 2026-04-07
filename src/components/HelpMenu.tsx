@@ -1,4 +1,5 @@
 import ModalHeaderPlate from "./ModalHeaderPlate";
+import { useGame } from "../hooks/useGameHook";
 
 type HelpMenuProps = {
     onCloseHelp: () => void;
@@ -25,6 +26,8 @@ function CloseIcon() {
 }
 
 export default function HelpMenu({ onCloseHelp }: HelpMenuProps) {
+
+    const { gameDetails } = useGame();
     return (
         <div className="h-[342px] bg-gradient-to-t from-[#7C00D5] to-[#5028C1] w-[393px] rounded-t-[20px]">
             <ModalHeaderPlate className="absolute left-1/2 -translate-x-1/2" />
@@ -32,11 +35,8 @@ export default function HelpMenu({ onCloseHelp }: HelpMenuProps) {
             <button className="absolute h-[19px] w-[19px] mt-[5px] pl-[2px] right-[62px] rounded-full bg-[#360149]" onClick={onCloseHelp}>
                 <CloseIcon />
             </button>
-            <div className="flex flex-col gap-[14px] pt-[52px] pl-[45px] pr-[39px]">
-                <span >1. Select the number of diamonds, then select the fruits</span>
-                <span >2. You can choose up to 6 kinds of fruits in each round, and  there is no upper limit on the cost of each fruit</span>
-                <span >3. If the selected fruit wins, you will get the corresponding reward</span>
-                <span >4. The interpretation right of this game belongs to Hilo</span>
+            <div className=" scrollbar-hidden overflow-y-auto overflow-x-hidden flex pt-[52px] pl-[45px] pr-[39px]">
+                <span>{gameDetails?.how_to_play?.rules}</span>
             </div>
         </div>
     )
