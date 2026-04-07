@@ -4,7 +4,7 @@ import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
 import ModalHeaderPlate from "./ModalHeaderPlate";
 import ResultMenuDivider from "./ResultMenuDivider";
 import { useGame, resolveAssetUrl } from "../hooks/useGameHook";
-import { type ResultData } from "../api/api";
+
 type ResultMenuProps = {
     start?: number;
     onResultTimeUp?: () => void;
@@ -14,9 +14,8 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
 
     const initialTime = Math.max(0, start ?? 0);
     const [time, setTime] = useState(initialTime);
-    const [result, setResult] = useState<ResultData | null>(null);
     const onResultTimeUpRef = useRef(onResultTimeUp);
-    const { options, makeResult } = useGame();
+    const { options, makeResult: result } = useGame();
     const optionMap = useMemo(() => {
         return Object.fromEntries(options.map(o => [o.id, o.logo]));
     }, [options]);
@@ -25,19 +24,6 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
             ? resolveAssetUrl(optionMap[optionId])
             : "";
     };
-
-    useEffect(() => {
-        const start = async () => {
-            try {
-                const res = makeResult;
-                console.log("CREATE ROUND:", res);
-                setResult(res);
-            } catch (err) {
-                console.error(err);
-            }
-        };
-        start();
-    }, [makeResult]);
 
     useEffect(() => {
         onResultTimeUpRef.current = onResultTimeUp;

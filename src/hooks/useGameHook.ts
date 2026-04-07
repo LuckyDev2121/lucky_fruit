@@ -126,7 +126,17 @@ export function useGame() {
 
   const handleMakeResult = useCallback(async () => {
     const data = await makeGameResult();
-    updateStore({ makeResult: data });
+    const [player, gameResults] = await Promise.all([
+      fetchPlayerInfo(),
+      fetchGameResults(),
+    ]);
+
+    updateStore({
+      makeResult: data,
+      playerInfo: player,
+      results: gameResults,
+    });
+
     return data;
   }, []);
 
