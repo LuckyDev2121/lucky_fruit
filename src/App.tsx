@@ -73,7 +73,7 @@ function App() {
 
       setRoundId(res.data.round_no);
       setIsRoundRunning(true);
-      makeGameResult();
+      // makeGameResult();
       return true;
     } catch (err) {
       console.error(err);
