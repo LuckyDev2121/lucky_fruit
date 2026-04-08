@@ -50,7 +50,7 @@ export default function ChooseRectangle({ onChooseTimeUp }: { onChooseTimeUp?: (
                 setTimestep(100);
             }
             if (second > 2000 && second < 3820) {
-                if (second === 2100) { console.log(makeResult, makeResult?.winning_option_id, "====", steps, "====", currentFruit.id - 1); }
+                if (second === 2100) { console.log(makeResult, makeResult?.winning_option_id, "====", steps, "====", currentFruit.id); }
                 if (steps === 0) {
                     setSecond((s) => s + 100 + 100 * add);
                     setTime((t) => t + 1);

@@ -91,14 +91,14 @@ export default function CupMenu({ onCloseCup, onOpenModal }: CupMenuProps) {
                                 className="absolute left-[74px] h-[36px] w-[36px] rounded-full object-cover"
                             />
                             <div className="absolute left-[123px] flex h-[40px] w-[198px] flex-col justify-center">
-                                <span className="my-[2px] text-[20px] leading-none">Name: {item.player?.username ?? "***"}</span>
+                                <span className="my-[2px] text-[20px] leading-none">{item.player?.username ?? "***"}</span>
                                 <span className="my-[2px] text-[10px] leading-none">ID:{item.player?.id ?? "***"}</span>
                             </div>
-                            <div className="absolute right-[22px] flex h-[22px] w-[55px] rounded-full bg-[#39064B]/70 my-[9px]">
+                            <div className="absolute justify-between right-[22px] flex h-[22px] w-[105px] rounded-full bg-[#39064B]/70 my-[9px]">
                                 <div className="relative ml-[5px] mr-[3px] mt-[6px] h-[9px] w-[16px]">
                                     <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" />
                                 </div>
-                                <span className="relative inline-flex items-center justify-center text-[12px] my-[2px]">
+                                <span className="relative inline-flex items-center justify-center text-[12px] mr-[7px] ">
                                     {item.total_win}
                                 </span>
                             </div>
