@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
 import ChooseRectangle from "./ChooseRectangle";
 import ChooseTimer from "./ChooseTimer";
@@ -16,6 +16,10 @@ type PlayBoardProps = {
     onRoundFinished: () => void;
 };
 
+function sumBetMap(betMap: Record<number, number>): number {
+    return Object.values(betMap).reduce((sum, amount) => sum + amount, 0);
+}
+
 export default function PlayBoard({
     onOpenModal,
     onOpenAlert,
@@ -23,7 +27,6 @@ export default function PlayBoard({
     isRoundRunning,
     onRoundFinished,
 }: PlayBoardProps) {
-
     const [blockClick, setBlockClick] = useState<"auto" | "none">("none");
     const [showLedTimer, setShowLedTimer] = useState(false);
     const [showChooseTimer, setShowChooseTimer] = useState(false);
@@ -32,18 +35,28 @@ export default function PlayBoard({
     const [showHand, setShowHand] = useState(false);
     const [showChooseRectangle, setShowChooseRectangle] = useState(false);
     const [currentBetAmount, setCurrentBetAmount] = useState(100);
-    // const [bet, setBet] = useState(false)
-    const [resetKey, setResetKey] = useState(0)
-    const { betAmounts, options, results, clearCurrentRoundBets } = useGame();
+    const [displayedBets, setDisplayedBets] = useState<Record<number, number>>({});
+    const [queuedBets, setQueuedBets] = useState<Record<number, number>>({});
+    const [serverErrorMessage, setServerErrorMessage] = useState<string | null>(null);
+    const [hasStartedFinalBetWindow, setHasStartedFinalBetWindow] = useState(false);
+    const [resetKey, setResetKey] = useState(0);
+    const { betAmounts, options, results, clearCurrentRoundBets, placeBet, playerInfo } = useGame();
+    const queuedBetsRef = useRef<Record<number, number>>({});
+    const isSendingBetRef = useRef(false);
     const optionMap = useMemo(() => {
         return Object.fromEntries(
             options.map(o => [o.id, o.logo])
         );
     }, [options]);
     const roundKey = RoundId ?? "waiting";
+    const playerBalance = Number.parseFloat(playerInfo?.balance ?? "0");
 
     const getResultOptionLogo = (id: number) =>
         optionMap[id] ? resolveAssetUrl(optionMap[id]) : "";
+
+    useEffect(() => {
+        queuedBetsRef.current = queuedBets;
+    }, [queuedBets]);
 
     useEffect(() => {
         if (!isRoundRunning || !RoundId) {
@@ -54,6 +67,12 @@ export default function PlayBoard({
             setShowBoardOpacity(false);
             setShowChooseRectangle(false);
             setShowHand(false);
+            setDisplayedBets({});
+            setQueuedBets({});
+            queuedBetsRef.current = {};
+            isSendingBetRef.current = false;
+            setServerErrorMessage(null);
+            setHasStartedFinalBetWindow(false);
             return;
         }
 
@@ -64,6 +83,12 @@ export default function PlayBoard({
         setShowBoardOpacity(false);
         setShowChooseRectangle(false);
         setShowHand(true);
+        setDisplayedBets({});
+        setQueuedBets({});
+        queuedBetsRef.current = {};
+        isSendingBetRef.current = false;
+        setServerErrorMessage(null);
+        setHasStartedFinalBetWindow(false);
     }, [RoundId, isRoundRunning]);
 
     useEffect(() => {
@@ -71,6 +96,68 @@ export default function PlayBoard({
             clearCurrentRoundBets();
         }
     }, [RoundId, isRoundRunning, clearCurrentRoundBets]);
+
+    const handleBetOption = (optionId: number, amount: number) => {
+        if (blockClick === "none" || hasStartedFinalBetWindow) {
+            return;
+        }
+
+        const queuedTotal = sumBetMap(queuedBetsRef.current);
+
+        if ((playerBalance - queuedTotal) < amount) {
+            return;
+        }
+
+        setServerErrorMessage(null);
+        setDisplayedBets((prev) => ({
+            ...prev,
+            [optionId]: (prev[optionId] ?? 0) + amount,
+        }));
+        setQueuedBets((prev) => ({
+            ...prev,
+            [optionId]: (prev[optionId] ?? 0) + amount,
+        }));
+    };
+
+    useEffect(() => {
+        if (!hasStartedFinalBetWindow) {
+            return;
+        }
+
+        const intervalId = window.setInterval(() => {
+            if (isSendingBetRef.current) {
+                return;
+            }
+
+            const nextEntry = Object.entries(queuedBetsRef.current).find(([, amount]) => amount > 0);
+
+            if (!nextEntry) {
+                return;
+            }
+
+            const optionId = Number(nextEntry[0]);
+            const amount = nextEntry[1];
+            isSendingBetRef.current = true;
+
+            void placeBet(optionId, amount)
+                .then(() => {
+                    setQueuedBets((prev) => ({
+                        ...prev,
+                        [optionId]: 0,
+                    }));
+                })
+                .catch(() => {
+                    setServerErrorMessage("Sorry, server not response");
+                })
+                .finally(() => {
+                    isSendingBetRef.current = false;
+                });
+        }, 500);
+
+        return () => {
+            window.clearInterval(intervalId);
+        };
+    }, [hasStartedFinalBetWindow, placeBet]);
 
     return (
         <div className="absolute z-20 object-contain" style={{ width: "100%", height: "100%" }}>
@@ -82,7 +169,7 @@ export default function PlayBoard({
                 />
                 <img src={getAssetUrl(GAME_ASSETS.fruitBgFrame)} className="absolute inset-0 mt-[7px]" />
                 <span className="absolute left-1/2 top-[70px] h-[18px] w-[124px] -translate-x-1/2 transform justify-center rounded-full bg-[#3D005C] text-center font-regular">
-                    {RoundId ? (`Round ${RoundId} of today`) : (`Please wait next round`)}
+                    {serverErrorMessage ?? (RoundId ? (`Round ${RoundId} of today`) : (`Please wait next round`))}
                 </span>
                 <img
                     src={getAssetUrl(GAME_ASSETS.fruitContainerFrame)}
@@ -91,7 +178,13 @@ export default function PlayBoard({
                 {showHand && (
                     <MovingHand />
                 )}
-                <GameElements removeBet={resetKey} controlButtons={blockClick} currentBetAmount={currentBetAmount} />
+                <GameElements
+                    controlButtons={blockClick}
+                    currentBetAmount={currentBetAmount}
+                    removeBet={resetKey}
+                    displayedBets={displayedBets}
+                    onBetOption={handleBetOption}
+                />
                 <img
                     src={getAssetUrl(GAME_ASSETS.timeCountingBoard)}
                     className="absolute left-[calc(50%-1px)] top-[183px] z-40 -translate-x-1/2 transform"
@@ -145,7 +238,7 @@ export default function PlayBoard({
                                     <div className="absolute left-[2px] top-[0px] h-[42px] w-[53px] bg-[#ffae00]/50 rounded-full"></div>
                                 )}
                             </button>
-                        )
+                        );
                     })}
                 </div>
                 <img
@@ -180,6 +273,13 @@ export default function PlayBoard({
                         <LedTimer
                             key={`led-${roundKey}`}
                             start={29}
+                            onTick={(timeLeft) => {
+                                if (timeLeft === 4 && !hasStartedFinalBetWindow) {
+                                    setHasStartedFinalBetWindow(true);
+                                    setBlockClick("none");
+                                    setShowHand(false);
+                                }
+                            }}
                             onLedTimeUp={() => {
                                 setShowChooseTimer(true);
                                 setShowLedTimer(false);
@@ -228,7 +328,6 @@ export default function PlayBoard({
                         }}
                     />
                 )}
-
             </div>
         </div>
     );

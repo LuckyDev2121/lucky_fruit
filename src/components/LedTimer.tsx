@@ -4,20 +4,30 @@ import { motion, AnimatePresence } from "framer-motion";
 type LedTimerProps = {
     start?: number;
     onLedTimeUp?: () => void;
+    onTick?: (timeLeft: number) => void;
 };
 
-export default function LedTimer({ start, onLedTimeUp }: LedTimerProps) {
+export default function LedTimer({ start, onLedTimeUp, onTick }: LedTimerProps) {
     const initialTime = Math.max(0, start ?? 0);
     const [time, setTime] = useState(initialTime);
     const onLedTimeUpRef = useRef(onLedTimeUp);
+    const onTickRef = useRef(onTick);
 
     useEffect(() => {
         onLedTimeUpRef.current = onLedTimeUp;
     }, [onLedTimeUp]);
 
     useEffect(() => {
+        onTickRef.current = onTick;
+    }, [onTick]);
+
+    useEffect(() => {
         setTime(initialTime);
     }, [initialTime]);
+
+    useEffect(() => {
+        onTickRef.current?.(time);
+    }, [time]);
 
     useEffect(() => {
         if (initialTime <= 0) {
