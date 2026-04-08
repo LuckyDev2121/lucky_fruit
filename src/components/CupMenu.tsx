@@ -1,4 +1,5 @@
 import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
+import { useGame, resolveAssetUrl } from "../hooks/useGameHook";
 import ModalHeaderPlate from "./ModalHeaderPlate";
 
 type CupMenuProps = {
@@ -41,6 +42,23 @@ function CloseIcon() {
 }
 
 export default function CupMenu({ onCloseCup, onOpenModal }: CupMenuProps) {
+
+    const { rankingToday } = useGame();
+
+    const getRankIcon = (index: number) => {
+        if (index === 0) {
+            return GAME_ASSETS.resultfirstposition;
+        }
+        if (index === 1) {
+            return GAME_ASSETS.resultsecondposition;
+        }
+        if (index === 2) {
+            return GAME_ASSETS.resultthirdposition;
+        }
+
+        return null;
+    };
+
     return (
         <div className="h-[342px] bg-gradient-to-t from-[#7C00D5] to-[#5028C1] w-[393px] rounded-t-[20px]">
             <ModalHeaderPlate className="absolute left-1/2 -translate-x-1/2" />
@@ -52,9 +70,43 @@ export default function CupMenu({ onCloseCup, onOpenModal }: CupMenuProps) {
                 <QuestionMarkIcon />
             </button>
             <div className="scrollbar-hidden absolute top-[30px] h-[312px] w-[393px] overflow-y-auto overflow-x-hidden pt-[15px]">
-                <div className="relative flex h-[40px] w-[393px]">
+                {rankingToday.map((item, index) => {
+                    const rankIcon = getRankIcon(index);
+                    return (
+                        <div key={`${item.player_id}-${index}`} className="relative flex h-[40px] w-[393px]">
+                            {rankIcon ? (
+                                <img
+                                    src={getAssetUrl(rankIcon)}
+                                    alt={`Rank ${index + 1}`}
+                                    className="absolute my-[2px] ml-[23px] mr-[15px]"
+                                />
+                            ) : (
+                                <span className="absolute inline-flex h-[36px] w-[36px] ml-[23px] mr-[15px] items-center justify-center">
+                                    {index + 1}
+                                </span>
+                            )}
+                            <img
+                                src={resolveAssetUrl(item.player?.avater ?? "")}
+                                alt={item.player?.username ?? "Player"}
+                                className="absolute left-[74px] h-[36px] w-[36px] rounded-full object-cover"
+                            />
+                            <div className="absolute left-[123px] flex h-[40px] w-[198px] flex-col justify-center">
+                                <span className="my-[2px] text-[20px] leading-none">Name: {item.player?.username ?? "***"}</span>
+                                <span className="my-[2px] text-[10px] leading-none">ID:{item.player?.id ?? "***"}</span>
+                            </div>
+                            <div className="absolute right-[22px] flex h-[22px] w-[55px] rounded-full bg-[#39064B]/70 my-[9px]">
+                                <div className="relative ml-[5px] mr-[3px] mt-[6px] h-[9px] w-[16px]">
+                                    <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" />
+                                </div>
+                                <span className="relative inline-flex items-center justify-center text-[12px] my-[2px]">
+                                    {item.total_win}
+                                </span>
+                            </div>
+                        </div>
+                    );
+                })}
+                {/* <div className="relative flex h-[40px] w-[393px]">
                     <img src={getAssetUrl(GAME_ASSETS.resultfirstposition)} alt="First" className="absolute my-[2px] ml-[23px] mr-[15px] " />
-                    {/* <img src={ } alt="Avatar" className="absolute left-[74px] h-[36px] w-[36px]" /> */}
                     <div className="absolute left-[123px] flex h-[40px] w-[198px] flex-col justify-center">
                         <span className="text-[20px] leading-none my-[2px]">Name: C</span>
                         <span className="text-[10px] leading-none my-[2px]">ID:234</span>
@@ -68,7 +120,6 @@ export default function CupMenu({ onCloseCup, onOpenModal }: CupMenuProps) {
                 </div>
                 <div className="relative flex h-[40px] w-[393px]">
                     <img src={getAssetUrl(GAME_ASSETS.resultsecondposition)} alt="Second" className="absolute my-[2px] ml-[23px] mr-[15px] " />
-                    {/* <img src={ } alt="Avatar" className="absolute left-[74px] h-[36px] w-[36px]" /> */}
                     <div className="absolute left-[123px] flex h-[40px] w-[198px] flex-col justify-center">
                         <span className="text-[20px] leading-none my-[2px]">Name: D</span>
                         <span className="text-[10px] leading-none my-[2px]">ID:235</span>
@@ -82,7 +133,6 @@ export default function CupMenu({ onCloseCup, onOpenModal }: CupMenuProps) {
                 </div>
                 <div className="relative flex h-[40px] w-[393px]">
                     <img src={getAssetUrl(GAME_ASSETS.resultthirdposition)} alt="Third" className="absolute my-[2px] ml-[23px] mr-[15px] " />
-                    {/* <img src={ } alt="Avatar" className="absolute left-[74px] h-[36px] w-[36px]" /> */}
                     <div className="absolute left-[123px] flex h-[40px] w-[198px] flex-col justify-center">
                         <span className="text-[20px] leading-none my-[2px]">Name: D</span>
                         <span className="text-[10px] leading-none my-[2px]">ID:235</span>
@@ -97,7 +147,6 @@ export default function CupMenu({ onCloseCup, onOpenModal }: CupMenuProps) {
                 {Array.from({ length: 7 }).map((_, index) => (
                     <div key={index} className="relative flex h-[40px] w-[393px]">
                         <span className=" absolute inline-flex h-[36px] w-[36px] ml-[23px] mr-[15px]  items-center justify-center">{index + 4}</span>
-                        {/* <img src={ } alt="Avatar" className="absolute left-[74px] h-[36px] w-[36px]" /> */}
                         <div className="absolute left-[123px] flex h-[40px] w-[198px] flex-col justify-center">
                             <span className="text-[20px] leading-none my-[2px]">Name: {String.fromCharCode(65 + index + 3)}</span>
                             <span className="text-[10px] leading-none my-[2px]">ID: {234 + index + 3}</span>
@@ -109,7 +158,7 @@ export default function CupMenu({ onCloseCup, onOpenModal }: CupMenuProps) {
                             <span className="relative inline-flex text-[12px] my-[2px] items-center justify-center">****</span>
                         </div>
                     </div>
-                ))}
+                ))} */}
             </div>
         </div>
     )

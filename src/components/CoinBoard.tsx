@@ -26,7 +26,7 @@ export default function CoinBoard({ onOpenModal }: CoinBoardProps) {
           <div className="ml-[9px] justify-center items-center flex">
             <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" />
           </div>
-          <span className="pointer-events-none absolute inset-0 flex items-center justify-center font-bold">
+          <span className="pointer-events-none absolute ml-[10px] inset-0 flex items-center justify-center font-bold">
             {playerInfo?.balance ? playerInfo?.balance : "0"}
           </span>
           <button className="ml-auto mr-[7px]"

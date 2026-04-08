@@ -9,12 +9,14 @@ import {
   makeGameResult,
   fetchSoundSetting,
   saveSoundSetting,
+  fetchRankingToday,
   type GameDetailsData,
   type PlayerDetailsData,
   type GameResults,
   type CreateRoundResponse,
   type ResultData,
   type PlaceBet,
+  type RankingTodayItem,
 } from "../api/api";
 import {
   REALTIME_CHANNEL,
@@ -37,6 +39,7 @@ type GameStore = {
   lastBetMessage: string | null;
   isMusicEnabled: boolean;
   isMusicSettingLoading: boolean;
+  rankingTodays: RankingTodayItem[];
 };
 
 const listeners = new Set<(state: GameStore) => void>();
@@ -52,6 +55,7 @@ let store: GameStore = {
   lastBetMessage: null,
   isMusicEnabled: true,
   isMusicSettingLoading: true,
+  rankingTodays: [],
 };
 
 let hasInitialized = false;
@@ -72,11 +76,12 @@ async function runRefreshGameData() {
   updateStore({ isLoading: true, isMusicSettingLoading: true });
 
   try {
-    const [gameDetail, player, gameResults, isMusicEnabled] = await Promise.all([
+    const [gameDetail, player, gameResults, isMusicEnabled, rankingToday] = await Promise.all([
       fetchGameDetail(),
       fetchPlayerInfo(),
       fetchGameResults(),
       fetchSoundSetting(),
+      fetchRankingToday(),
     ]);
 
     updateStore({
@@ -86,6 +91,7 @@ async function runRefreshGameData() {
       isMusicEnabled,
       isLoading: false,
       isMusicSettingLoading: false,
+      rankingTodays: rankingToday,
     });
   } catch (error) {
     updateStore({ isLoading: false, isMusicSettingLoading: false });
@@ -137,15 +143,17 @@ export function useGame() {
 
   const handleMakeResult = useCallback(async () => {
     const data = await makeGameResult();
-    const [player, gameResults] = await Promise.all([
+    const [player, gameResults, ranking] = await Promise.all([
       fetchPlayerInfo(),
       fetchGameResults(),
+      fetchRankingToday(),
     ]);
 
     updateStore({
       makeResult: data,
       playerInfo: player,
       results: gameResults,
+      rankingTodays: ranking,
     });
 
     return data;
@@ -207,6 +215,7 @@ export function useGame() {
     lastBetMessage: snapshot.lastBetMessage,
     isMusicEnabled: snapshot.isMusicEnabled,
     isMusicSettingLoading: snapshot.isMusicSettingLoading,
+    rankingToday: snapshot.rankingTodays,
     refreshGameData,
     createRound: handleCreateRound,
     makeGameResult: handleMakeResult,

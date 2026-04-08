@@ -8,6 +8,7 @@ import {
   MAKE_RESULT_API_URL,
   SOUND_SETTING_API_URL,
   SOUND_SETTING_GAME_API_URL,
+  RANKING_TODAY_API_URL,
 } from "../config/gameConfig";
 type GameOption = {
   id: number;
@@ -157,6 +158,7 @@ export type CreateRoundResponse =
         game_id: number;
         round_no: number;
         status: number;
+        created_at: string;
         id: number;
       };
     };
@@ -204,4 +206,29 @@ export const saveSoundSetting = async (
   }
 
   return response.data;
+};
+
+export type RankingTodayItem = {
+  player_id: number;
+  total_win: string;
+  player?: {
+    id: number;
+    username: string;
+    avater: string;
+  };
+};
+
+type RankingTodayResponse = {
+  status?: boolean;
+  data?: RankingTodayItem[];
+  message?: string;
+};
+
+export const fetchRankingToday = async (): Promise<RankingTodayItem[]> => {
+  const response = await axios.get<RankingTodayResponse>(RANKING_TODAY_API_URL);
+
+  if (!response.data.status) {
+    throw new Error(response.data.message || "Failed to load ranking today");
+  }
+  return response.data.data ?? [];
 };
