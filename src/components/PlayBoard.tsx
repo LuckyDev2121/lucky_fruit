@@ -40,7 +40,16 @@ export default function PlayBoard({
     const [serverErrorMessage, setServerErrorMessage] = useState<string | null>(null);
     const [hasStartedFinalBetWindow, setHasStartedFinalBetWindow] = useState(false);
     const [resetKey, setResetKey] = useState(0);
-    const { betAmounts, options, results, clearCurrentRoundBets, placeBet, playerInfo } = useGame();
+    const {
+        betAmounts,
+        options,
+        results,
+        clearCurrentRoundBets,
+        placeBet,
+        reserveBetBalance,
+        releaseBetBalance,
+        playerInfo,
+    } = useGame();
     const queuedBetsRef = useRef<Record<number, number>>({});
     const isSendingBetRef = useRef(false);
     const optionMap = useMemo(() => {
@@ -117,6 +126,7 @@ export default function PlayBoard({
             ...prev,
             [optionId]: (prev[optionId] ?? 0) + amount,
         }));
+        reserveBetBalance(amount);
     };
 
     useEffect(() => {
@@ -147,6 +157,7 @@ export default function PlayBoard({
                     }));
                 })
                 .catch(() => {
+                    releaseBetBalance(amount);
                     setServerErrorMessage("Sorry, server not response");
                 })
                 .finally(() => {
@@ -157,7 +168,7 @@ export default function PlayBoard({
         return () => {
             window.clearInterval(intervalId);
         };
-    }, [hasStartedFinalBetWindow, placeBet]);
+    }, [hasStartedFinalBetWindow, placeBet, releaseBetBalance]);
 
     return (
         <div className="absolute z-20 object-contain" style={{ width: "100%", height: "100%" }}>

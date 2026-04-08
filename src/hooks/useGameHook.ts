@@ -35,6 +35,7 @@ type GameStore = {
   roundData: CreateRoundResponse | null;
   makeResult: ResultData | null;
   currentRoundBets: Record<number, number>;
+  pendingBalanceDeduction: number;
   isLoading: boolean;
   lastBetMessage: string | null;
   isMusicEnabled: boolean;
@@ -51,6 +52,7 @@ let store: GameStore = {
   roundData: null,
   makeResult: null,
   currentRoundBets: {},
+  pendingBalanceDeduction: 0,
   isLoading: true,
   lastBetMessage: null,
   isMusicEnabled: true,
@@ -72,7 +74,21 @@ function updateStore(partial: Partial<GameStore>) {
   emit();
 }
 
-async function runRefreshGameData() {
+type RefreshGameDataOptions = {
+  resetPendingBalanceDeduction?: boolean;
+};
+
+function formatBalanceValue(amount: number): string {
+  if (Number.isNaN(amount) || amount <= 0) {
+    return "0";
+  }
+
+  return Number.isInteger(amount)
+    ? amount.toString()
+    : amount.toFixed(2).replace(/\.?0+$/, "");
+}
+
+async function runRefreshGameData(options?: RefreshGameDataOptions) {
   updateStore({ isLoading: true, isMusicSettingLoading: true });
 
   try {
@@ -92,6 +108,9 @@ async function runRefreshGameData() {
       isLoading: false,
       isMusicSettingLoading: false,
       rankingTodays: rankingToday,
+      pendingBalanceDeduction: options?.resetPendingBalanceDeduction
+        ? 0
+        : store.pendingBalanceDeduction,
     });
   } catch (error) {
     updateStore({ isLoading: false, isMusicSettingLoading: false });
@@ -131,8 +150,8 @@ export function useGame() {
     };
   }, []);
 
-  const refreshGameData = useCallback(async () => {
-    await runRefreshGameData();
+  const refreshGameData = useCallback(async (options?: RefreshGameDataOptions) => {
+    await runRefreshGameData(options);
   }, []);
 
   const handleCreateRound = useCallback(async () => {
@@ -167,24 +186,37 @@ export function useGame() {
     }
 
     const response: PlaceBet = await placeBetRequest(optionId, amount);
-    const nextBalance = Math.max(0, currentBalance - amount);
     const nextRoundBets = {
       ...store.currentRoundBets,
       [optionId]: (store.currentRoundBets[optionId] ?? 0) + amount,
     };
 
     updateStore({
-      playerInfo: store.playerInfo
-        ? {
-            ...store.playerInfo,
-            balance: nextBalance.toFixed(2),
-          }
-        : store.playerInfo,
       currentRoundBets: nextRoundBets,
       lastBetMessage: response.message ?? null,
     });
 
     return response;
+  }, []);
+
+  const reserveBetBalance = useCallback((amount: number) => {
+    if (amount <= 0) {
+      return;
+    }
+
+    updateStore({
+      pendingBalanceDeduction: store.pendingBalanceDeduction + amount,
+    });
+  }, []);
+
+  const releaseBetBalance = useCallback((amount: number) => {
+    if (amount <= 0) {
+      return;
+    }
+
+    updateStore({
+      pendingBalanceDeduction: Math.max(0, store.pendingBalanceDeduction - amount),
+    });
   }, []);
 
   const handleSetMusicEnabled = useCallback(async (nextValue: boolean) => {
@@ -202,11 +234,17 @@ export function useGame() {
     updateStore({ currentRoundBets: {} });
   }, []);
 
+  const rawBalance = Number.parseFloat(snapshot.playerInfo?.balance ?? "0");
+  const displayBalance = formatBalanceValue(
+    Math.max(0, rawBalance - snapshot.pendingBalanceDeduction),
+  );
+
   return {
     betAmounts: snapshot.gameDetails?.bet_amounts ?? [],
     options: snapshot.gameDetails?.options ?? [],
     gameDetails: snapshot.gameDetails,
     playerInfo: snapshot.playerInfo,
+    displayBalance,
     results: snapshot.results,
     roundData: snapshot.roundData,
     makeResult: snapshot.makeResult,
@@ -220,6 +258,8 @@ export function useGame() {
     createRound: handleCreateRound,
     makeGameResult: handleMakeResult,
     placeBet: handlePlaceBet,
+    reserveBetBalance,
+    releaseBetBalance,
     setMusicEnabled: handleSetMusicEnabled,
     clearCurrentRoundBets,
   };

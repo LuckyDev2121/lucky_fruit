@@ -1,4 +1,4 @@
-import { use, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
 import ModalHeaderPlate from "./ModalHeaderPlate";
@@ -30,7 +30,7 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
     const initialTime = Math.max(0, start ?? 0);
     const [time, setTime] = useState(initialTime);
     const onResultTimeUpRef = useRef(onResultTimeUp);
-    const { options, makeResult: result, currentRoundBets } = useGame();
+    const { options, makeResult: result, currentRoundBets, refreshGameData } = useGame();
     const optionMap = useMemo(() => {
         return Object.fromEntries(options.map(o => [o.id, o.logo]));
     }, [options]);
@@ -65,6 +65,10 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
     useEffect(() => {
         onResultTimeUpRef.current = onResultTimeUp;
     }, [onResultTimeUp]);
+
+    useEffect(() => {
+        void refreshGameData({ resetPendingBalanceDeduction: true });
+    }, [refreshGameData]);
 
     useEffect(() => {
         if (consol === 0) {
