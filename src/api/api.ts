@@ -4,7 +4,7 @@ import {
   PLAYER_API_URL,
   GAME_RESULTS_API_URL,
   PLACE_BET_API_URL,
-  CREAT_ROUND_API_URL,
+  CURRENT_ROUND_API_URL,
   MAKE_RESULT_API_URL,
   SOUND_SETTING_API_URL,
   SOUND_SETTING_GAME_API_URL,
@@ -150,23 +150,28 @@ export const makeGameResult = async (): Promise<ResultData> => {
 };
 
 
-export type CreateRoundResponse =
-  {
-      status?: boolean;
-      message?: string;
-      data: {
-        game_id: number;
-        round_no: number;
-        status: number;
-        created_at: string;
-        id: number;
-      };
-    };
+export type CurrentRoundData = {
+  id: number;
+  game_id: number;
+  round_no: number;
+  winning_option_id: number | null;
+  status: number;
+  created_at: string;
+};
+
+export type CreateRoundResponse = {
+  status?: boolean;
+  message?: string;
+  data?: CurrentRoundData;
+};
 
 export const createRound = async (): Promise<CreateRoundResponse> => {
-    const response = await axios.post<CreateRoundResponse>(CREAT_ROUND_API_URL, {
-    game_id: 5,
-  });
+    const response = await axios.get<CreateRoundResponse>(CURRENT_ROUND_API_URL);
+  
+  if (!response.data.status) {
+    throw new Error(response.data.message || "Failed to load sound setting");
+  }
+
   return response.data;
 }
 
