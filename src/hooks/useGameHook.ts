@@ -35,6 +35,7 @@ type GameStore = {
   roundData: CreateRoundResponse | null;
   makeResult: ResultData | null;
   currentRoundBets: Record<number, number>;
+  previousRoundBets: Record<number, number>;
   pendingBalanceDeduction: number;
   isLoading: boolean;
   lastBetMessage: string | null;
@@ -52,6 +53,7 @@ let store: GameStore = {
   roundData: null,
   makeResult: null,
   currentRoundBets: {},
+  previousRoundBets: {},
   pendingBalanceDeduction: 0,
   isLoading: true,
   lastBetMessage: null,
@@ -88,6 +90,19 @@ function formatBalanceValue(amount: number): string {
     : amount.toFixed(2).replace(/\.?0+$/, "");
 }
 
+function normalizeBetRecord(
+  options: GameDetailsData["options"],
+  source: Record<number, number>,
+): Record<number, number> {
+  const normalized: Record<number, number> = {};
+
+  options?.forEach((option) => {
+    normalized[option.id] = source[option.id] ?? 0;
+  });
+
+  return normalized;
+}
+
 async function runRefreshGameData(options?: RefreshGameDataOptions) {
   updateStore({ isLoading: true, isMusicSettingLoading: true });
 
@@ -111,6 +126,7 @@ async function runRefreshGameData(options?: RefreshGameDataOptions) {
       pendingBalanceDeduction: options?.resetPendingBalanceDeduction
         ? 0
         : store.pendingBalanceDeduction,
+      previousRoundBets: normalizeBetRecord(gameDetail.options, store.previousRoundBets),
     });
   } catch (error) {
     updateStore({ isLoading: false, isMusicSettingLoading: false });
@@ -234,6 +250,29 @@ export function useGame() {
     updateStore({ currentRoundBets: {} });
   }, []);
 
+  const archiveCurrentRoundBets = useCallback(() => {
+    updateStore({
+      previousRoundBets: normalizeBetRecord(
+        store.gameDetails?.options,
+        store.currentRoundBets,
+      ),
+    });
+  }, []);
+
+  const setPreviousRoundBets = useCallback((betMap: Record<number, number>) => {
+    updateStore({
+      previousRoundBets: normalizeBetRecord(
+        store.gameDetails?.options,
+        betMap,
+      ),
+    });
+  }, []);
+
+  const previousRoundBetEntries = (snapshot.gameDetails?.options ?? []).map((option) => ({
+    option_id: option.id,
+    amount: snapshot.previousRoundBets[option.id] ?? 0,
+  }));
+
   const rawBalance = Number.parseFloat(snapshot.playerInfo?.balance ?? "0");
   const displayBalance = formatBalanceValue(
     Math.max(0, rawBalance - snapshot.pendingBalanceDeduction),
@@ -249,6 +288,8 @@ export function useGame() {
     roundData: snapshot.roundData,
     makeResult: snapshot.makeResult,
     currentRoundBets: snapshot.currentRoundBets,
+    previousRoundBets: snapshot.previousRoundBets,
+    previousRoundBetEntries,
     isLoading: snapshot.isLoading,
     lastBetMessage: snapshot.lastBetMessage,
     isMusicEnabled: snapshot.isMusicEnabled,
@@ -262,5 +303,7 @@ export function useGame() {
     releaseBetBalance,
     setMusicEnabled: handleSetMusicEnabled,
     clearCurrentRoundBets,
+    archiveCurrentRoundBets,
+    setPreviousRoundBets,
   };
 }

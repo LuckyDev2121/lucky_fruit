@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { useGame } from "../hooks/useGameHook";
 import CoinBoard from "./CoinBoard";
 import CupMenu from "./CupMenu";
 import HelpMenu from "./HelpMenu";
@@ -38,8 +39,36 @@ export default function LuckyFruitGame({
 
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const [activeAlert, setActiveAlert] = useState<string | null>(null);
+  const [repeatRequestId, setRepeatRequestId] = useState(0);
+  const [skipNextRepeatModal, setSkipNextRepeatModal] = useState(false);
   const [scale, setScale] = useState(1);
+  const { displayBalance, previousRoundBets } = useGame();
   const isOverlayOpen = activeModal !== null || activeAlert !== null;
+  const previousRoundTotal = Object.values(previousRoundBets).reduce((sum, amount) => sum + amount, 0);
+  const availableBalance = Number.parseFloat(displayBalance ?? "0");
+  const hasInsufficientBalance = previousRoundTotal > availableBalance;
+
+  const triggerRepeatBet = () => {
+    setRepeatRequestId((prev) => prev + 1);
+  };
+
+  const handleRepeatButtonClick = () => {
+    if (skipNextRepeatModal) {
+      triggerRepeatBet();
+      return;
+    }
+
+    setActiveAlert("repeat");
+  };
+
+  const handleConfirmRepeat = () => {
+    if (hasInsufficientBalance || previousRoundTotal <= 0) {
+      return;
+    }
+
+    setActiveAlert(null);
+    triggerRepeatBet();
+  };
 
   useEffect(() => {
     if (activeModal === "result") {
@@ -100,7 +129,8 @@ export default function LuckyFruitGame({
               isRoundRunning={isRoundRunning}
               onRoundFinished={onRoundFinished}
               onOpenModal={(modal) => setActiveModal(modal)}
-              onOpenAlert={(alert) => setActiveAlert(alert)}
+              onRepeatButtonClick={handleRepeatButtonClick}
+              repeatRequestId={repeatRequestId}
             />
           </div>
 
@@ -176,7 +206,14 @@ export default function LuckyFruitGame({
               >
                 {
                   activeAlert === "repeat" && (
-                    <RepeatModal onCloseRepeatModal={() => setActiveAlert(null)} />
+                    <RepeatModal
+                      onCloseRepeatModal={() => setActiveAlert(null)}
+                      onConfirmRepeat={handleConfirmRepeat}
+                      previousRoundTotal={previousRoundTotal}
+                      skipNextRepeatModal={skipNextRepeatModal}
+                      onSkipNextRepeatModalChange={setSkipNextRepeatModal}
+                      hasInsufficientBalance={hasInsufficientBalance}
+                    />
                   )
                 }
                 {activeAlert === "music" && (

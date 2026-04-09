@@ -1,17 +1,24 @@
 import React, { useState } from 'react';
 
-// Define the props type (if necessary)
 interface CheckboxProps {
     label: string;
+    checked?: boolean;
+    onChange?: (checked: boolean) => void;
 }
 
-const Checkbox: React.FC<CheckboxProps> = ({ label }) => {
-    // State to handle checked/unchecked status
+const Checkbox: React.FC<CheckboxProps> = ({ label, checked, onChange }) => {
     const [isChecked, setIsChecked] = useState<boolean>(false);
+    const isControlled = typeof checked === "boolean";
+    const resolvedChecked = isControlled ? checked : isChecked;
 
-    // Handle the checkbox change
     const handleCheckboxChange = () => {
-        setIsChecked(!isChecked);
+        const nextChecked = !resolvedChecked;
+
+        if (!isControlled) {
+            setIsChecked(nextChecked);
+        }
+
+        onChange?.(nextChecked);
     };
 
     return (
@@ -22,7 +29,7 @@ const Checkbox: React.FC<CheckboxProps> = ({ label }) => {
             >
                 <input
                     type="checkbox"
-                    checked={isChecked}
+                    checked={resolvedChecked}
                     onChange={handleCheckboxChange}
                     style={{
                         marginRight: '10px',

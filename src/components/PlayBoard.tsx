@@ -10,10 +10,11 @@ import MovingHand from "./MoveHand";
 
 type PlayBoardProps = {
     onOpenModal: (modal: string) => void;
-    onOpenAlert: (alert: string) => void;
+    onRepeatButtonClick: () => void;
     RoundId: number | null;
     isRoundRunning: boolean;
     onRoundFinished: () => void;
+    repeatRequestId: number;
 };
 
 function sumBetMap(betMap: Record<number, number>): number {
@@ -22,10 +23,11 @@ function sumBetMap(betMap: Record<number, number>): number {
 
 export default function PlayBoard({
     onOpenModal,
-    onOpenAlert,
+    onRepeatButtonClick,
     RoundId,
     isRoundRunning,
     onRoundFinished,
+    repeatRequestId,
 }: PlayBoardProps) {
     const [blockClick, setBlockClick] = useState<"auto" | "none">("none");
     const [showLedTimer, setShowLedTimer] = useState(false);
@@ -46,12 +48,16 @@ export default function PlayBoard({
         results,
         clearCurrentRoundBets,
         placeBet,
+        previousRoundBets,
         reserveBetBalance,
         releaseBetBalance,
         playerInfo,
+        setPreviousRoundBets,
     } = useGame();
     const queuedBetsRef = useRef<Record<number, number>>({});
     const isSendingBetRef = useRef(false);
+    const repeatRequestIdRef = useRef(repeatRequestId);
+    const errorTimeoutRef = useRef<number | null>(null);
     const optionMap = useMemo(() => {
         return Object.fromEntries(
             options.map(o => [o.id, o.logo])
@@ -60,12 +66,68 @@ export default function PlayBoard({
     const roundKey = RoundId ?? "waiting";
     const playerBalance = Number.parseFloat(playerInfo?.balance ?? "0");
 
+    const showTemporaryMessage = (message: string, duration = 3000) => {
+        setServerErrorMessage(message);
+
+        if (errorTimeoutRef.current !== null) {
+            window.clearTimeout(errorTimeoutRef.current);
+        }
+
+        errorTimeoutRef.current = window.setTimeout(() => {
+            setServerErrorMessage(null);
+            errorTimeoutRef.current = null;
+        }, duration);
+    };
+
+    const applyBetBatch = (betBatch: Record<number, number>) => {
+        const betEntries = Object.entries(betBatch)
+            .map(([optionId, amount]) => [Number(optionId), amount] as const)
+            .filter(([, amount]) => amount > 0);
+
+        if (betEntries.length === 0) {
+            return;
+        }
+
+        const totalAmount = betEntries.reduce((sum, [, amount]) => sum + amount, 0);
+        const queuedTotal = sumBetMap(queuedBetsRef.current);
+
+        if ((playerBalance - queuedTotal) < totalAmount) {
+            showTemporaryMessage("Sorry balance is bad");
+            return;
+        }
+
+        setServerErrorMessage(null);
+        setDisplayedBets((prev) => {
+            const next = { ...prev };
+            betEntries.forEach(([optionId, amount]) => {
+                next[optionId] = (next[optionId] ?? 0) + amount;
+            });
+            return next;
+        });
+        setQueuedBets((prev) => {
+            const next = { ...prev };
+            betEntries.forEach(([optionId, amount]) => {
+                next[optionId] = (next[optionId] ?? 0) + amount;
+            });
+            return next;
+        });
+        reserveBetBalance(totalAmount);
+    };
+
     const getResultOptionLogo = (id: number) =>
         optionMap[id] ? resolveAssetUrl(optionMap[id]) : "";
 
     useEffect(() => {
         queuedBetsRef.current = queuedBets;
     }, [queuedBets]);
+
+    useEffect(() => {
+        return () => {
+            if (errorTimeoutRef.current !== null) {
+                window.clearTimeout(errorTimeoutRef.current);
+            }
+        };
+    }, []);
 
     useEffect(() => {
         if (!isRoundRunning || !RoundId) {
@@ -130,6 +192,20 @@ export default function PlayBoard({
     };
 
     useEffect(() => {
+        if (repeatRequestId === repeatRequestIdRef.current) {
+            return;
+        }
+
+        repeatRequestIdRef.current = repeatRequestId;
+
+        if (blockClick === "none" || hasStartedFinalBetWindow) {
+            return;
+        }
+
+        applyBetBatch(previousRoundBets);
+    }, [repeatRequestId, blockClick, hasStartedFinalBetWindow, previousRoundBets]);
+
+    useEffect(() => {
         if (!hasStartedFinalBetWindow) {
             return;
         }
@@ -158,7 +234,7 @@ export default function PlayBoard({
                 })
                 .catch(() => {
                     releaseBetBalance(amount);
-                    setServerErrorMessage("Sorry, server not response");
+                    setServerErrorMessage("Server not response");
                 })
                 .finally(() => {
                     isSendingBetRef.current = false;
@@ -205,7 +281,7 @@ export default function PlayBoard({
                         cursor: "pointer",
                         pointerEvents: "auto",
                     }}
-                    onClick={() => onOpenAlert("repeat")}
+                    onClick={onRepeatButtonClick}
                     className="absolute left-[calc(78%-0px)] top-[324px] z-20 h-fit"
                 >
                     <div className="relative ml-[20px] flex h-[30px] w-[80px] items-center justify-center overflow-hidden rounded-[15px] border border-[#b889d0] bg-gradient-to-b from-[#7f4a93] via-[#5f2e72] to-[#3b163f] shadow-[inset_0_1px_0_rgba(255,255,255,0.55),inset_0_-2px_0_rgba(46,13,55,0.8)]">
@@ -292,6 +368,7 @@ export default function PlayBoard({
                                 }
                             }}
                             onLedTimeUp={() => {
+                                setPreviousRoundBets(displayedBets);
                                 setShowChooseTimer(true);
                                 setShowLedTimer(false);
                                 setShowBoardOpacity(true);
