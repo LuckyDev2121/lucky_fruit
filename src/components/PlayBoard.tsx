@@ -42,7 +42,7 @@ export default function PlayBoard({
     const [queuedBets, setQueuedBets] = useState<Record<number, number>>({});
     const [serverErrorMessage, setServerErrorMessage] = useState<string | null>(null);
     const [hasStartedFinalBetWindow, setHasStartedFinalBetWindow] = useState(false);
-    const [resetKey, setResetKey] = useState(0);
+    // const [resetKey, setResetKey] = useState(0);
     const [showResultTimer, setShowResultTimer] = useState(false);
     const {
         betAmounts,
@@ -270,7 +270,7 @@ export default function PlayBoard({
                 <GameElements
                     controlButtons={blockClick}
                     currentBetAmount={currentBetAmount}
-                    removeBet={resetKey}
+                    // removeBet={resetKey}
                     displayedBets={displayedBets}
                     onBetOption={handleBetOption}
                 />
@@ -391,7 +391,7 @@ export default function PlayBoard({
                                 setShowChooseTimer(false);
                                 setShowResultTimer(true)
                                 setShowBoardOpacity(false);
-                                setResetKey(prev => prev + 1);
+                                // setResetKey(prev => prev + 1);
                             }}
                         />
                     </div>

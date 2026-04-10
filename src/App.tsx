@@ -65,15 +65,12 @@ function App() {
     try {
       const res = await createRound();
 
-      // console.log("CREATE ROUND:", res);
-
       if (res?.remaining_seconds < 38) {
         return false;
       }
 
       setRoundId(res.round_no);
       setIsRoundRunning(true);
-      // makeGameResult();
       return true;
     } catch (err) {
       console.error(err);
@@ -111,7 +108,6 @@ function App() {
           return;
         }
 
-        // console.log("CREATE ROUND:", res);
 
         if (res.remaining_seconds < 38) {
           setRoundId(null);
@@ -126,8 +122,6 @@ function App() {
         if (!cancelled) {
           setProgress(100);
           setIsBootLoading(false);
-          // makeGameResult()
-          // console.log("===================makeGameResult");
         }
       }
     };
