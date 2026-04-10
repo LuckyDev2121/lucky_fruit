@@ -155,7 +155,7 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
             <div className="absolute grid grid-cols-3 top-[244px] w-[300px] h-[100px] left-1/2 -translate-x-1/2 ">
                 {result?.winners?.[0]?.avater && (
                     <div className="relative h-[100px] w-[100px]">
-                        <img src={resolveAssetUrl(result?.winners?.[0]?.avater ?? "")} alt="abatar" className="absolute w-[50px] h-[50px] left-1/2 -translate-x-1/2" />
+                        <img src={resolveAssetUrl(result?.winners?.[0]?.avater ?? "")} alt="abatar" className="absolute left-1/2 h-[50px] w-[50px] -translate-x-1/2 rounded-full object-cover" />
                         <span className="absolute top-[50px] w-[100px] text-center">{result?.winners?.[0]?.id ?? "N/A"}</span>
                         <div className="absolute flex top-[70px] w-[100px] items-center justify-center">
                             <div className="relative ">
@@ -166,7 +166,7 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
                     </div>
                 )}
                 {result?.winners?.[1]?.avater && (<div className="relative h-[100px] w-[100px]">
-                    <img src={resolveAssetUrl(result?.winners?.[1]?.avater ?? "")} alt="abatar" className="absolute w-[50px] h-[50px] left-1/2 -translate-x-1/2" />
+                    <img src={resolveAssetUrl(result?.winners?.[1]?.avater ?? "")} alt="abatar" className="absolute left-1/2 h-[50px] w-[50px] -translate-x-1/2 rounded-full object-cover" />
                     <span className="absolute top-[50px] w-[100px] text-center">{result?.winners?.[1]?.id ?? "N/A"}</span>
                     <div className="absolute flex top-[70px] w-[100px] items-center justify-center">
                         <div className="relative ">
@@ -177,7 +177,7 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
                 </div>
                 )}
                 {result?.winners?.[2]?.avater && (<div className="relative h-[100px] w-[100px]">
-                    <img src={resolveAssetUrl(result?.winners?.[2]?.avater ?? "")} alt="image" className="absolute w-[50px] h-[50px] left-1/2 -translate-x-1/2" />
+                    <img src={resolveAssetUrl(result?.winners?.[2]?.avater ?? "")} alt="image" className="absolute left-1/2 h-[50px] w-[50px] -translate-x-1/2 rounded-full object-cover" />
                     <span className="absolute top-[50px] w-[100px] text-center">{result?.winners?.[2]?.id ?? "N/A"}</span>
                     <div className="absolute flex top-[70px] w-[100px] items-center justify-center">
                         <div className="relative ">
