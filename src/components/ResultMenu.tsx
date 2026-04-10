@@ -153,17 +153,19 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
             <ResultMenuDivider className="absolute left-[281px] top-[221px]" direction="right" />
             <span className="absolute left-1/2 -translate-x-1/2 top-[215px] text-[#FFFFFF]/60">Biggest winning of the round</span>
             <div className="absolute grid grid-cols-3 top-[244px] w-[300px] h-[100px] left-1/2 -translate-x-1/2 ">
-                <div className="relative h-[100px] w-[100px]">
-                    <img src={resolveAssetUrl(result?.winners?.[0]?.avater ?? "")} alt="abatar" className="absolute w-[50px] h-[50px] left-1/2 -translate-x-1/2" />
-                    <span className="absolute top-[50px] w-[100px] text-center">{result?.winners?.[0]?.id ?? "N/A"}</span>
-                    <div className="absolute flex top-[70px] w-[100px] items-center justify-center">
-                        <div className="relative ">
-                            <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" className="h-[9px] w-[16px] mr-[3px]" />
+                {result?.winners?.[0]?.avater && (
+                    <div className="relative h-[100px] w-[100px]">
+                        <img src={resolveAssetUrl(result?.winners?.[0]?.avater ?? "")} alt="abatar" className="absolute w-[50px] h-[50px] left-1/2 -translate-x-1/2" />
+                        <span className="absolute top-[50px] w-[100px] text-center">{result?.winners?.[0]?.id ?? "N/A"}</span>
+                        <div className="absolute flex top-[70px] w-[100px] items-center justify-center">
+                            <div className="relative ">
+                                <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" className="h-[9px] w-[16px] mr-[3px]" />
+                            </div>
+                            <span >{result?.winners?.[0]?.balance ?? "***"}</span>
                         </div>
-                        <span >{result?.winners?.[0]?.balance ?? "***"}</span>
                     </div>
-                </div>
-                <div className="relative h-[100px] w-[100px]">
+                )}
+                {result?.winners?.[1]?.avater && (<div className="relative h-[100px] w-[100px]">
                     <img src={resolveAssetUrl(result?.winners?.[1]?.avater ?? "")} alt="abatar" className="absolute w-[50px] h-[50px] left-1/2 -translate-x-1/2" />
                     <span className="absolute top-[50px] w-[100px] text-center">{result?.winners?.[1]?.id ?? "N/A"}</span>
                     <div className="absolute flex top-[70px] w-[100px] items-center justify-center">
@@ -173,7 +175,8 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
                         <span >{result?.winners?.[1]?.balance ?? "***"}</span>
                     </div>
                 </div>
-                <div className="relative h-[100px] w-[100px]">
+                )}
+                {result?.winners?.[2]?.avater && (<div className="relative h-[100px] w-[100px]">
                     <img src={resolveAssetUrl(result?.winners?.[2]?.avater ?? "")} alt="image" className="absolute w-[50px] h-[50px] left-1/2 -translate-x-1/2" />
                     <span className="absolute top-[50px] w-[100px] text-center">{result?.winners?.[2]?.id ?? "N/A"}</span>
                     <div className="absolute flex top-[70px] w-[100px] items-center justify-center">
@@ -183,6 +186,7 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
                         <span >{result?.winners?.[2]?.balance ?? "***"}</span>
                     </div>
                 </div>
+                )}
             </div>
         </div>
     )
