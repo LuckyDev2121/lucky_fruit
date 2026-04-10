@@ -13,7 +13,6 @@ const fruits = [
     { id: 12, element_name: "A", top: 183, left: 60 },
 ];
 
-
 export default function ChooseRectangle({ onChooseTimeUp }: { onChooseTimeUp?: () => void; onResult?: (fruit: string) => void }) {
     const [time, setTime] = useState(0);
     const [second, setSecond] = useState(0);
@@ -35,22 +34,17 @@ export default function ChooseRectangle({ onChooseTimeUp }: { onChooseTimeUp?: (
             return;
         }
         const timer = setInterval(() => {
-            if (second <= 2000) {
+            if (second <= 3000) {
                 setSecond((s) => s + 100);
                 setTime((t) => t + 1);
                 setTimestep(100);
             }
-            if (second === 2000) {
+            if (second === 3000) {
                 makeGameResult();
                 setSteps(((makeResult?.winning_option_id ? makeResult.winning_option_id : 0) - currentFruit.id + 8) % fruits.length);
             }
-            if (second >= 3820 && second < 4820) {
-                setSecond((s) => s + 100);
-                setTime((t) => t);
-                setTimestep(100);
-            }
-            if (second > 2000 && second < 3820) {
-                if (second === 2100) { console.log(makeResult, makeResult?.winning_option_id, "====", steps, "====", currentFruit.id); }
+            if (second > 3000 && second < 4820) {
+                if (second === 3100) { console.log(makeResult, makeResult?.winning_option_id, "====", steps, "====", currentFruit.id); }
                 if (steps === 0) {
                     setSecond((s) => s + 100 + 100 * add);
                     setTime((t) => t + 1);
@@ -58,7 +52,7 @@ export default function ChooseRectangle({ onChooseTimeUp }: { onChooseTimeUp?: (
                     setTimestep(100 + 100 * add);
                 }
                 if (steps === 1) {
-                    if (second > 2200) {
+                    if (second > 3200) {
                         setSecond((s) => s + 100 + 100 * add);
                         setTime((t) => t + 1);
                         setAdd((a) => a + 1);
@@ -70,7 +64,7 @@ export default function ChooseRectangle({ onChooseTimeUp }: { onChooseTimeUp?: (
                     }
                 }
                 if (steps === 2) {
-                    if (second > 2300) {
+                    if (second > 3300) {
                         setSecond((s) => s + 100 + 90 * add);
                         setTime((t) => t + 1);
                         setAdd((a) => a + 1);
@@ -82,7 +76,7 @@ export default function ChooseRectangle({ onChooseTimeUp }: { onChooseTimeUp?: (
                     }
                 }
                 if (steps === 3) {
-                    if (second > 2400) {
+                    if (second > 3400) {
                         setSecond((s) => s + 100 + 80 * add);
                         setTime((t) => t + 1);
                         setAdd((a) => a + 1);
@@ -94,7 +88,7 @@ export default function ChooseRectangle({ onChooseTimeUp }: { onChooseTimeUp?: (
                     }
                 }
                 if (steps === 4) {
-                    if (second > 2300) {
+                    if (second > 3300) {
                         setSecond((s) => s + 200);
                         setTime((t) => t + 1);
                         setAdd((a) => a + 1);
@@ -106,7 +100,7 @@ export default function ChooseRectangle({ onChooseTimeUp }: { onChooseTimeUp?: (
                     }
                 }
                 if (steps === 5) {
-                    if (second > 2600) {
+                    if (second > 3600) {
                         setSecond((s) => s + 200);
                         setTime((t) => t + 1);
                         setAdd((a) => a + 1);
@@ -118,7 +112,7 @@ export default function ChooseRectangle({ onChooseTimeUp }: { onChooseTimeUp?: (
                     }
                 }
                 if (steps === 6) {
-                    if (second > 2700) {
+                    if (second > 3700) {
                         setSecond((s) => s + 200);
                         setTime((t) => t + 1);
                         setAdd((a) => a + 1);
@@ -130,7 +124,7 @@ export default function ChooseRectangle({ onChooseTimeUp }: { onChooseTimeUp?: (
                     }
                 }
                 if (steps === 7) {
-                    if (second > 2900) {
+                    if (second > 3900) {
                         setSecond((s) => s + 400);
                         setTime((t) => t + 1);
                         setAdd((a) => a + 1);

@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-type LedTimerProps = {
+type ChooseTimerProps = {
     start?: number;
     onChooseTimeUp?: () => void;
 };
 
-export default function ChooseTimer({ start, onChooseTimeUp }: LedTimerProps) {
+export default function ChooseTimer({ start, onChooseTimeUp }: ChooseTimerProps) {
     const initialTime = Math.max(0, start ?? 0);
     const [time, setTime] = useState(initialTime);
     const onChooseTimeUpRef = useRef(onChooseTimeUp);

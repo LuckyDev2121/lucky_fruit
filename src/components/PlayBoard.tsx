@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
 import ChooseRectangle from "./ChooseRectangle";
 import ChooseTimer from "./ChooseTimer";
+import ResultTimer from "./ResultTimer"
 import GameElements from "./GameElements";
 import HiddenTimer from "./HiddenTimer";
 import LedTimer from "./LedTimer";
@@ -42,6 +43,7 @@ export default function PlayBoard({
     const [serverErrorMessage, setServerErrorMessage] = useState<string | null>(null);
     const [hasStartedFinalBetWindow, setHasStartedFinalBetWindow] = useState(false);
     const [resetKey, setResetKey] = useState(0);
+    const [showResultTimer, setShowResultTimer] = useState(false);
     const {
         betAmounts,
         options,
@@ -387,11 +389,22 @@ export default function PlayBoard({
                             onChooseTimeUp={() => {
                                 setShowChooseRectangle(false);
                                 setShowChooseTimer(false);
-                                setShowHiddenTimer(true);
-                                onOpenModal("result");
+                                setShowResultTimer(true)
+                                setShowBoardOpacity(false);
                                 setResetKey(prev => prev + 1);
                             }}
                         />
+                    </div>
+                )}
+                {showResultTimer && (
+                    <div className='absolute top-[90px] h-[271px] w-[280px] z-30 left-1/2 transform -translate-x-1/2'>
+                        <ResultTimer
+                            start={1}
+                            onResultTimeUp={() => {
+                                onOpenModal("result");
+                                setShowHiddenTimer(true);
+                                setShowResultTimer(false)
+                            }} />
                     </div>
                 )}
                 {showHiddenTimer && (
@@ -401,7 +414,6 @@ export default function PlayBoard({
                             start={3}
                             onHiddenTimeUp={() => {
                                 setShowHiddenTimer(false);
-                                setShowBoardOpacity(false);
                                 setShowHand(false);
                                 setBlockClick("none");
                                 onRoundFinished();
