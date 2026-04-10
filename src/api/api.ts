@@ -150,26 +150,19 @@ export const makeGameResult = async (): Promise<ResultData> => {
 };
 
 
-export type CurrentRoundData = {
-  id: number;
+export type CreateRoundResponse = {
   game_id: number;
   round_no: number;
-  winning_option_id: number | null;
-  status: number;
-  created_at: string;
+  remaining_seconds: number;
+  stage: string;
 };
 
-export type CreateRoundResponse = {
-  status?: boolean;
-  message?: string;
-  data?: CurrentRoundData;
-};
 
 export const createRound = async (): Promise<CreateRoundResponse> => {
     const response = await axios.get<CreateRoundResponse>(CURRENT_ROUND_API_URL);
   
-  if (!response.data.status) {
-    throw new Error(response.data.message || "Failed to load sound setting");
+  if (!response.data) {
+    throw new Error(response.data || "Failed to load sound setting");
   }
 
   return response.data;

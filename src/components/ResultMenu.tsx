@@ -30,7 +30,8 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
     const initialTime = Math.max(0, start ?? 0);
     const [time, setTime] = useState(initialTime);
     const onResultTimeUpRef = useRef(onResultTimeUp);
-    const { options, makeResult: result, currentRoundBets, refreshGameData } = useGame();
+    const { options, makeResult: result, makeGameResult, currentRoundBets, refreshGameData } = useGame();
+
     const optionMap = useMemo(() => {
         return Object.fromEntries(options.map(o => [o.id, o.logo]));
     }, [options]);
@@ -63,6 +64,7 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
     };
 
     useEffect(() => {
+        makeGameResult();
         onResultTimeUpRef.current = onResultTimeUp;
     }, [onResultTimeUp]);
 

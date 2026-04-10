@@ -11,7 +11,7 @@ type ResultTimerProps = {
 export default function ResultTimer({ start, onResultTimeUp }: ResultTimerProps) {
     const duration = Math.max(0, start ?? 0);
     const onResultTimeUpRef = useRef(onResultTimeUp);
-    const { makeResult, createRound } = useGame();
+    const { makeResult } = useGame();
     // const [currentOptionId, setCurrentOptionid] = useState<number | null>(null);
 
     // const attemptStartRound = useCallback(async () => {
