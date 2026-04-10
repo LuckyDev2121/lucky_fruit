@@ -16,7 +16,6 @@ const points = [
 
 export default function MovingImage() {
     return (
-        // <div className="absolute w-[280px] h-[280px] top-[90px]  left-1/2 -translate-x-1/2">
         <motion.img
             src={getAssetUrl(GAME_ASSETS.hand)}
             className="w-16 h-16 absolute z-50"

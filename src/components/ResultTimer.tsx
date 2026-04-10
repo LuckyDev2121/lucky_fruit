@@ -12,23 +12,6 @@ export default function ResultTimer({ start, onResultTimeUp }: ResultTimerProps)
     const duration = Math.max(0, start ?? 0);
     const onResultTimeUpRef = useRef(onResultTimeUp);
     const { makeResult } = useGame();
-    // const [currentOptionId, setCurrentOptionid] = useState<number | null>(null);
-
-    // const attemptStartRound = useCallback(async () => {
-    //     try {
-    //         const res = await createRound();
-
-    //         if (!res?.status || !res.data) {
-    //             return false;
-    //         }
-    //         setCurrentOptionid(res.data?.winning_option_id)
-    //         return true;
-    //     } catch (err) {
-    //         console.error(err);
-    //         return false;
-    //     }
-    // }, [createRound]);
-
     useEffect(() => {
         onResultTimeUpRef.current = onResultTimeUp;
     }, [onResultTimeUp]);

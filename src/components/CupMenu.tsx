@@ -105,60 +105,6 @@ export default function CupMenu({ onCloseCup, onOpenModal }: CupMenuProps) {
                         </div>
                     );
                 })}
-                {/* <div className="relative flex h-[40px] w-[393px]">
-                    <img src={getAssetUrl(GAME_ASSETS.resultfirstposition)} alt="First" className="absolute my-[2px] ml-[23px] mr-[15px] " />
-                    <div className="absolute left-[123px] flex h-[40px] w-[198px] flex-col justify-center">
-                        <span className="text-[20px] leading-none my-[2px]">Name: C</span>
-                        <span className="text-[10px] leading-none my-[2px]">ID:234</span>
-                    </div>
-                    <div className="absolute flex bg-[#39064B]/70 h-[22px] w-[55px] right-[22px] rounded-full my-[9px]">
-                        <div className="relative ml-[5px] mr-[3px] mt-[6px] h-[9px] w-[16px]">
-                            <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" />
-                        </div>
-                        <span className="relative inline-flex text-[12px] my-[2px] items-center justify-center">****</span>
-                    </div>
-                </div>
-                <div className="relative flex h-[40px] w-[393px]">
-                    <img src={getAssetUrl(GAME_ASSETS.resultsecondposition)} alt="Second" className="absolute my-[2px] ml-[23px] mr-[15px] " />
-                    <div className="absolute left-[123px] flex h-[40px] w-[198px] flex-col justify-center">
-                        <span className="text-[20px] leading-none my-[2px]">Name: D</span>
-                        <span className="text-[10px] leading-none my-[2px]">ID:235</span>
-                    </div>
-                    <div className="absolute flex bg-[#39064B]/70 h-[22px] w-[55px] right-[22px] rounded-full my-[9px]">
-                        <div className="relative ml-[5px] mr-[3px] mt-[6px] h-[9px] w-[16px]">
-                            <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" />
-                        </div>
-                        <span className="relative inline-flex text-[12px] my-[2px] items-center justify-center">****</span>
-                    </div>
-                </div>
-                <div className="relative flex h-[40px] w-[393px]">
-                    <img src={getAssetUrl(GAME_ASSETS.resultthirdposition)} alt="Third" className="absolute my-[2px] ml-[23px] mr-[15px] " />
-                    <div className="absolute left-[123px] flex h-[40px] w-[198px] flex-col justify-center">
-                        <span className="text-[20px] leading-none my-[2px]">Name: D</span>
-                        <span className="text-[10px] leading-none my-[2px]">ID:235</span>
-                    </div>
-                    <div className="absolute flex bg-[#39064B]/70 h-[22px] w-[55px] right-[22px] rounded-full my-[9px]">
-                        <div className="relative ml-[5px] mr-[3px] mt-[6px] h-[9px] w-[16px]">
-                            <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" />
-                        </div>
-                        <span className="relative inline-flex text-[12px] my-[2px] items-center justify-center">****</span>
-                    </div>
-                </div>
-                {Array.from({ length: 7 }).map((_, index) => (
-                    <div key={index} className="relative flex h-[40px] w-[393px]">
-                        <span className=" absolute inline-flex h-[36px] w-[36px] ml-[23px] mr-[15px]  items-center justify-center">{index + 4}</span>
-                        <div className="absolute left-[123px] flex h-[40px] w-[198px] flex-col justify-center">
-                            <span className="text-[20px] leading-none my-[2px]">Name: {String.fromCharCode(65 + index + 3)}</span>
-                            <span className="text-[10px] leading-none my-[2px]">ID: {234 + index + 3}</span>
-                        </div>
-                        <div className="absolute flex bg-[#39064B]/70 h-[22px] w-[55px] right-[22px] rounded-full my-[9px]">
-                            <div className="relative ml-[5px] mr-[3px] mt-[6px] h-[9px] w-[16px]">
-                                <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" />
-                            </div>
-                            <span className="relative inline-flex text-[12px] my-[2px] items-center justify-center">****</span>
-                        </div>
-                    </div>
-                ))} */}
             </div>
         </div>
     )

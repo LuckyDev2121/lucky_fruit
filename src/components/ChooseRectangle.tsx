@@ -18,7 +18,6 @@ export default function ChooseRectangle({ onChooseTimeUp }: { onChooseTimeUp?: (
     const [second, setSecond] = useState(0);
     const [add, setAdd] = useState(0);
     const [timestep, setTimestep] = useState(100);
-    // const [randomIndex] = useState(() => Math.floor(Math.random() * fruits.length));
     const onChooseTimeUpRef = useRef(onChooseTimeUp);
     const currentFruit = fruits[(8 + time) % fruits.length];
     const { makeResult, makeGameResult } = useGame();

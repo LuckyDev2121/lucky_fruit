@@ -33,7 +33,7 @@ const Checkbox: React.FC<CheckboxProps> = ({ label, checked, onChange }) => {
                     onChange={handleCheckboxChange}
                     style={{
                         marginRight: '10px',
-                    }} // Add some spacing and color to the checkbox
+                    }}
                 />
                 {label}
             </label>
