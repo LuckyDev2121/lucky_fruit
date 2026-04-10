@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
 import { useGame, resolveAssetUrl } from "../hooks/useGameHook";
 import ModalHeaderPlate from "./ModalHeaderPlate";
+import RankingHelpModal from "./RankingHelpModal";
 
 type CupMenuProps = {
     onCloseCup: () => void;
@@ -41,7 +43,8 @@ function CloseIcon() {
     );
 }
 
-export default function CupMenu({ onCloseCup, onOpenModal }: CupMenuProps) {
+export default function CupMenu({ onCloseCup }: CupMenuProps) {
+    const [isRankingHelpOpen, setIsRankingHelpOpen] = useState(false);
 
     const { rankingToday } = useGame();
 
@@ -66,7 +69,7 @@ export default function CupMenu({ onCloseCup, onOpenModal }: CupMenuProps) {
             <button className="absolute h-[19px] w-[19px] mt-[5px] pl-[2px] right-[62px] rounded-full bg-[#360149]" onClick={onCloseCup}>
                 <CloseIcon />
             </button>
-            <button className="absolute h-[19px] w-[19px] mt-[5px] pl-[2px] right-[87px] rounded-full bg-[#360149]" onClick={() => onOpenModal("help")}>
+            <button className="absolute h-[19px] w-[19px] mt-[5px] pl-[2px] right-[87px] rounded-full bg-[#360149]" onClick={() => setIsRankingHelpOpen(true)}>
                 <QuestionMarkIcon />
             </button>
             <div className="scrollbar-hidden absolute top-[30px] h-[312px] w-[393px] overflow-y-auto overflow-x-hidden pt-[15px]">
@@ -106,6 +109,16 @@ export default function CupMenu({ onCloseCup, onOpenModal }: CupMenuProps) {
                     );
                 })}
             </div>
+            {isRankingHelpOpen && (
+                <>
+                    <div className="absolute inset-0 z-[60] rounded-t-[20px] bg-black/30" />
+                    <div className="absolute left-1/2 -top-[50px] z-[70] -translate-x-1/2 ">
+                        <RankingHelpModal
+                            onCloseRankingHelpModal={() => setIsRankingHelpOpen(false)}
+                        />
+                    </div>
+                </>
+            )}
         </div>
     )
 }
