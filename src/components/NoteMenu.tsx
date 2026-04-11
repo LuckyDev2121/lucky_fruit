@@ -110,11 +110,11 @@ export default function NoteMenu({ onCloseNote, onOpenModal }: NoteMenuProps) {
                                 <span className=" relative   ">{item.status ? "WIN" : "LOSE"}</span>
                             </div>
                             <span className="absolute top-[54px]">Mine</span>
-                            <div className="absolute top-[78px] flex ">
+                            <div className="absolute top-[78px]  grid grid-cols-4 grid-rows-2 gap-[0px]">
                                 {item.detail.map((element, index) => {
-                                    if (!element.bet_amount) {
+                                    if (element.bet_amount) {
                                         return (
-                                            <div className="relative w-[75px] h-[30px] justify-center items-center flex " >
+                                            <div className="relative w-[75px] h-[20px] justify-center items-center flex " >
                                                 <img src={getAssetUrl(options[index].logo)} alt={options[index].name} className="h-4 w-4 mr-[2px]" />
                                                 <div className=" justify-center items-center content-center h-[14px] w-[10px]">
                                                     <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" className="h-[9px] w-[16px] mr-[5px]" />

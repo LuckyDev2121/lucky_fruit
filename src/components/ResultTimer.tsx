@@ -39,9 +39,7 @@ export default function ResultTimer({ start, RoundId, onResultTimeUp }: ResultTi
             isMounted = false;
         };
     }, [makeGameRound, RoundId]);
-    useEffect(() => {
-        console.log("activeResult", activeResult)
-    }, [])
+
     useEffect(() => {
         if (duration <= 0) {
             onResultTimeUpRef.current?.();

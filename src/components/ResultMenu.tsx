@@ -89,10 +89,6 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
     }, [refreshGameData]);
 
     useEffect(() => {
-        console.log("result", roundData?.round_no, result);
-    }, []);
-
-    useEffect(() => {
         if (winningDiamondAmount > 0) setShowIcon(true);
         else setShowIcon(false);
     }, [winningDiamondAmount]);

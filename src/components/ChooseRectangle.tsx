@@ -50,7 +50,7 @@ export default function ChooseRectangle({ onChooseTimeUp, RoundId }: { onChooseT
     //     };
     // }, [makeGameResult, roundData?.round_no]);
     useEffect(() => {
-        console.log("second====", second)
+        // console.log("second====", second)
         if (second >= 4820) {
             onChooseTimeUpRef.current?.(); // trigger notification
             return;
@@ -61,12 +61,12 @@ export default function ChooseRectangle({ onChooseTimeUp, RoundId }: { onChooseT
                 setTime((t) => t + 1);
                 setTimestep(100);
                 if (second === 2000) {
-                    console.log("1000");
+                    // console.log("1000");
                     if (RoundId) {
-                        console.log("sent")
+                        // console.log("sent")
                         void makeGameRound(RoundId)
                             .then((response) => {
-                                console.log("received")
+                                // console.log("received")
                                 setResultResponse(response);
                             })
                             .catch((error) => {
@@ -80,7 +80,7 @@ export default function ChooseRectangle({ onChooseTimeUp, RoundId }: { onChooseT
             }
 
             if (second > 4000 && second < 4820) {
-                if (second === 4100) console.log(result, result?.winning_option_id, "====", steps, "====", currentFruit.id);
+                // if (second === 4100) console.log(result, result?.winning_option_id, "====", steps, "====", currentFruit.id);
                 if (steps === 0) {
                     setSecond((s) => s + 100);
                     setTime((t) => t + 1);

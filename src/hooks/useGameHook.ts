@@ -190,14 +190,14 @@ export function useGame() {
 
   const handlePlayerLog = useCallback(async () => {
     const data = await fetchPlayerLog();
-     console.log("API playerLog:", data);
+    //  console.log("API playerLog:", data);
     updateStore({ playerLog: data });
     return data;
   }, []);
 
   const handleWinToday= useCallback(async () => {
     const data = await fetchWinToday();
-    console.log("API winToday:", data);
+    // console.log("API winToday:", data);
     updateStore({ winToday: data });
     return data;
   }, []);
