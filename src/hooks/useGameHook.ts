@@ -176,8 +176,8 @@ export function useGame() {
     return data;
   }, []);
 
-  const handleMakeResult = useCallback(async () => {
-    const data = await makeGameResult();
+  const handleMakeResult = useCallback(async (roundId: number) => {
+    const data = await makeGameResult(roundId);
     const [player, gameResults, ranking] = await Promise.all([
       fetchPlayerInfo(),
       fetchGameResults(),

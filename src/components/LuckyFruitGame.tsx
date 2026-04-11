@@ -25,7 +25,9 @@ export default function LuckyFruitGame({
   TodaysRoundId,
   isRoundRunning,
   onRoundFinished,
+  RoundTime,
 }: {
+  RoundTime: number;
   onToggleMusic: () => void;
   isMusicPlaying: boolean;
   onToggleSound: () => void;
@@ -126,6 +128,7 @@ export default function LuckyFruitGame({
           <div className="bottom-0 left-0 right-0">
             <PlayBoard
               RoundId={TodaysRoundId}
+              RoundTime={RoundTime}
               isRoundRunning={isRoundRunning}
               onRoundFinished={onRoundFinished}
               onOpenModal={(modal) => setActiveModal(modal)}

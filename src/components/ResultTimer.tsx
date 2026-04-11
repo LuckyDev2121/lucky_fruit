@@ -1,21 +1,46 @@
-
-import { useEffect, useRef, } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useGame } from '../hooks/useGameHook';
 import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
 
 type ResultTimerProps = {
     start?: number;
     onResultTimeUp?: () => void;
+    RoundId?: number | null;
 };
 
-export default function ResultTimer({ start, onResultTimeUp }: ResultTimerProps) {
+export default function ResultTimer({ start, RoundId, onResultTimeUp }: ResultTimerProps) {
     const duration = Math.max(0, start ?? 0);
     const onResultTimeUpRef = useRef(onResultTimeUp);
-    const { makeResult } = useGame();
+    const [resultResponse, setResultResponse] = useState<ReturnType<typeof useGame>["makeResult"]>(null);
+    const { makeResult, makeGameResult, } = useGame();
+    const activeResult = resultResponse ?? makeResult;
+
     useEffect(() => {
         onResultTimeUpRef.current = onResultTimeUp;
     }, [onResultTimeUp]);
 
+    useEffect(() => {
+        let isMounted = true;
+
+        if (RoundId) {
+            void makeGameResult(RoundId)
+                .then((response) => {
+                    if (isMounted) {
+                        setResultResponse(response);
+                    }
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+
+        return () => {
+            isMounted = false;
+        };
+    }, [makeGameResult, RoundId]);
+    useEffect(() => {
+        console.log("activeResult", activeResult)
+    }, [])
     useEffect(() => {
         if (duration <= 0) {
             onResultTimeUpRef.current?.();
@@ -31,42 +56,42 @@ export default function ResultTimer({ start, onResultTimeUp }: ResultTimerProps)
 
     return (
         <div className='absolute left-[3px] top-[4px] h-[263px] w-[274px] z-30 grid grid-cols-3 grid-rows-3  '>
-            {makeResult?.winning_option_id === 12 ?
+            {activeResult?.winning_option_id === 12 ?
                 <div className="relative col-start-1 row-start-2 z-40" >
                     <img src={getAssetUrl(GAME_ASSETS.selectround)} alt="Choose Rectangle" className="absolute -left-[2px] -top-[8px] h-[100px] w-[96px]" />
                 </div> : <div className={`relative col-start-1 row-start-2 z-40 bg-black/50 rounded-[8px]`} />
             }
-            {makeResult?.winning_option_id === 11 ?
+            {activeResult?.winning_option_id === 11 ?
                 <div className="relative col-start-1 row-start-3 z-40" >
                     <img src={getAssetUrl(GAME_ASSETS.selectround)} alt="Choose Rectangle" className="absolute -left-[2px] -top-[8px] h-[100px] w-[96px]" />
                 </div> : <div className={`relative col-start-1 row-start-3 z-40 bg-black/50 rounded-[8px]`} />
             }
-            {makeResult?.winning_option_id === 10 ?
+            {activeResult?.winning_option_id === 10 ?
                 <div className="relative col-start-2 row-start-3 z-40" >
                     <img src={getAssetUrl(GAME_ASSETS.selectround)} alt="Choose Rectangle" className="absolute -left-[2px] -top-[8px] h-[100px] w-[96px]" />
                 </div> : <div className={`relative col-start-2 row-start-3 z-40 bg-black/50 rounded-[8px]`} />
             }
-            {makeResult?.winning_option_id === 10 ?
+            {activeResult?.winning_option_id === 10 ?
                 <div className="relative col-start-3 row-start-3 z-40" >
                     <img src={getAssetUrl(GAME_ASSETS.selectround)} alt="Choose Rectangle" className="absolute -left-[2px] -top-[8px] h-[100px] w-[96px]" />
                 </div> : <div className={`relative col-start-3 row-start-3 z-40 bg-black/50 rounded-[8px]`} />
             }
-            {makeResult?.winning_option_id === 8 ?
+            {activeResult?.winning_option_id === 8 ?
                 <div className="relative col-start-3 row-start-2 z-40" >
                     <img src={getAssetUrl(GAME_ASSETS.selectround)} alt="Choose Rectangle" className="absolute  -left-[2px] -top-[8px] h-[100px] w-[96px]" />
                 </div> : <div className={`relative col-start-3 row-start-2 z-40 bg-black/50 rounded-[8px]`} />
             }
-            {makeResult?.winning_option_id === 5 ?
+            {activeResult?.winning_option_id === 5 ?
                 <div className="relative col-start-3 row-start-1 z-40" >
                     <img src={getAssetUrl(GAME_ASSETS.selectround)} alt="Choose Rectangle" className="absolute -left-[2px] -top-[8px] h-[100px] w-[96px]" />
                 </div> : <div className={`relative col-start-3 row-start-1 z-40 bg-black/50 rounded-[8px]`} />
             }
-            {makeResult?.winning_option_id === 6 ?
+            {activeResult?.winning_option_id === 6 ?
                 <div className="relative col-start-2 row-start-1 z-40" >
                     <img src={getAssetUrl(GAME_ASSETS.selectround)} alt="Choose Rectangle" className="absolute -left-[2px] -top-[8px] h-[100px] w-[96px]" />
                 </div> : <div className={`relative col-start-2 row-start-1 z-40 bg-black/50 rounded-[8px]`} />
             }
-            {makeResult?.winning_option_id === 5 ?
+            {activeResult?.winning_option_id === 5 ?
                 <div className="relative col-start-1 row-start-1 z-40" >
                     <img src={getAssetUrl(GAME_ASSETS.selectround)} alt="Choose Rectangle" className="absolute -left-[2px] -top-[8px] h-[100px] w-[96px]" />
                 </div> : <div className={`relative col-start-1 row-start-1 z-40 bg-black/50 rounded-[8px]`} />

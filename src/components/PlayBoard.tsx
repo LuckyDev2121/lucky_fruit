@@ -16,6 +16,7 @@ type PlayBoardProps = {
     isRoundRunning: boolean;
     onRoundFinished: () => void;
     repeatRequestId: number;
+    RoundTime: number;
 };
 
 function sumBetMap(betMap: Record<number, number>): number {
@@ -29,6 +30,7 @@ export default function PlayBoard({
     isRoundRunning,
     onRoundFinished,
     repeatRequestId,
+    RoundTime,
 }: PlayBoardProps) {
     const [blockClick, setBlockClick] = useState<"auto" | "none">("none");
     const [showLedTimer, setShowLedTimer] = useState(false);
@@ -42,6 +44,10 @@ export default function PlayBoard({
     const [queuedBets, setQueuedBets] = useState<Record<number, number>>({});
     const [serverErrorMessage, setServerErrorMessage] = useState<string | null>(null);
     const [hasStartedFinalBetWindow, setHasStartedFinalBetWindow] = useState(false);
+    const [ledTime, setLedTime] = useState(0);
+    const [chooseTime, setChooseTime] = useState(0);
+    const [resultTime, setResultTime] = useState(0);
+    const [hiddenTime, setHiddenTime] = useState(0);
     // const [resetKey, setResetKey] = useState(0);
     const [showResultTimer, setShowResultTimer] = useState(false);
     const {
@@ -132,7 +138,86 @@ export default function PlayBoard({
     }, []);
 
     useEffect(() => {
-        if (!isRoundRunning || !RoundId) {
+
+        if (RoundTime >= 10) {
+            setLedTime(Math.floor(RoundTime) - 9);
+            setChooseTime(5);
+            setResultTime(1);
+            setHiddenTime(3);
+            setBlockClick("auto");
+            setShowLedTimer(true);
+            setShowChooseTimer(false);
+            setShowHiddenTimer(false);
+            setShowBoardOpacity(false);
+            setShowChooseRectangle(false);
+            setShowHand(true);
+            setDisplayedBets({});
+            setQueuedBets({});
+            queuedBetsRef.current = {};
+            isSendingBetRef.current = false;
+            setServerErrorMessage(null);
+            setHasStartedFinalBetWindow(false);
+        } else if (RoundTime < 10 || RoundTime >= 5) {
+            setLedTime(29);
+            setChooseTime(Math.floor(RoundTime) - 4);
+            setResultTime(1);
+            setHiddenTime(3);
+            setBlockClick("none");
+            setShowLedTimer(false);
+            setShowChooseTimer(true);
+            setShowHiddenTimer(false);
+            setShowBoardOpacity(true);
+            setShowChooseRectangle(true);
+            setShowHand(false);
+            setDisplayedBets({});
+            setQueuedBets({});
+            queuedBetsRef.current = {};
+            isSendingBetRef.current = false;
+            setServerErrorMessage(null);
+            setHasStartedFinalBetWindow(false);
+        } else if (RoundTime < 5 || RoundTime >= 4) {
+            setLedTime(29);
+            setChooseTime(5);
+            setResultTime(1);
+            setHiddenTime(3);
+            setBlockClick("auto");
+            setShowLedTimer(true);
+            setShowChooseTimer(false);
+            setShowHiddenTimer(false);
+            setShowBoardOpacity(false);
+            setShowChooseRectangle(false);
+            setShowHand(true);
+            setDisplayedBets({});
+            setQueuedBets({});
+            queuedBetsRef.current = {};
+            isSendingBetRef.current = false;
+            setServerErrorMessage(null);
+            setHasStartedFinalBetWindow(false);
+            setShowResultTimer(true)
+        } else if (RoundTime < 4 || RoundTime >= 1) {
+            setLedTime(29);
+            setChooseTime(5);
+            setResultTime(1);
+            setHiddenTime(Math.floor(RoundTime));
+            setBlockClick("auto");
+            setShowLedTimer(true);
+            setShowChooseTimer(false);
+            setShowHiddenTimer(true);
+            setShowBoardOpacity(false);
+            setShowChooseRectangle(false);
+            setShowHand(true);
+            setDisplayedBets({});
+            setQueuedBets({});
+            queuedBetsRef.current = {};
+            isSendingBetRef.current = false;
+            setServerErrorMessage(null);
+            setHasStartedFinalBetWindow(false);
+            onOpenModal("result");
+            setShowResultTimer(false)
+        } else if (RoundTime < 1) {
+            // setChooseTime(5);
+            // setResultTime(1);
+            // setHiddenTime(3);
             setBlockClick("none");
             setShowLedTimer(false);
             setShowChooseTimer(false);
@@ -148,20 +233,6 @@ export default function PlayBoard({
             setHasStartedFinalBetWindow(false);
             return;
         }
-
-        setBlockClick("auto");
-        setShowLedTimer(true);
-        setShowChooseTimer(false);
-        setShowHiddenTimer(false);
-        setShowBoardOpacity(false);
-        setShowChooseRectangle(false);
-        setShowHand(true);
-        setDisplayedBets({});
-        setQueuedBets({});
-        queuedBetsRef.current = {};
-        isSendingBetRef.current = false;
-        setServerErrorMessage(null);
-        setHasStartedFinalBetWindow(false);
     }, [RoundId, isRoundRunning]);
 
     useEffect(() => {
@@ -361,9 +432,9 @@ export default function PlayBoard({
                     <div className="absolute  left-[calc(50%+1px)] top-[198px] z-50 -translate-x-1/2 transform">
                         <LedTimer
                             key={`led-${roundKey}`}
-                            start={29}
+                            start={ledTime}
                             onTick={(timeLeft) => {
-                                if (timeLeft === 4 && !hasStartedFinalBetWindow) {
+                                if ((timeLeft === 4 || ledTime <= 4) && !hasStartedFinalBetWindow) {
                                     setHasStartedFinalBetWindow(true);
                                     setBlockClick("none");
                                     setShowHand(false);
@@ -385,7 +456,8 @@ export default function PlayBoard({
                     <div className="absolute left-[calc(50%+1px)] top-[198px] z-50 -translate-x-1/2 transform">
                         <ChooseTimer
                             key={`choose-${roundKey}`}
-                            start={5}
+                            start={chooseTime}
+
                             onChooseTimeUp={() => {
                                 setShowChooseRectangle(false);
                                 setShowChooseTimer(false);
@@ -399,11 +471,13 @@ export default function PlayBoard({
                 {showResultTimer && (
                     <div className='absolute top-[90px] h-[271px] w-[280px] z-30 left-1/2 transform -translate-x-1/2'>
                         <ResultTimer
-                            start={1}
+                            start={resultTime}
+                            RoundId={RoundId}
                             onResultTimeUp={() => {
                                 onOpenModal("result");
                                 setShowHiddenTimer(true);
                                 setShowResultTimer(false)
+
                             }} />
                     </div>
                 )}
@@ -411,7 +485,7 @@ export default function PlayBoard({
                     <div className="absolute left-1/2 top-[197px] z-30 -translate-x-1/2 transform">
                         <HiddenTimer
                             key={`hidden-${roundKey}`}
-                            start={3}
+                            start={hiddenTime}
                             onHiddenTimeUp={() => {
                                 setShowHiddenTimer(false);
                                 setShowHand(false);
@@ -423,6 +497,7 @@ export default function PlayBoard({
                 )}
                 {showChooseRectangle && (
                     <ChooseRectangle
+                        RoundId={RoundId}
                         onChooseTimeUp={() => {
                             setShowChooseRectangle(false);
                         }}

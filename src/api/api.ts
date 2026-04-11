@@ -5,7 +5,7 @@ import {
   GAME_RESULTS_API_URL,
   PLACE_BET_API_URL,
   CURRENT_ROUND_API_URL,
-  MAKE_RESULT_API_URL,
+  ROUND_RESULT_API_URL,
   SOUND_SETTING_API_URL,
   SOUND_SETTING_GAME_API_URL,
   RANKING_TODAY_API_URL,
@@ -137,9 +137,10 @@ export type MakeResultResponse = {
   data: ResultData;
 };
 
-export const makeGameResult = async (): Promise<ResultData> => {
-  const response = await axios.post<MakeResultResponse>(MAKE_RESULT_API_URL, {
-    game_id: 5,
+export const makeGameResult = async (roundId: number): Promise<ResultData> => {
+  console.log("========= roundId", roundId);
+  const response = await axios.post<MakeResultResponse>(ROUND_RESULT_API_URL, {
+    round_no: roundId,
   });
 
   if (!response.data.status) {
@@ -230,3 +231,4 @@ export const fetchRankingToday = async (): Promise<RankingTodayItem[]> => {
   }
   return response.data.data ?? [];
 };
+

@@ -13,19 +13,40 @@ const fruits = [
     { id: 12, element_name: "A", top: 183, left: 60 },
 ];
 
-export default function ChooseRectangle({ onChooseTimeUp }: { onChooseTimeUp?: () => void; onResult?: (fruit: string) => void }) {
+export default function ChooseRectangle({ onChooseTimeUp, RoundId }: { onChooseTimeUp?: () => void; RoundId?: number | null; onResult?: (fruit: string) => void }) {
     const [time, setTime] = useState(0);
     const [second, setSecond] = useState(0);
     const [add, setAdd] = useState(0);
     const [timestep, setTimestep] = useState(100);
+    const [resultResponse, setResultResponse] = useState<ReturnType<typeof useGame>["makeResult"]>(null);
     const onChooseTimeUpRef = useRef(onChooseTimeUp);
     const currentFruit = fruits[(8 + time) % fruits.length];
-    const { makeResult, makeGameResult } = useGame();
+    const { makeResult, makeGameResult, } = useGame();
     const [steps, setSteps] = useState(0);
+    const activeResult = resultResponse ?? makeResult;
     useEffect(() => {
         onChooseTimeUpRef.current = onChooseTimeUp;
     }, [onChooseTimeUp]);
 
+    // useEffect(() => {
+    //     let isMounted = true;
+
+    //     if (roundData?.round_no) {
+    //         void makeGameResult(roundData.round_no)
+    //             .then((response) => {
+    //                 if (isMounted) {
+    //                     setResultResponse(response);
+    //                 }
+    //             })
+    //             .catch((error) => {
+    //                 console.error(error);
+    //             });
+    //     }
+
+    //     return () => {
+    //         isMounted = false;
+    //     };
+    // }, [makeGameResult, roundData?.round_no]);
     useEffect(() => {
 
         if (second >= 4820) {
@@ -39,11 +60,19 @@ export default function ChooseRectangle({ onChooseTimeUp }: { onChooseTimeUp?: (
                 setTimestep(100);
             }
             if (second === 3000) {
-                makeGameResult();
-                setSteps(((makeResult?.winning_option_id ? makeResult.winning_option_id : 0) - currentFruit.id + 8) % fruits.length);
+                if (RoundId) {
+                    void makeGameResult(RoundId)
+                        .then((response) => {
+                            setResultResponse(response);
+                        })
+                        .catch((error) => {
+                            console.error(error);
+                        });
+                }
+                setSteps(((activeResult?.winning_option_id ? activeResult.winning_option_id : 0) - currentFruit.id + 8) % fruits.length);
             }
             if (second > 3000 && second < 4820) {
-                if (second === 3100) { console.log(makeResult, makeResult?.winning_option_id, "====", steps, "====", currentFruit.id); }
+                if (second === 3100) { console.log(activeResult, activeResult?.winning_option_id, "====", steps, "====", currentFruit.id); }
                 if (steps === 0) {
                     setSecond((s) => s + 100 + 100 * add);
                     setTime((t) => t + 1);
@@ -139,8 +168,7 @@ export default function ChooseRectangle({ onChooseTimeUp }: { onChooseTimeUp?: (
         return () => {
             clearInterval(timer)
         };
-    }, [time, second]);
-
+    }, [second, time]);
     return (
         <div className="absolute z-40" style={{ top: `${fruits[(8 + time) % fruits.length].top}px`, left: `${fruits[(8 + time) % fruits.length].left}px` }}>
             <img src={getAssetUrl(GAME_ASSETS.selectround)} alt="Choose Rectangle" className="relative" />

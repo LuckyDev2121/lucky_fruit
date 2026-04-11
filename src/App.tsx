@@ -57,6 +57,7 @@ function App() {
   const [isBootLoading, setIsBootLoading] = useState(true);
   const [roundId, setRoundId] = useState<number | null>(null);
   const [isRoundRunning, setIsRoundRunning] = useState(false);
+  const [roundTime, setRoundTime] = useState(0)
   const openResultMenu = () => setIsOpenResultMenu(true);
   const closeResultMenu = () => setIsOpenResultMenu(false);
   const { createRound, isMusicEnabled, setMusicEnabled } = useGame();
@@ -65,10 +66,10 @@ function App() {
     try {
       const res = await createRound();
 
-      if (res?.remaining_seconds < 38) {
+      if (res?.remaining_seconds < 2) {
         return false;
       }
-
+      setRoundTime(res?.remaining_seconds - 1)
       setRoundId(res.round_no);
       setIsRoundRunning(true);
       return true;
@@ -80,7 +81,6 @@ function App() {
 
   const handleRoundFinished = useCallback(() => {
     setRoundId(null);
-    console.log("====================round Id");
     setIsRoundRunning(false);
     void attemptStartRound();
   }, [attemptStartRound]);
@@ -109,12 +109,13 @@ function App() {
         }
 
 
-        if (res.remaining_seconds < 38) {
+        if (res.remaining_seconds < 2) {
           setRoundId(null);
           setIsRoundRunning(false);
         } else {
           setRoundId(res?.round_no);
           setIsRoundRunning(true);
+          setRoundTime(res?.remaining_seconds - 1)
         }
       } catch (err) {
         console.error(err);
@@ -160,6 +161,7 @@ function App() {
       <LuckyFruitGame
         TodaysRoundId={roundId}
         isRoundRunning={isRoundRunning}
+        RoundTime={roundTime}
         onRoundFinished={handleRoundFinished}
         onOpenResultMenu={openResultMenu}
         onCloseResultMenu={closeResultMenu}
