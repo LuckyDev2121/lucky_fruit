@@ -69,7 +69,7 @@ function App() {
       if (res?.remaining_seconds < 2) {
         return false;
       }
-      setRoundTime(res?.remaining_seconds - 1)
+      setRoundTime(res?.remaining_seconds)
       setRoundId(res.round_no);
       setIsRoundRunning(true);
       return true;
@@ -115,7 +115,7 @@ function App() {
         } else {
           setRoundId(res?.round_no);
           setIsRoundRunning(true);
-          setRoundTime(res?.remaining_seconds - 1)
+          setRoundTime(res?.remaining_seconds)
         }
       } catch (err) {
         console.error(err);
