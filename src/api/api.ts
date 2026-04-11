@@ -240,7 +240,7 @@ export const fetchRankingToday = async (): Promise<RankingTodayItem[]> => {
 export type WinTodayResponse={
   status?:boolean;
   user_id?:number;
-  win?:string;
+  win?:number;
 }
 export const fetchWinToday= async (): Promise<WinTodayResponse> => {
   const response = await axios.get<WinTodayResponse>(WIN_TODAY_API_URL);
