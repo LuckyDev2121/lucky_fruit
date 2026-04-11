@@ -312,7 +312,7 @@ export default function PlayBoard({
                 .finally(() => {
                     isSendingBetRef.current = false;
                 });
-        }, 500);
+        }, 100);
 
         return () => {
             window.clearInterval(intervalId);
@@ -433,14 +433,15 @@ export default function PlayBoard({
                         <LedTimer
                             key={`led-${roundKey}`}
                             start={ledTime}
-                            onTick={(timeLeft) => {
-                                if ((timeLeft === 4 || ledTime <= 4) && !hasStartedFinalBetWindow) {
-                                    setHasStartedFinalBetWindow(true);
-                                    setBlockClick("none");
-                                    setShowHand(false);
-                                }
-                            }}
+                            // onTick={(timeLeft) => {
+                            //     if ((timeLeft === 4 || ledTime <= 4) && !hasStartedFinalBetWindow) {
+                            //         setHasStartedFinalBetWindow(true);
+                            //         setBlockClick("none");
+                            //         setShowHand(false);
+                            //     }
+                            // }}
                             onLedTimeUp={() => {
+                                setHasStartedFinalBetWindow(true);
                                 setPreviousRoundBets(displayedBets);
                                 setShowChooseTimer(true);
                                 setShowLedTimer(false);
