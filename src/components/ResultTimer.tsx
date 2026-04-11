@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useGame } from '../hooks/useGameHook';
 import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
+import type { ResultData } from "../api/api";
 
 type ResultTimerProps = {
     start?: number;
@@ -11,8 +12,8 @@ type ResultTimerProps = {
 export default function ResultTimer({ start, RoundId, onResultTimeUp }: ResultTimerProps) {
     const duration = Math.max(0, start ?? 0);
     const onResultTimeUpRef = useRef(onResultTimeUp);
-    const [resultResponse, setResultResponse] = useState<ReturnType<typeof useGame>["makeResult"]>(null);
-    const { makeResult, makeGameResult, } = useGame();
+    const [resultResponse, setResultResponse] = useState<ResultData | null>(null);;
+    const { makeResult, makeGameRound, } = useGame();
     const activeResult = resultResponse ?? makeResult;
 
     useEffect(() => {
@@ -23,7 +24,7 @@ export default function ResultTimer({ start, RoundId, onResultTimeUp }: ResultTi
         let isMounted = true;
 
         if (RoundId) {
-            void makeGameResult(RoundId)
+            void makeGameRound(RoundId)
                 .then((response) => {
                     if (isMounted) {
                         setResultResponse(response);
@@ -37,7 +38,7 @@ export default function ResultTimer({ start, RoundId, onResultTimeUp }: ResultTi
         return () => {
             isMounted = false;
         };
-    }, [makeGameResult, RoundId]);
+    }, [makeGameRound, RoundId]);
     useEffect(() => {
         console.log("activeResult", activeResult)
     }, [])

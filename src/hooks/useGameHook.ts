@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { echo } from "./echo";
 import {
+  fetchPlayerLog,
+  fetchWinToday,
   fetchGameDetail,
   fetchPlayerInfo,
   fetchGameResults,
@@ -10,6 +12,8 @@ import {
   fetchSoundSetting,
   saveSoundSetting,
   fetchRankingToday,
+  type PlayerLogData,
+  type WinTodayResponse,
   type GameDetailsData,
   type PlayerDetailsData,
   type GameResults,
@@ -42,6 +46,8 @@ type GameStore = {
   isMusicEnabled: boolean;
   isMusicSettingLoading: boolean;
   rankingTodays: RankingTodayItem[];
+  winToday: WinTodayResponse|null;
+  playerLog: PlayerLogData[];
 };
 
 const listeners = new Set<(state: GameStore) => void>();
@@ -60,6 +66,8 @@ let store: GameStore = {
   isMusicEnabled: true,
   isMusicSettingLoading: true,
   rankingTodays: [],
+  winToday:null,
+  playerLog:[],
 };
 
 let hasInitialized = false;
@@ -107,12 +115,14 @@ async function runRefreshGameData(options?: RefreshGameDataOptions) {
   updateStore({ isLoading: true, isMusicSettingLoading: true });
 
   try {
-    const [gameDetail, player, gameResults, isMusicEnabled, rankingToday] = await Promise.all([
+    const [gameDetail, player, gameResults, isMusicEnabled, rankingToday, winToday, playerLog] = await Promise.all([
       fetchGameDetail(),
       fetchPlayerInfo(),
       fetchGameResults(),
       fetchSoundSetting(),
       fetchRankingToday(),
+      fetchWinToday(),
+      fetchPlayerLog(),
     ]);
 
     updateStore({
@@ -123,6 +133,8 @@ async function runRefreshGameData(options?: RefreshGameDataOptions) {
       isLoading: false,
       isMusicSettingLoading: false,
       rankingTodays: rankingToday,
+      playerLog:playerLog,
+      winToday:winToday,
       pendingBalanceDeduction: options?.resetPendingBalanceDeduction
         ? 0
         : store.pendingBalanceDeduction,
@@ -176,12 +188,23 @@ export function useGame() {
     return data;
   }, []);
 
+  const handleGameRound = useCallback(async (roundId: number) => {
+    const data = await makeGameResult(roundId);
+    updateStore({
+      makeResult: data,
+    });
+
+    return data;
+  }, []);
+
   const handleMakeResult = useCallback(async (roundId: number) => {
     const data = await makeGameResult(roundId);
-    const [player, gameResults, ranking] = await Promise.all([
+    const [player, gameResults, ranking, playerLog, winToday] = await Promise.all([
       fetchPlayerInfo(),
       fetchGameResults(),
       fetchRankingToday(),
+      fetchPlayerLog(),
+      fetchWinToday(),
     ]);
 
     updateStore({
@@ -189,6 +212,8 @@ export function useGame() {
       playerInfo: player,
       results: gameResults,
       rankingTodays: ranking,
+      playerLog:playerLog,
+      winToday:winToday,
     });
 
     return data;
@@ -279,6 +304,8 @@ export function useGame() {
   );
 
   return {
+    playerLog: snapshot.playerLog ?? [],
+    winToday: snapshot.winToday,
     betAmounts: snapshot.gameDetails?.bet_amounts ?? [],
     options: snapshot.gameDetails?.options ?? [],
     gameDetails: snapshot.gameDetails,
@@ -297,6 +324,7 @@ export function useGame() {
     rankingToday: snapshot.rankingTodays,
     refreshGameData,
     createRound: handleCreateRound,
+    makeGameRound:handleGameRound,
     makeGameResult: handleMakeResult,
     placeBet: handlePlaceBet,
     reserveBetBalance,

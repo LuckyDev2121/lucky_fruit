@@ -4,7 +4,8 @@ import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
 import ModalHeaderPlate from "./ModalHeaderPlate";
 import ResultMenuDivider from "./ResultMenuDivider";
 import { useGame, resolveAssetUrl } from "../hooks/useGameHook";
-
+// import { makeGameResult } from "../api/api"
+import type { ResultData } from "../api/api";
 type ResultMenuProps = {
     start?: number;
     onResultTimeUp?: () => void;
@@ -28,7 +29,7 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
     const [showIcon, setShowIcon] = useState(false);
     const initialTime = Math.max(0, start ?? 0);
     const [time, setTime] = useState(initialTime);
-    const [resultResponse, setResultResponse] = useState<ReturnType<typeof useGame>["makeResult"]>(null);
+    const [resultResponse, setResultResponse] = useState<ResultData | null>(null);
     const onResultTimeUpRef = useRef(onResultTimeUp);
     const { options, makeResult: result, makeGameResult, currentRoundBets, refreshGameData, roundData } = useGame();
     const activeResult = resultResponse ?? result;

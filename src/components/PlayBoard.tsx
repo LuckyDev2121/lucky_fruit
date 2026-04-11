@@ -157,7 +157,7 @@ export default function PlayBoard({
             isSendingBetRef.current = false;
             setServerErrorMessage(null);
             setHasStartedFinalBetWindow(false);
-        } else if (RoundTime < 10 || RoundTime >= 5) {
+        } else if (RoundTime < 10 && RoundTime >= 5) {
             setLedTime(29);
             setChooseTime(Math.floor(RoundTime) - 4);
             setResultTime(1);
@@ -175,7 +175,7 @@ export default function PlayBoard({
             isSendingBetRef.current = false;
             setServerErrorMessage(null);
             setHasStartedFinalBetWindow(false);
-        } else if (RoundTime < 5 || RoundTime >= 4) {
+        } else if (RoundTime < 5 && RoundTime >= 4) {
             setLedTime(29);
             setChooseTime(5);
             setResultTime(1);
@@ -194,7 +194,7 @@ export default function PlayBoard({
             setServerErrorMessage(null);
             setHasStartedFinalBetWindow(false);
             setShowResultTimer(true)
-        } else if (RoundTime < 4 || RoundTime >= 1) {
+        } else if (RoundTime < 4 && RoundTime >= 1) {
             setLedTime(29);
             setChooseTime(5);
             setResultTime(1);

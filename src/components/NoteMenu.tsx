@@ -1,6 +1,6 @@
 import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
 import ModalHeaderPlate from "./ModalHeaderPlate";
-import { useGame } from "../hooks/useGameHook";
+import { useGame, resolveAssetUrl } from "../hooks/useGameHook";
 
 type NoteMenuProps = {
     onCloseNote: () => void;
@@ -44,7 +44,7 @@ function CloseIcon() {
 export default function NoteMenu({ onCloseNote, onOpenModal }: NoteMenuProps) {
 
 
-    const { options } = useGame();
+    const { options, playerLog, winToday } = useGame();
 
 
     return (
@@ -57,42 +57,46 @@ export default function NoteMenu({ onCloseNote, onOpenModal }: NoteMenuProps) {
             <button className="absolute h-[19px] w-[19px] mt-[5px] pl-[2px] right-[87px] rounded-full bg-[#360149]" onClick={() => onOpenModal("help")}>
                 <QuestionMarkIcon />
             </button>
-            <div className="absolute top-[57px] left-1/2 transform -translate-x-1/2 w-[84%] h-[60%] grid gap-1">
+            <div className="scrollbar-hidden absolute top-[57px] left-1/2 transform -translate-x-1/2 w-[84%] h-[60%] grid gap-1 overflow-x-hidden overflow-y-auto">
                 <div className="relative p-5 h-fit bg-[#450371] rounded-[12px] justify-between items-center flex" >
                     <span>Win Today</span>
                     <div>
                         <div className="ml-[9px] justify-center items-center flex">
                             <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" className="h-[9px] w-[16px] mr-[3px]" />
-                            <span className="ml-2.5 font-bold">0</span>
+                            <span className="ml-2.5 font-bold">{winToday?.win}</span>
                         </div>
                     </div>
                 </div>
-                <div className="relative px-3 pt-2 pb-5 h-fit bg-[#450371] rounded-[12px] ">
-                    <div className="justify-between items-center  flex">
-                        <span className="text-[10px] text-[#FFFFF]-600 ">Round 1406</span>
-                        <span className="text-[10px] text-[#FFFFF]-600 ">2026-02-26 12:17:40</span>
-                    </div>
-                    <div className="justify-between items-center flex">
-                        <span>Winning
-                            {/* <img src="" alt="" /> */}
-                        </span>
-                        <span>Lose</span>
-                    </div>
-                    <span>Mine</span>
-                    <div className="grid grid-cols-4 grid-rows-2 gap-1">
-                        {options.map((element) => {
-                            return (
-                                <div className="justify-center items-center flex " >
-                                    <img src={getAssetUrl(element.logo)} alt={element.name} className="h-4 w-4 mr-[2px]" />
-                                    <div className=" justify-center items-center content-center h-[14px] w-[10px]">
-                                        <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" className="h-[9px] w-[16px] mr-[3px]" />
-                                    </div>
-                                    <span>1000</span>
-                                </div>
-                            );
-                        })}
-                    </div>
-                </div>
+                {playerLog.map((item, index) => {
+                    return (
+                        <div className="relative px-3 pt-2 pb-5 h-fit bg-[#450371] rounded-[12px] ">
+                            <div className="justify-between items-center  flex">
+                                <span className="text-[10px] text-[#FFFFF]-600 ">Round {item.round_id}</span>
+                                <span className="text-[10px] text-[#FFFFF]-600 ">{item.created_at}</span>
+                            </div>
+                            <div className="justify-between items-center flex">
+                                <span>Winning
+                                    {/* <img src={getAssetUrl(logo)} alt="a" /> */}
+                                </span>
+                                <span>Lose</span>
+                            </div>
+                            <span>Mine</span>
+                            <div className="grid grid-cols-4 grid-rows-2 gap-1">
+                                {options.map((element) => {
+                                    return (
+                                        <div className="justify-center items-center flex " >
+                                            <img src={getAssetUrl(element.logo)} alt={element.name} className="h-4 w-4 mr-[2px]" />
+                                            <div className=" justify-center items-center content-center h-[14px] w-[10px]">
+                                                <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" className="h-[9px] w-[16px] mr-[3px]" />
+                                            </div>
+                                            <span>{item.amount}</span>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    )
+                })}
             </div>
         </div >
     )

@@ -66,10 +66,10 @@ function App() {
     try {
       const res = await createRound();
 
-      if (res?.remaining_seconds < 2) {
+      if (res?.remaining_seconds >= 37) {
         return false;
       }
-      setRoundTime(res?.remaining_seconds)
+      setRoundTime(res?.remaining_seconds + 2)
       setRoundId(res.round_no);
       setIsRoundRunning(true);
       return true;
@@ -109,13 +109,13 @@ function App() {
         }
 
 
-        if (res.remaining_seconds < 2) {
+        if (res.remaining_seconds >= 37) {
           setRoundId(null);
           setIsRoundRunning(false);
         } else {
           setRoundId(res?.round_no);
           setIsRoundRunning(true);
-          setRoundTime(res?.remaining_seconds)
+          setRoundTime(res?.remaining_seconds + 2)
         }
       } catch (err) {
         console.error(err);

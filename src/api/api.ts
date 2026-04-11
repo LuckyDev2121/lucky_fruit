@@ -134,16 +134,19 @@ export type ResultData = {
 export type MakeResultResponse = {
   status: boolean;
   message: string;
-  data: ResultData;
+  data?: ResultData;
+  remaining_seconds?: number;
 };
 
 export const makeGameResult = async (roundId: number): Promise<ResultData> => {
-  console.log("========= roundId", roundId);
-  const response = await axios.post<MakeResultResponse>(ROUND_RESULT_API_URL, {
-    round_no: roundId,
-  });
+    const response = await axios.post<MakeResultResponse>(ROUND_RESULT_API_URL, {
+      round_no: roundId,
+    });
 
   if (!response.data.status) {
+    throw new Error(response.data.message || "Failed to make game result");
+  }
+  if (!response.data.data) {
     throw new Error(response.data.message || "Failed to make game result");
   }
 
@@ -232,3 +235,41 @@ export const fetchRankingToday = async (): Promise<RankingTodayItem[]> => {
   return response.data.data ?? [];
 };
 
+export type WinTodayResponse={
+  status?:boolean;
+  user_id?:number;
+  win?:string;
+}
+export const fetchWinToday= async (): Promise<WinTodayResponse> => {
+  const response = await axios.get<WinTodayResponse>(RANKING_TODAY_API_URL);
+
+  if (!response.data.status) {
+    throw new Error(response.data.status || "Failed to load ranking today");
+  }
+  return response.data;
+};
+
+export type PlayerLogData={
+  id?:number;
+  round_id?:number;
+  player_id?:number;
+  game_id?:number;
+  option_id?:number;
+  amount?:string;
+  status?:number;
+  created_at?:string;
+}
+type PlayerLogResponse={
+  status?:boolean;
+  message?:string;
+  data?:PlayerLogData[];
+}
+
+export const fetchPlayerLog= async (): Promise<PlayerLogData[]> => {
+  const response = await axios.get<PlayerLogResponse>(RANKING_TODAY_API_URL);
+
+  if (!response.data.status) {
+    throw new Error(response.data.status || "Failed to load ranking today");
+  }
+  return response.data.data ?? [];
+};
