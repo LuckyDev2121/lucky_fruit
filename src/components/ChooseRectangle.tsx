@@ -17,7 +17,6 @@ const fruits = [
 export default function ChooseRectangle({ onChooseTimeUp, RoundId }: { onChooseTimeUp?: () => void; RoundId?: number | null; onResult?: (fruit: string) => void }) {
     const [time, setTime] = useState(0);
     const [second, setSecond] = useState(0);
-    const [add, setAdd] = useState(0);
     const [timestep, setTimestep] = useState(100);
     const [resultResponse, setResultResponse] = useState<ResultData | null>(null);
     const onChooseTimeUpRef = useRef(onChooseTimeUp);
@@ -51,21 +50,23 @@ export default function ChooseRectangle({ onChooseTimeUp, RoundId }: { onChooseT
     //     };
     // }, [makeGameResult, roundData?.round_no]);
     useEffect(() => {
-
+        console.log("second====", second)
         if (second >= 4820) {
             onChooseTimeUpRef.current?.(); // trigger notification
             return;
         }
         const timer = setInterval(() => {
-            if (second <= 3000) {
+            if (second <= 4000) {
                 setSecond((s) => s + 100);
                 setTime((t) => t + 1);
                 setTimestep(100);
-                if (second === 2000) {
-                    console.log("2000");
+                if (second === 1000) {
+                    console.log("1000");
                     if (RoundId) {
+                        console.log("sent")
                         void makeGameRound(RoundId)
                             .then((response) => {
+                                console.log("received")
                                 setResultResponse(response);
                             })
                             .catch((error) => {
@@ -73,70 +74,42 @@ export default function ChooseRectangle({ onChooseTimeUp, RoundId }: { onChooseT
                             });
                     }
                 }
-                if (second === 3000) setSteps(((result?.winning_option_id ? result.winning_option_id : 0) - currentFruit.id + 8) % fruits.length);
+                if (second === 4000) {
+                    setSteps(((result?.winning_option_id ? result.winning_option_id : 0) - currentFruit.id + 8) % fruits.length);
+                }
             }
 
-            if (second > 3000 && second < 4820) {
-                if (second === 3100) { console.log(result, result?.winning_option_id, "====", steps, "====", currentFruit.id); }
+            if (second > 4000 && second < 4820) {
+                if (second === 4100) console.log(result, result?.winning_option_id, "====", steps, "====", currentFruit.id);
                 if (steps === 0) {
-                    setSecond((s) => s + 100 + 100 * add);
+                    setSecond((s) => s + 100);
                     setTime((t) => t + 1);
-                    setAdd((a) => a + 1);
-                    setTimestep(100 + 100 * add);
+                    setTimestep(100);
                 }
                 if (steps === 1) {
-                    if (second > 3200) {
-                        setSecond((s) => s + 100 + 100 * add);
-                        setTime((t) => t + 1);
-                        setAdd((a) => a + 1);
-                        setTimestep(100 + 100 * add);
-                    } else {
-                        setSecond((s) => s + 100);
-                        setTime((t) => t + 1);
-                        setTimestep(100);
-                    }
+                    setSecond((s) => s + 800);
+                    setTime((t) => t + 1);
+                    setTimestep(900);
                 }
                 if (steps === 2) {
-                    if (second > 3300) {
-                        setSecond((s) => s + 100 + 90 * add);
-                        setTime((t) => t + 1);
-                        setAdd((a) => a + 1);
-                        setTimestep(100 + 90 * add);
-                    } else {
-                        setSecond((s) => s + 100);
-                        setTime((t) => t + 1);
-                        setTimestep(100);
-                    }
+                    setSecond((s) => s + 400);
+                    setTime((t) => t + 1);
+                    setTimestep(400);
                 }
                 if (steps === 3) {
-                    if (second > 3400) {
-                        setSecond((s) => s + 100 + 80 * add);
-                        setTime((t) => t + 1);
-                        setAdd((a) => a + 1);
-                        setTimestep(100 + 80 * add);
-                    } else {
-                        setSecond((s) => s + 100);
-                        setTime((t) => t + 1);
-                        setTimestep(100);
-                    }
+                    setSecond((s) => s + 300);
+                    setTime((t) => t + 1);
+                    setTimestep(300);
                 }
                 if (steps === 4) {
-                    if (second > 3300) {
-                        setSecond((s) => s + 200);
-                        setTime((t) => t + 1);
-                        setAdd((a) => a + 1);
-                        setTimestep(200);
-                    } else {
-                        setSecond((s) => s + 100);
-                        setTime((t) => t + 1);
-                        setTimestep(100);
-                    }
+                    setSecond((s) => s + 200);
+                    setTime((t) => t + 1);
+                    setTimestep(200);
                 }
                 if (steps === 5) {
-                    if (second > 3600) {
+                    if (second > 4200) {
                         setSecond((s) => s + 200);
                         setTime((t) => t + 1);
-                        setAdd((a) => a + 1);
                         setTimestep(200);
                     } else {
                         setSecond((s) => s + 100);
@@ -145,10 +118,9 @@ export default function ChooseRectangle({ onChooseTimeUp, RoundId }: { onChooseT
                     }
                 }
                 if (steps === 6) {
-                    if (second > 3700) {
+                    if (second > 4300) {
                         setSecond((s) => s + 200);
                         setTime((t) => t + 1);
-                        setAdd((a) => a + 1);
                         setTimestep(200);
                     } else {
                         setSecond((s) => s + 100);
@@ -157,15 +129,14 @@ export default function ChooseRectangle({ onChooseTimeUp, RoundId }: { onChooseT
                     }
                 }
                 if (steps === 7) {
-                    if (second > 3900) {
-                        setSecond((s) => s + 400);
+                    if (second > 4600) {
+                        setSecond((s) => s + 200);
                         setTime((t) => t + 1);
-                        setAdd((a) => a + 1);
-                        setTimestep(400);
+                        setTimestep(200);
                     } else {
-                        setSecond((s) => s + 300);
+                        setSecond((s) => s + 100);
                         setTime((t) => t + 1);
-                        setTimestep(300);
+                        setTimestep(100);
                     }
                 }
             }
@@ -173,7 +144,7 @@ export default function ChooseRectangle({ onChooseTimeUp, RoundId }: { onChooseT
         return () => {
             clearInterval(timer)
         };
-    }, [second, time, makeGameRound]);
+    }, [second, time,]);
     return (
         <div className="absolute z-40" style={{ top: `${fruits[(8 + time) % fruits.length].top}px`, left: `${fruits[(8 + time) % fruits.length].left}px` }}>
             <img src={getAssetUrl(GAME_ASSETS.selectround)} alt="Choose Rectangle" className="relative" />

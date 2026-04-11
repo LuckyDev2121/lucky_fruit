@@ -459,10 +459,10 @@ export default function PlayBoard({
                             start={chooseTime}
 
                             onChooseTimeUp={() => {
-                                setShowChooseRectangle(false);
                                 setShowChooseTimer(false);
                                 setShowResultTimer(true)
                                 setShowBoardOpacity(false);
+                                setShowChooseRectangle(false);
                                 // setResetKey(prev => prev + 1);
                             }}
                         />

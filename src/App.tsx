@@ -66,7 +66,7 @@ function App() {
     try {
       const res = await createRound();
 
-      if (res?.remaining_seconds >= 37) {
+      if (res?.remaining_seconds >= 37 || res?.remaining_seconds < 5) {
         return false;
       }
       setRoundTime(res?.remaining_seconds + 2)
@@ -109,7 +109,7 @@ function App() {
         }
 
 
-        if (res.remaining_seconds >= 37) {
+        if (res.remaining_seconds >= 37 || res?.remaining_seconds < 5) {
           setRoundId(null);
           setIsRoundRunning(false);
         } else {

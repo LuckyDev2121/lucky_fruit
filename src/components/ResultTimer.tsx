@@ -72,7 +72,7 @@ export default function ResultTimer({ start, RoundId, onResultTimeUp }: ResultTi
                     <img src={getAssetUrl(GAME_ASSETS.selectround)} alt="Choose Rectangle" className="absolute -left-[2px] -top-[8px] h-[100px] w-[96px]" />
                 </div> : <div className={`relative col-start-2 row-start-3 z-40 bg-black/50 rounded-[8px]`} />
             }
-            {activeResult?.winning_option_id === 10 ?
+            {activeResult?.winning_option_id === 9 ?
                 <div className="relative col-start-3 row-start-3 z-40" >
                     <img src={getAssetUrl(GAME_ASSETS.selectround)} alt="Choose Rectangle" className="absolute -left-[2px] -top-[8px] h-[100px] w-[96px]" />
                 </div> : <div className={`relative col-start-3 row-start-3 z-40 bg-black/50 rounded-[8px]`} />
@@ -82,7 +82,7 @@ export default function ResultTimer({ start, RoundId, onResultTimeUp }: ResultTi
                     <img src={getAssetUrl(GAME_ASSETS.selectround)} alt="Choose Rectangle" className="absolute  -left-[2px] -top-[8px] h-[100px] w-[96px]" />
                 </div> : <div className={`relative col-start-3 row-start-2 z-40 bg-black/50 rounded-[8px]`} />
             }
-            {activeResult?.winning_option_id === 5 ?
+            {activeResult?.winning_option_id === 7 ?
                 <div className="relative col-start-3 row-start-1 z-40" >
                     <img src={getAssetUrl(GAME_ASSETS.selectround)} alt="Choose Rectangle" className="absolute -left-[2px] -top-[8px] h-[100px] w-[96px]" />
                 </div> : <div className={`relative col-start-3 row-start-1 z-40 bg-black/50 rounded-[8px]`} />
