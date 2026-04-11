@@ -76,7 +76,7 @@ export default function NoteMenu({ onCloseNote, onOpenModal }: NoteMenuProps) {
             <button className="absolute h-[19px] w-[19px] mt-[5px] pl-[2px] right-[87px] rounded-full bg-[#360149]" onClick={() => onOpenModal("help")}>
                 <QuestionMarkIcon />
             </button>
-            <div className="scrollbar-hidden absolute top-[57px] left-1/2 transform -translate-x-1/2 w-[84%] h-[60%] gap-1 overflow-x-hidden overflow-y-auto">
+            <div className="scrollbar-hidden absolute top-[57px] left-1/2 transform -translate-x-1/2 w-[84%] h-[70%] grip overflow-x-hidden overflow-y-auto">
                 <div className="relative p-5 h-fit bg-[#450371] rounded-[12px] justify-between items-center flex" >
                     <span>Win Today</span>
                     <div>
@@ -88,34 +88,38 @@ export default function NoteMenu({ onCloseNote, onOpenModal }: NoteMenuProps) {
                 </div>
                 {rounds.map((item,) => {
                     const result = new Date(new Date().getTime() - (39 * item.round_id) * 1000)
+                    const formatDate = (date: Date) => {
+                        return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")} ${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
+                    };
                     return (
-                        <div className="relative flex px-3 pt-2 pb-5 h-fit bg-[#450371] rounded-[12px] ">
-                            <div className="justify-between items-center  flex">
-                                <span className="text-[10px] text-[#FFFFF]-600 ">Round {item.round_id}</span>
-                                <span className="text-[10px] text-[#FFFFF]-600 ">{result.toString()}</span>
+                        <div className="relative h-[134px] w-[324px] flex px-3 pt-2 pb-5  bg-[#450371] rounded-[12px] mt-[40px] ">
+                            <div className="absolute w-[300px] flex justify-between">
+                                <span className=" relative  text-[10px] text-[#FFFFFF]/60 ">Round {item.round_id}</span>
+                                <span className=" relative   text-[10px] text-[#FFFFFF]/60  ">{formatDate(result)}</span>
                             </div>
-                            <div className="justify-between items-center flex">
-                                <span>Winning
+                            <div className="absolute w-[300px] top-[30px] justify-between items-center flex">
+                                <span className=" relative flex  items-center">Winning
                                     {item.winning_option_id != null && (
                                         <img
                                             src={getAssetUrl(options[item.winning_option_id - 5].logo)}
                                             alt="a"
+                                            className="w-[20px] h-[20px] ml-[10px]"
                                         />
                                     )}
-                                </span>
-                                <span>{item.status ? "WIN" : "LOSE"}</span>
+                                </span >
+                                <span className=" relative   ">{item.status ? "WIN" : "LOSE"}</span>
                             </div>
-                            <span>Mine</span>
-                            <div className="flex gap-1">
+                            <span className="absolute top-[54px]">Mine</span>
+                            <div className="absolute top-[78px] flex ">
                                 {item.detail.map((element, index) => {
                                     if (!element.bet_amount) {
                                         return (
-                                            <div className="justify-center items-center flex " >
+                                            <div className="relative w-[75px] h-[30px] justify-center items-center flex " >
                                                 <img src={getAssetUrl(options[index].logo)} alt={options[index].name} className="h-4 w-4 mr-[2px]" />
                                                 <div className=" justify-center items-center content-center h-[14px] w-[10px]">
-                                                    <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" className="h-[9px] w-[16px] mr-[3px]" />
+                                                    <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" className="h-[9px] w-[16px] mr-[5px]" />
                                                 </div>
-                                                <span>{element.bet_amount}</span>
+                                                <span className=" items-center ml-[2px]">{element.bet_amount}</span>
                                             </div>
                                         );
                                     }
