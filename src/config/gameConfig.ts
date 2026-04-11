@@ -38,6 +38,9 @@ export const CURRENT_ROUND_API_URL = `${API_BASE_URL.replace(/\/$/, "")}/game-ro
 export const SOUND_SETTING_GAME_API_URL = `${API_BASE_URL.replace(/\/$/, "")}/sound-setting/${GAME_ID}`;
 export const SOUND_SETTING_API_URL = `${API_BASE_URL.replace(/\/$/, "")}/sound-setting`;
 export const RANKING_TODAY_API_URL = `${API_BASE_URL.replace(/\/$/, "")}/ranking-today/${GAME_ID}`;
+export const WIN_TODAY_API_URL= `${API_BASE_URL.replace(/\/$/, "")}/win-today`;
+export const PLAYER_LOG_API_URL= `${API_BASE_URL.replace(/\/$/, "")}/player-log`;
+
 
 export const REVERB_KEY =
   import.meta.env.VITE_REVERB_APP_KEY || "k6dbocgucm0at6gwak3y";

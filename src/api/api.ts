@@ -9,6 +9,8 @@ import {
   SOUND_SETTING_API_URL,
   SOUND_SETTING_GAME_API_URL,
   RANKING_TODAY_API_URL,
+  WIN_TODAY_API_URL,
+  PLAYER_LOG_API_URL,
 } from "../config/gameConfig";
 type GameOption = {
   id: number;
@@ -241,7 +243,7 @@ export type WinTodayResponse={
   win?:string;
 }
 export const fetchWinToday= async (): Promise<WinTodayResponse> => {
-  const response = await axios.get<WinTodayResponse>(RANKING_TODAY_API_URL);
+  const response = await axios.get<WinTodayResponse>(WIN_TODAY_API_URL);
 
   if (!response.data.status) {
     throw new Error(response.data.status || "Failed to load ranking today");
@@ -249,6 +251,14 @@ export const fetchWinToday= async (): Promise<WinTodayResponse> => {
   return response.data;
 };
 
+type RoundData={
+  id:number,
+  game_id:number,
+  round_no:number,
+  winning_option_id:number|null,
+  status:number,
+  created_at:string,
+}
 export type PlayerLogData={
   id?:number;
   round_id?:number;
@@ -258,6 +268,7 @@ export type PlayerLogData={
   amount?:string;
   status?:number;
   created_at?:string;
+  round_data?:RoundData;
 }
 type PlayerLogResponse={
   status?:boolean;
@@ -266,7 +277,7 @@ type PlayerLogResponse={
 }
 
 export const fetchPlayerLog= async (): Promise<PlayerLogData[]> => {
-  const response = await axios.get<PlayerLogResponse>(RANKING_TODAY_API_URL);
+  const response = await axios.get<PlayerLogResponse>(PLAYER_LOG_API_URL);
 
   if (!response.data.status) {
     throw new Error(response.data.status || "Failed to load ranking today");

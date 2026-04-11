@@ -188,6 +188,20 @@ export function useGame() {
     return data;
   }, []);
 
+  const handlePlayerLog = useCallback(async () => {
+    const data = await fetchPlayerLog();
+     console.log("API playerLog:", data);
+    updateStore({ playerLog: data });
+    return data;
+  }, []);
+
+  const handleWinToday= useCallback(async () => {
+    const data = await fetchWinToday();
+    console.log("API winToday:", data);
+    updateStore({ winToday: data });
+    return data;
+  }, []);
+
   const handleGameRound = useCallback(async (roundId: number) => {
     const data = await makeGameResult(roundId);
     updateStore({
@@ -333,5 +347,7 @@ export function useGame() {
     clearCurrentRoundBets,
     archiveCurrentRoundBets,
     setPreviousRoundBets,
+    handlePlayerLog,
+    handleWinToday,
   };
 }

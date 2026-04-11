@@ -1,6 +1,9 @@
+import { useEffect, useMemo, } from "react";
 import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
 import ModalHeaderPlate from "./ModalHeaderPlate";
-import { useGame, resolveAssetUrl } from "../hooks/useGameHook";
+import { useGame, } from "../hooks/useGameHook";
+import { transformGameLog, } from "../utils/transformGameLog";
+// import { fetchPlayerLog, fetchWinToday } from "../api/api";
 
 type NoteMenuProps = {
     onCloseNote: () => void;
@@ -44,20 +47,36 @@ function CloseIcon() {
 export default function NoteMenu({ onCloseNote, onOpenModal }: NoteMenuProps) {
 
 
-    const { options, playerLog, winToday } = useGame();
+    const { options, playerLog, winToday, handlePlayerLog, handleWinToday } = useGame();
 
+    useEffect(() => {
+        const load = async () => {
+            await handlePlayerLog();
+            await handleWinToday();
+        };
+        load();
+    }, []);
+    const rounds = useMemo(() => {
+        if (!playerLog) return [];
+        return transformGameLog(playerLog);
+    }, [playerLog]);
+
+    useEffect(() => {
+        console.log(playerLog);
+        console.log(rounds);
+    }, [rounds, playerLog]);
 
     return (
         <div className="h-[342px] bg-gradient-to-t from-[#7C00D5] to-[#5028C1] w-[393px] rounded-t-[20px]">
             <ModalHeaderPlate className="absolute left-1/2 -translate-x-1/2" />
-            <span className="absolute  left-1/2 transform -translate-x-1/2 text-sm font-bold mt-1">Record (ID:1638)</span>
+            <span className="absolute  left-1/2 transform -translate-x-1/2 text-sm font-bold mt-1">Record (ID:{winToday?.user_id})</span>
             <button className="absolute h-[19px] w-[19px] mt-[5px] pl-[2px] right-[62px] rounded-full bg-[#360149]" onClick={onCloseNote}>
                 <CloseIcon />
             </button>
             <button className="absolute h-[19px] w-[19px] mt-[5px] pl-[2px] right-[87px] rounded-full bg-[#360149]" onClick={() => onOpenModal("help")}>
                 <QuestionMarkIcon />
             </button>
-            <div className="scrollbar-hidden absolute top-[57px] left-1/2 transform -translate-x-1/2 w-[84%] h-[60%] grid gap-1 overflow-x-hidden overflow-y-auto">
+            <div className="scrollbar-hidden absolute top-[57px] left-1/2 transform -translate-x-1/2 w-[84%] h-[60%] gap-1 overflow-x-hidden overflow-y-auto">
                 <div className="relative p-5 h-fit bg-[#450371] rounded-[12px] justify-between items-center flex" >
                     <span>Win Today</span>
                     <div>
@@ -67,31 +86,39 @@ export default function NoteMenu({ onCloseNote, onOpenModal }: NoteMenuProps) {
                         </div>
                     </div>
                 </div>
-                {playerLog.map((item, index) => {
+                {rounds.map((item,) => {
+                    const result = new Date(new Date().getTime() - (39 * item.round_id) * 1000)
                     return (
-                        <div className="relative px-3 pt-2 pb-5 h-fit bg-[#450371] rounded-[12px] ">
+                        <div className="relative flex px-3 pt-2 pb-5 h-fit bg-[#450371] rounded-[12px] ">
                             <div className="justify-between items-center  flex">
                                 <span className="text-[10px] text-[#FFFFF]-600 ">Round {item.round_id}</span>
-                                <span className="text-[10px] text-[#FFFFF]-600 ">{item.created_at}</span>
+                                <span className="text-[10px] text-[#FFFFF]-600 ">{result.toString()}</span>
                             </div>
                             <div className="justify-between items-center flex">
                                 <span>Winning
-                                    {/* <img src={getAssetUrl(logo)} alt="a" /> */}
+                                    {item.winning_option_id != null && (
+                                        <img
+                                            src={getAssetUrl(options[item.winning_option_id - 5].logo)}
+                                            alt="a"
+                                        />
+                                    )}
                                 </span>
-                                <span>Lose</span>
+                                <span>{item.status ? "WIN" : "LOSE"}</span>
                             </div>
                             <span>Mine</span>
-                            <div className="grid grid-cols-4 grid-rows-2 gap-1">
-                                {options.map((element) => {
-                                    return (
-                                        <div className="justify-center items-center flex " >
-                                            <img src={getAssetUrl(element.logo)} alt={element.name} className="h-4 w-4 mr-[2px]" />
-                                            <div className=" justify-center items-center content-center h-[14px] w-[10px]">
-                                                <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" className="h-[9px] w-[16px] mr-[3px]" />
+                            <div className="flex gap-1">
+                                {item.detail.map((element, index) => {
+                                    if (!element.bet_amount) {
+                                        return (
+                                            <div className="justify-center items-center flex " >
+                                                <img src={getAssetUrl(options[index].logo)} alt={options[index].name} className="h-4 w-4 mr-[2px]" />
+                                                <div className=" justify-center items-center content-center h-[14px] w-[10px]">
+                                                    <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" className="h-[9px] w-[16px] mr-[3px]" />
+                                                </div>
+                                                <span>{element.bet_amount}</span>
                                             </div>
-                                            <span>{item.amount}</span>
-                                        </div>
-                                    );
+                                        );
+                                    }
                                 })}
                             </div>
                         </div>
