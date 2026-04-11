@@ -21,9 +21,9 @@ export default function ChooseRectangle({ onChooseTimeUp, RoundId }: { onChooseT
     const [resultResponse, setResultResponse] = useState<ReturnType<typeof useGame>["makeResult"]>(null);
     const onChooseTimeUpRef = useRef(onChooseTimeUp);
     const currentFruit = fruits[(8 + time) % fruits.length];
-    const { makeResult, makeGameResult, } = useGame();
+    const { makeGameResult, } = useGame();
     const [steps, setSteps] = useState(0);
-    const activeResult = resultResponse ?? makeResult;
+    const activeResult = resultResponse;
     useEffect(() => {
         onChooseTimeUpRef.current = onChooseTimeUp;
     }, [onChooseTimeUp]);
@@ -58,19 +58,20 @@ export default function ChooseRectangle({ onChooseTimeUp, RoundId }: { onChooseT
                 setSecond((s) => s + 100);
                 setTime((t) => t + 1);
                 setTimestep(100);
-            }
-            if (second === 3000) {
-                if (RoundId) {
-                    void makeGameResult(RoundId)
-                        .then((response) => {
-                            setResultResponse(response);
-                        })
-                        .catch((error) => {
-                            console.error(error);
-                        });
+                if (second === 3000) {
+                    if (RoundId) {
+                        void makeGameResult(RoundId)
+                            .then((response) => {
+                                setResultResponse(response);
+                            })
+                            .catch((error) => {
+                                console.error(error);
+                            });
+                    }
+                    setSteps(((activeResult?.winning_option_id ? activeResult.winning_option_id : 0) - currentFruit.id + 8) % fruits.length);
                 }
-                setSteps(((activeResult?.winning_option_id ? activeResult.winning_option_id : 0) - currentFruit.id + 8) % fruits.length);
             }
+
             if (second > 3000 && second < 4820) {
                 if (second === 3100) { console.log(activeResult, activeResult?.winning_option_id, "====", steps, "====", currentFruit.id); }
                 if (steps === 0) {
