@@ -31,22 +31,34 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
     const [time, setTime] = useState(initialTime);
     const [resultResponse, setResultResponse] = useState<ResultData | null>(null);
     const onResultTimeUpRef = useRef(onResultTimeUp);
-    const { options, makeResult: result, makeGameResult, currentRoundBets, refreshGameData, roundData } = useGame();
+    const { options, makeResult: result, makeGameResult, previousRoundBets, currentRoundBets, refreshGameData, roundData } = useGame();
     const activeResult = resultResponse ?? result;
-
     const optionMap = useMemo(() => {
-        return Object.fromEntries(options.map(o => [o.id, o.logo]));
+        return Object.fromEntries(options.map(o => [o.id, o.logo,]));
     }, [options]);
     const totalBetAmount = useMemo(() => {
-        return Object.values(currentRoundBets).reduce((sum, amount) => sum + amount, 0);
-    }, [currentRoundBets]);
+        return Object.values(previousRoundBets).reduce(
+            (sum, amount) => sum + amount,
+            0
+        );
+    }, [previousRoundBets]);
     const winningDiamondAmount = useMemo(() => {
         if (!activeResult) {
             return 0;
         }
+        let timer = 0;
+        if (activeResult.winning_option_id < 9) {
+            timer = 5;
+        }
+        else if (activeResult.winning_option_id === 9) { timer = 10; }
+        else if (activeResult.winning_option_id === 10) { timer = 15; }
+        else if (activeResult.winning_option_id === 11) { timer = 25; }
+        else if (activeResult.winning_option_id === 12) { timer = 45; }
+        const betAmount = previousRoundBets[activeResult.winning_option_id] ?? 0;
+        return betAmount * timer;
+    }, [activeResult, previousRoundBets]);
 
-        return currentRoundBets[activeResult.winning_option_id] ?? 0;
-    }, [activeResult, currentRoundBets]);
+
     const resultMessage = useMemo(() => {
         if (totalBetAmount === 0) {
             return "Did not participate in this round";
@@ -118,6 +130,9 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
     }, [initialTime]);
 
     const formatted = String(time).padStart(2, "0");
+    useEffect(() => {
+        console.log("UPDATED currentRoundBets", currentRoundBets);
+    }, [currentRoundBets]);
 
     return (
         <div className="relative h-[342px] w-[393px] overflow-hidden rounded-t-[20px] bg-gradient-to-t from-[#7C00D5] to-[#5028C1]">

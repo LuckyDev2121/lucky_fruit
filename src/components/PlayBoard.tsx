@@ -284,29 +284,27 @@ export default function PlayBoard({
         }
 
         const intervalId = window.setInterval(() => {
-            if (isSendingBetRef.current) {
-                return;
-            }
+            if (isSendingBetRef.current) return;
 
-            const nextEntry = Object.entries(queuedBetsRef.current).find(([, amount]) => amount > 0);
+            const batch = { ...queuedBetsRef.current };
 
-            if (!nextEntry) {
-                return;
-            }
+            const hasBets = Object.values(batch).some((amount) => amount > 0);
+            if (!hasBets) return;
 
-            const optionId = Number(nextEntry[0]);
-            const amount = nextEntry[1];
+            // 🔥 clear queue immediately
+            queuedBetsRef.current = {};
+            setQueuedBets({});
+
             isSendingBetRef.current = true;
 
-            void placeBet(optionId, amount)
-                .then(() => {
-                    setQueuedBets((prev) => ({
-                        ...prev,
-                        [optionId]: 0,
-                    }));
-                })
+            Promise.all(
+                Object.entries(batch).map(([optionId, amount]) =>
+                    placeBet(Number(optionId), amount)
+                )
+            )
                 .catch(() => {
-                    releaseBetBalance(amount);
+                    const total = Object.values(batch).reduce((a, b) => a + b, 0);
+                    releaseBetBalance(total);
                     setServerErrorMessage("Server not response");
                 })
                 .finally(() => {
@@ -433,16 +431,10 @@ export default function PlayBoard({
                         <LedTimer
                             key={`led-${roundKey}`}
                             start={ledTime}
-                            // onTick={(timeLeft) => {
-                            //     if ((timeLeft === 4 || ledTime <= 4) && !hasStartedFinalBetWindow) {
-                            //         setHasStartedFinalBetWindow(true);
-                            //         setBlockClick("none");
-                            //         setShowHand(false);
-                            //     }
-                            // }}
                             onLedTimeUp={() => {
                                 setHasStartedFinalBetWindow(true);
                                 setPreviousRoundBets(displayedBets);
+                                console.log("===", displayedBets)
                                 setShowChooseTimer(true);
                                 setShowLedTimer(false);
                                 setShowBoardOpacity(true);

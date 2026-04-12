@@ -61,11 +61,6 @@ export default function NoteMenu({ onCloseNote, onOpenModal }: NoteMenuProps) {
         return transformGameLog(playerLog);
     }, [playerLog]);
 
-    useEffect(() => {
-        console.log(playerLog);
-        console.log(rounds);
-    }, [rounds, playerLog]);
-
     return (
         <div className="h-[342px] bg-gradient-to-t from-[#7C00D5] to-[#5028C1] w-[393px] rounded-t-[20px]">
             <ModalHeaderPlate className="absolute left-1/2 -translate-x-1/2" />

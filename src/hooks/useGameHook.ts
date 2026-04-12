@@ -239,7 +239,7 @@ export function useGame() {
     if (currentBalance < amount) {
       throw new Error("Insufficient balance");
     }
-
+    console.log("useHook",optionId, amount)
     const response: PlaceBet = await placeBetRequest(optionId, amount);
     const nextRoundBets = {
       ...store.currentRoundBets,
@@ -299,6 +299,7 @@ export function useGame() {
   }, []);
 
   const setPreviousRoundBets = useCallback((betMap: Record<number, number>) => {
+    // console.log("betmout", betMap)
     updateStore({
       previousRoundBets: normalizeBetRecord(
         store.gameDetails?.options,
