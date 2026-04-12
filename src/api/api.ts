@@ -142,6 +142,7 @@ export type MakeResultResponse = {
 
 export const makeGameResult = async (roundId: number): Promise<ResultData> => {
     const response = await axios.post<MakeResultResponse>(ROUND_RESULT_API_URL, {
+      game_id: 5,
       round_no: roundId,
     });
 
