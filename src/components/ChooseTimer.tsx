@@ -23,8 +23,6 @@ export default function ChooseTimer({ start, onChooseTimeUp }: ChooseTimerProps)
             return;
         }
 
-
-
         const timer = window.setInterval(() => {
             setTime((prev) => {
                 if (prev <= 1) {

@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
-// import { usePlayerDetails } from "../hooks/usePlayerDetails";
 import { useGame } from "../hooks/useGameHook";
 import CoinBoardPlate from "./CoinBoardPlate";
 
