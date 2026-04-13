@@ -39,7 +39,7 @@ export default function ChooseRectangle({ onChooseTimeUp, RoundId }: { onChooseT
                 setSecond((s) => s + 100);
                 setTime((t) => t + 1);
                 setTimestep(100);
-                if (second === 400) {
+                if (second === 1000) {
                     console.log("Sent");
                     if (RoundId) {
                         void makeGameRound(RoundId)
