@@ -60,7 +60,7 @@ export const transformGameLog = (
       result[roundId] = {
         round_id: roundId,
         winning_option_id: item.round_data?.winning_option_id ?? null,
-        status: item.round_data?.status ?? 0,
+        status: item.status ?? 0,
         detail: {
           5: 0,
           6: 0,
