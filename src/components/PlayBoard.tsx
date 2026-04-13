@@ -139,9 +139,9 @@ export default function PlayBoard({
 
     useEffect(() => {
 
-        if (RoundTime >= 10) {
-            setLedTime(Math.floor(RoundTime) - 9);
-            setChooseTime(5);
+        if (RoundTime >= 12) {
+            setLedTime(Math.floor(RoundTime) - 11);
+            setChooseTime(7);
             setResultTime(1);
             setHiddenTime(3);
             setBlockClick("auto");
@@ -157,7 +157,7 @@ export default function PlayBoard({
             isSendingBetRef.current = false;
             setServerErrorMessage(null);
             setHasStartedFinalBetWindow(false);
-        } else if (RoundTime < 10 && RoundTime >= 5) {
+        } else if (RoundTime < 12 && RoundTime >= 5) {
             setLedTime(29);
             setChooseTime(Math.floor(RoundTime) - 4);
             setResultTime(1);
@@ -177,7 +177,7 @@ export default function PlayBoard({
             setHasStartedFinalBetWindow(false);
         } else if (RoundTime < 5 && RoundTime >= 4) {
             setLedTime(29);
-            setChooseTime(5);
+            setChooseTime(7);
             setResultTime(1);
             setHiddenTime(3);
             setBlockClick("auto");
@@ -196,7 +196,7 @@ export default function PlayBoard({
             setShowResultTimer(true)
         } else if (RoundTime < 4 && RoundTime >= 1) {
             setLedTime(29);
-            setChooseTime(5);
+            setChooseTime(7);
             setResultTime(1);
             setHiddenTime(Math.floor(RoundTime));
             setBlockClick("auto");
@@ -465,7 +465,7 @@ export default function PlayBoard({
                     <div className='absolute top-[90px] h-[271px] w-[280px] z-30 left-1/2 transform -translate-x-1/2'>
                         <ResultTimer
                             start={resultTime}
-                            RoundId={RoundId}
+                            // RoundId={RoundId}
                             onResultTimeUp={() => {
                                 onOpenModal("result");
                                 setShowHiddenTimer(true);

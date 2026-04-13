@@ -1,7 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, } from "react";
 import { useGame } from '../hooks/useGameHook';
 import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
-import type { ResultData } from "../api/api";
 
 type ResultTimerProps = {
     start?: number;
@@ -9,36 +8,51 @@ type ResultTimerProps = {
     RoundId?: number | null;
 };
 
-export default function ResultTimer({ start, RoundId, onResultTimeUp }: ResultTimerProps) {
+export default function ResultTimer({ start, onResultTimeUp }: ResultTimerProps) {
     const duration = Math.max(0, start ?? 0);
     const onResultTimeUpRef = useRef(onResultTimeUp);
-    const [resultResponse, setResultResponse] = useState<ResultData | null>(null);;
-    const { makeResult, makeGameRound, } = useGame();
-    const activeResult = resultResponse ?? makeResult;
+    const { makeResult, } = useGame();
+    const activeResult = makeResult;
+    const winningIds = Array.isArray(activeResult?.winning_option_id)
+        ? activeResult.winning_option_id.map(Number)
+        : activeResult?.winning_option_id !== undefined
+            ? [activeResult.winning_option_id]
+            : [];
+
+    const gridMap = [
+        { id: 12, col: 1, row: 2 },
+        { id: 11, col: 1, row: 3 },
+        { id: 10, col: 2, row: 3 },
+        { id: 9, col: 3, row: 3 },
+        { id: 8, col: 3, row: 2 },
+        { id: 7, col: 3, row: 1 },
+        { id: 6, col: 2, row: 1 },
+        { id: 5, col: 1, row: 1 },
+    ];
 
     useEffect(() => {
         onResultTimeUpRef.current = onResultTimeUp;
     }, [onResultTimeUp]);
 
-    useEffect(() => {
-        let isMounted = true;
+    // useEffect(() => {
+    //     let isMounted = true;
 
-        if (RoundId) {
-            void makeGameRound(RoundId)
-                .then((response) => {
-                    if (isMounted) {
-                        setResultResponse(response);
-                    }
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-        }
+    //     if (RoundId) {
+    //         void makeGameRound(RoundId)
+    //             .then((response) => {
+    //                 if (isMounted) {
+    //                     setResultResponse(response);
+    //                 }
+    //             })
+    //             .catch((error) => {
+    //                 console.error(error);
+    //             });
+    //     }
 
-        return () => {
-            isMounted = false;
-        };
-    }, [makeGameRound, RoundId]);
+    //     return () => {
+    //         isMounted = false;
+    //     };
+    // }, [makeGameRound, RoundId]);
 
     useEffect(() => {
         if (duration <= 0) {
@@ -55,7 +69,7 @@ export default function ResultTimer({ start, RoundId, onResultTimeUp }: ResultTi
 
     return (
         <div className='absolute left-[3px] top-[4px] h-[263px] w-[274px] z-30 grid grid-cols-3 grid-rows-3  '>
-            {activeResult?.winning_option_id === 12 ?
+            {/* {activeResult?.winning_option_id === 12 ?
                 <div className="relative col-start-1 row-start-2 z-40" >
                     <img src={getAssetUrl(GAME_ASSETS.selectround)} alt="Choose Rectangle" className="absolute -left-[2px] -top-[8px] h-[100px] w-[96px]" />
                 </div> : <div className={`relative col-start-1 row-start-2 z-40 bg-black/50 rounded-[8px]`} />
@@ -94,7 +108,22 @@ export default function ResultTimer({ start, RoundId, onResultTimeUp }: ResultTi
                 <div className="relative col-start-1 row-start-1 z-40" >
                     <img src={getAssetUrl(GAME_ASSETS.selectround)} alt="Choose Rectangle" className="absolute -left-[2px] -top-[8px] h-[100px] w-[96px]" />
                 </div> : <div className={`relative col-start-1 row-start-1 z-40 bg-black/50 rounded-[8px]`} />
-            }
+            } */}
+            {gridMap.map((item) => (
+                winningIds.includes(item.id) ? (
+                    <div key={item.id} className={`relative col-start-${item.col} row-start-${item.row} z-40`}>
+                        <img
+                            src={getAssetUrl(GAME_ASSETS.selectround)}
+                            className="absolute -left-[2px] -top-[8px] h-[100px] w-[96px]"
+                        />
+                    </div>
+                ) : (
+                    <div
+                        key={item.id}
+                        className={`relative col-start-${item.col} row-start-${item.row} z-40 bg-black/50 rounded-[8px]`}
+                    />
+                )
+            ))}
         </div >
     );
 }

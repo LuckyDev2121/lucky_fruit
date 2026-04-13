@@ -123,21 +123,24 @@ export const placeBet = async (betId: number, amount: number): Promise<PlaceBet>
 type Winners = {
   id: number;
   username: string;
-  balance: number;
   avater: string;
+  win_amount: number;
 }
 export type ResultData = {
   round_id: number;
   round_no: number;
-  winning_option_id: number;
+  winning_option_id: number[]; // ✅ ALWAYS ARRAY NOW
   winners: Winners[];
+  jackpot_avatar?: string;
 };
 
 export type MakeResultResponse = {
   status: boolean;
   message: string;
+  jackpot_avatar?:string;
   data?: ResultData;
   remaining_seconds?: number;
+  
 };
 
 export const makeGameResult = async (roundId: number): Promise<ResultData> => {
@@ -153,7 +156,19 @@ export const makeGameResult = async (roundId: number): Promise<ResultData> => {
     throw new Error(response.data.message || "Failed to make game result");
   }
 
-  return response.data.data;
+  const raw = response.data.data;
+
+  const normalizedWinningIds = Array.isArray(raw.winning_option_id)
+    ? raw.winning_option_id.map(Number)
+    : [raw.winning_option_id];
+
+     return {
+    round_id: raw.round_id,
+    round_no: raw.round_no,
+    winning_option_id: normalizedWinningIds,
+    winners: raw.winners,
+    jackpot_avatar: response.data.jackpot_avatar, // ✅ merge here
+  };
 };
 
 

@@ -4,7 +4,7 @@ import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
 import ModalHeaderPlate from "./ModalHeaderPlate";
 import ResultMenuDivider from "./ResultMenuDivider";
 import { useGame, resolveAssetUrl } from "../hooks/useGameHook";
-import type { ResultData } from "../api/api";
+// import type { ResultData } from "../api/api";
 type ResultMenuProps = {
     start?: number;
     onResultTimeUp?: () => void;
@@ -28,10 +28,12 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
     const [showIcon, setShowIcon] = useState(false);
     const initialTime = Math.max(0, start ?? 0);
     const [time, setTime] = useState(initialTime);
-    const [resultResponse, setResultResponse] = useState<ResultData | null>(null);
+    // const [resultResponse, setResultResponse] = useState<ResultData | null>(null);
     const onResultTimeUpRef = useRef(onResultTimeUp);
-    const { options, makeResult: result, makeGameResult, previousRoundBets, currentRoundBets, refreshGameData, roundData } = useGame();
-    const activeResult = resultResponse ?? result;
+    const { options, makeResult: result, previousRoundBets, currentRoundBets, refreshGameData, } = useGame();
+    const activeResult = result;
+    const isJackpot = !!activeResult?.jackpot_avatar;
+
     const optionMap = useMemo(() => {
         return Object.fromEntries(options.map(o => [o.id, o.logo,]));
     }, [options]);
@@ -45,16 +47,22 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
         if (!activeResult) {
             return 0;
         }
-        let timer = 0;
-        if (activeResult.winning_option_id < 9) {
-            timer = 5;
-        }
-        else if (activeResult.winning_option_id === 9) { timer = 10; }
-        else if (activeResult.winning_option_id === 10) { timer = 15; }
-        else if (activeResult.winning_option_id === 11) { timer = 25; }
-        else if (activeResult.winning_option_id === 12) { timer = 45; }
-        const betAmount = previousRoundBets[activeResult.winning_option_id] ?? 0;
-        return betAmount * timer;
+        let total = 0;
+        activeResult.winning_option_id.forEach((optionId) => {
+            let timer = 0;
+
+            if (optionId < 9) timer = 5;
+            else if (optionId === 9) timer = 10;
+            else if (optionId === 10) timer = 15;
+            else if (optionId === 11) timer = 25;
+            else if (optionId === 12) timer = 45;
+
+            const betAmount = previousRoundBets[optionId] ?? 0;
+
+            total += betAmount * timer;
+        });
+
+        return total;
     }, [activeResult, previousRoundBets]);
 
 
@@ -76,24 +84,24 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
             : "";
     };
 
-    useEffect(() => {
-        let isMounted = true;
+    // useEffect(() => {
+    //     let isMounted = true;
 
-        if (roundData?.round_no) {
-            void makeGameResult(roundData.round_no).then((response) => {
-                if (isMounted) {
-                    setResultResponse(response);
-                }
-            }).catch((error) => {
-                console.error(error);
-            });
-        }
-        onResultTimeUpRef.current = onResultTimeUp;
+    //     if (roundData?.round_no) {
+    //         void makeGameResult(roundData.round_no).then((response) => {
+    //             if (isMounted) {
+    //                 setResultResponse(response);
+    //             }
+    //         }).catch((error) => {
+    //             console.error(error);
+    //         });
+    //     }
+    //     onResultTimeUpRef.current = onResultTimeUp;
 
-        return () => {
-            isMounted = false;
-        };
-    }, [makeGameResult, onResultTimeUp, roundData?.round_no]);
+    //     return () => {
+    //         isMounted = false;
+    //     };
+    // }, [makeGameResult, onResultTimeUp, roundData?.round_no]);
 
     useEffect(() => {
         void refreshGameData({ resetPendingBalanceDeduction: true });
@@ -153,11 +161,20 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
                 />
             </div>
             {activeResult && (
-                <img
-                    src={getResultOptionLogo(activeResult.winning_option_id)}
-                    alt="selectedFruit"
-                    className={`absolute left-1/2 -translate-x-1/2 top-[70px] h-[85px] w-[85px]`}
-                />
+                isJackpot ? (
+                    <img
+                        src={resolveAssetUrl(activeResult.jackpot_avatar ?? "")}
+                        alt="selectedFruit"
+                        className={`absolute left-1/2 -translate-x-1/2 top-[70px] h-[85px] w-[85px]`}
+                    />
+                )
+                    : (
+                        <img
+                            src={getResultOptionLogo(activeResult.winning_option_id[0])}
+                            alt="selectedFruit"
+                            className={`absolute left-1/2 -translate-x-1/2 top-[70px] h-[85px] w-[85px]`}
+                        />
+                    )
             )}
             <div className="absolute left-1/2 top-[191px] flex -translate-x-1/2 items-center justify-center gap-1 whitespace-nowrap">
                 <span>{resultMessage}</span>
@@ -184,7 +201,7 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
                             <div className="relative ">
                                 <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" className="h-[9px] w-[16px] mr-[3px]" />
                             </div>
-                            <span >{activeResult?.winners?.[0]?.balance ?? "***"}</span>
+                            <span >{activeResult?.winners?.[0]?.win_amount ?? "***"}</span>
                         </div>
                     </div>
                 )}
@@ -195,7 +212,7 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
                         <div className="relative ">
                             <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" className="h-[9px] w-[16px] mr-[3px]" />
                         </div>
-                        <span >{activeResult?.winners?.[1]?.balance ?? "***"}</span>
+                        <span >{activeResult?.winners?.[1]?.win_amount ?? "***"}</span>
                     </div>
                 </div>
                 )}
@@ -206,7 +223,7 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
                         <div className="relative ">
                             <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" className="h-[9px] w-[16px] mr-[3px]" />
                         </div>
-                        <span >{activeResult?.winners?.[2]?.balance ?? "***"}</span>
+                        <span >{activeResult?.winners?.[2]?.win_amount ?? "***"}</span>
                     </div>
                 </div>
                 )}

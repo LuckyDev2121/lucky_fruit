@@ -17,6 +17,7 @@ export default function ChooseRectangle({ onChooseTimeUp, RoundId }: { onChooseT
     const [time, setTime] = useState(0);
     const [second, setSecond] = useState(0);
     const [timestep, setTimestep] = useState(100);
+    const [addTime, setAddTime] = useState(0);
     const [resultResponse, setResultResponse] = useState<ResultData | null>(null);
     const onChooseTimeUpRef = useRef(onChooseTimeUp);
     const currentFruit = fruits[(8 + time) % fruits.length];
@@ -24,13 +25,12 @@ export default function ChooseRectangle({ onChooseTimeUp, RoundId }: { onChooseT
     const [steps, setSteps] = useState(0);
     const result = resultResponse ?? makeResult;
 
-
     useEffect(() => {
         onChooseTimeUpRef.current = onChooseTimeUp;
     }, [onChooseTimeUp]);
 
     useEffect(() => {
-        if (second >= 4820) {
+        if (second >= 6820) {
             onChooseTimeUpRef.current?.(); // trigger notification
             return;
         }
@@ -51,67 +51,98 @@ export default function ChooseRectangle({ onChooseTimeUp, RoundId }: { onChooseT
                     }
                 }
                 if (second === 4000) {
-                    setSteps(((result?.winning_option_id ? result.winning_option_id : 0) - currentFruit.id + 8) % fruits.length);
+                    const winningId = Array.isArray(result?.winning_option_id)
+                        ? Number(result.winning_option_id[0])
+                        : result?.winning_option_id ?? 0;
+
+                    setSteps((winningId - currentFruit.id + fruits.length) % fruits.length);
                 }
             }
 
-            if (second > 4000 && second < 4820) {
-                if (steps === 0) {
-                    setSecond((s) => s + 100);
-                    setTime((t) => t + 1);
-                    setTimestep(100);
-                }
+            if (second > 4000 && second < 6820) {
+                if (second === 4100) console.log("=============", steps)
                 if (steps === 1) {
-                    setSecond((s) => s + 800);
-                    setTime((t) => t + 1);
-                    setTimestep(900);
+                    if (second < 5900) {
+                        setSecond((s) => s + 300);
+                        setTime((t) => t + 1);
+                        setTimestep(300);
+                    } else {
+                        setSecond((s) => s + 400 + addTime * 100);
+                        setTime((t) => t + 1);
+                        setAddTime((a) => a + 1);
+                        setTimestep(400 + addTime * 100);
+                    }
                 }
                 if (steps === 2) {
-                    setSecond((s) => s + 400);
-                    setTime((t) => t + 1);
-                    setTimestep(400);
-                }
-                if (steps === 3) {
-                    setSecond((s) => s + 300);
-                    setTime((t) => t + 1);
-                    setTimestep(300);
-                }
-                if (steps === 4) {
-                    setSecond((s) => s + 200);
-                    setTime((t) => t + 1);
-                    setTimestep(200);
-                }
-                if (steps === 5) {
-                    if (second > 4200) {
-                        setSecond((s) => s + 200);
-                        setTime((t) => t + 1);
-                        setTimestep(200);
-                    } else {
+                    if (second < 4600) {
                         setSecond((s) => s + 100);
                         setTime((t) => t + 1);
                         setTimestep(100);
+                    } else {
+                        setSecond((s) => s + 400 + addTime * 100);
+                        setTime((t) => t + 1);
+                        setAddTime((a) => a + 1);
+                        setTimestep(400 + addTime * 100);
+                    }
+                }
+                if (steps === 3) {
+                    if (second < 5600) {
+                        setSecond((s) => s + 100);
+                        setTime((t) => t + 1);
+                        setTimestep(100);
+                    } else {
+                        setSecond((s) => s + 300 + addTime * 100);
+                        setTime((t) => t + 1);
+                        setAddTime((a) => a + 1);
+                        setTimestep(300 + addTime * 100);
+                    }
+                }
+                if (steps === 4) {
+                    setSecond((s) => s + 800 + addTime * 100);
+                    setTime((t) => t + 1);
+                    setAddTime((a) => a + 1);
+                    setTimestep(800 + addTime * 100);
+                }
+                if (steps === 5) {
+                    if (second < 5000) {
+                        setSecond((s) => s + 100);
+                        setTime((t) => t + 1);
+                        setTimestep(100);
+                    } else {
+                        setSecond((s) => s + 500 + addTime * 100);
+                        setTime((t) => t + 1);
+                        setAddTime((a) => a + 1);
+                        setTimestep(500 + addTime * 100);
                     }
                 }
                 if (steps === 6) {
-                    if (second > 4300) {
-                        setSecond((s) => s + 200);
-                        setTime((t) => t + 1);
-                        setTimestep(200);
-                    } else {
+                    if (second < 5000) {
                         setSecond((s) => s + 100);
                         setTime((t) => t + 1);
                         setTimestep(100);
+                    } else {
+                        setSecond((s) => s + 300 + addTime * 100);
+                        setTime((t) => t + 1);
+                        setAddTime((a) => a + 1);
+                        setTimestep(300 + addTime * 100);
                     }
                 }
                 if (steps === 7) {
-                    if (second > 4600) {
-                        setSecond((s) => s + 200);
+                    setSecond((s) => s + 100 + addTime * 100);
+                    setTime((t) => t + 1);
+                    setAddTime((a) => a + 1);
+                    setTimestep(100 + addTime * 100);
+                }
+                if (steps === 0) {
+                    if (second > 5000) {
+                        setSecond((s) => s + 500);
                         setTime((t) => t + 1);
-                        setTimestep(200);
+                        setTimestep(500);
                     } else {
-                        setSecond((s) => s + 100);
+                        setSecond((s) => s + 100 + addTime * 100);
                         setTime((t) => t + 1);
-                        setTimestep(100);
+                        setAddTime((a) => a + 1);
+                        setTimestep(100 + addTime * 100);
                     }
                 }
             }
