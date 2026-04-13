@@ -83,6 +83,7 @@ export const fetchPlayerInfo = async (): Promise<PlayerDetailsData> => {
 type GameResultItem = {
   option_id: number;
   option_name: string;
+  is_jackpot:number;
 };
 
 export type GameResults = {
