@@ -102,7 +102,7 @@ export default function NoteMenu({ onCloseNote, onOpenModal }: NoteMenuProps) {
                                         />
                                     )}
                                 </span >
-                                <span className=" relative   ">{item.status ? "WIN" : "LOSE"}</span>
+                                <span className=" relative   ">{item.status === 0 && ("PENDING")}{item.status === 1 && ("WIN")}{item.status === 2 && ("LOSE")}</span>
                             </div>
                             <span className="absolute top-[54px]">Mine</span>
                             <div className="absolute top-[78px]  grid grid-cols-4 grid-rows-2 gap-[0px]">
