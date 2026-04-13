@@ -4,7 +4,6 @@ import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
 import ModalHeaderPlate from "./ModalHeaderPlate";
 import ResultMenuDivider from "./ResultMenuDivider";
 import { useGame, resolveAssetUrl } from "../hooks/useGameHook";
-// import type { ResultData } from "../api/api";
 type ResultMenuProps = {
     start?: number;
     onResultTimeUp?: () => void;
