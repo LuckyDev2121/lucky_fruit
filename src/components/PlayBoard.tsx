@@ -234,7 +234,7 @@ export default function PlayBoard({
             return;
         }
     }, [RoundId, isRoundRunning]);
-
+    useEffect(() => console.log("RoundTime", results), [])
     useEffect(() => {
         if (isRoundRunning && RoundId) {
             clearCurrentRoundBets();
@@ -310,7 +310,7 @@ export default function PlayBoard({
                 .finally(() => {
                     isSendingBetRef.current = false;
                 });
-        }, 100);
+        }, 30);
 
         return () => {
             window.clearInterval(intervalId);
@@ -434,7 +434,6 @@ export default function PlayBoard({
                             onLedTimeUp={() => {
                                 setHasStartedFinalBetWindow(true);
                                 setPreviousRoundBets(displayedBets);
-                                console.log("===", displayedBets)
                                 setShowChooseTimer(true);
                                 setShowLedTimer(false);
                                 setShowBoardOpacity(true);
