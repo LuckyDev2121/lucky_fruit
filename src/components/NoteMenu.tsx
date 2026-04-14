@@ -60,6 +60,7 @@ export default function NoteMenu({ onCloseNote, onOpenModal }: NoteMenuProps) {
         return transformGameLog(playerLog);
     }, [playerLog]);
 
+    useEffect(() => { console.log("rounds", rounds) }, [rounds])
     return (
         <div className="h-[342px] bg-gradient-to-t from-[#7C00D5] to-[#5028C1] w-[393px] rounded-t-[20px]">
             <ModalHeaderPlate className="absolute left-1/2 -translate-x-1/2" />
@@ -93,9 +94,26 @@ export default function NoteMenu({ onCloseNote, onOpenModal }: NoteMenuProps) {
                             </div>
                             <div className="absolute w-[300px] top-[30px] justify-between items-center flex">
                                 <span className=" relative flex  items-center">Winning
-                                    {item.winning_option_id != null && (
+                                    {item.winning_option_id.length === 1 && (
                                         <img
-                                            src={getAssetUrl(options[item.winning_option_id - 5].logo)}
+                                            key={item.winning_option_id[0]}
+                                            src={getAssetUrl(options[item.winning_option_id[0] - 5].logo)}
+                                            alt="a"
+                                            className="w-[20px] h-[20px] ml-[10px]"
+                                        />
+                                    )}
+                                    {item.winning_option_id.length > 1 && item.winning_option_id[0] === 5 && (
+                                        <img
+                                            key={item.winning_option_id[0]}
+                                            src={getAssetUrl("fruit-jackpot/small.svg")}
+                                            alt="a"
+                                            className="w-[20px] h-[20px] ml-[10px]"
+                                        />
+                                    )}
+                                    {item.winning_option_id.length > 1 && item.winning_option_id[0] === 9 && (
+                                        <img
+                                            key={item.winning_option_id[0]}
+                                            src={getAssetUrl("fruit-jackpot/big.svg")}
                                             alt="a"
                                             className="w-[20px] h-[20px] ml-[10px]"
                                         />

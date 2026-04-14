@@ -5,7 +5,7 @@ type DetailItem = {
 
 export type TransformedRound = {
   round_id: number;
-  winning_option_id: number | null;
+  winning_option_id: number[];
   status: number;
   detail: DetailItem[];
 };
@@ -14,7 +14,7 @@ type RoundData={
   id:number,
   game_id:number,
   round_no:number,
-  winning_option_id:number|null,
+  winning_option_id:number[],
   status:number,
   created_at:string,
 };
@@ -31,6 +31,24 @@ export type PlayerLogData={
   round_data?:RoundData;
 };
 
+function parseWinningIds(input: unknown): number[] {
+  if (!input) return [];
+
+  if (typeof input === "string") {
+    try {
+      return JSON.parse(input).map(Number);
+    } catch {
+      return [];
+    }
+  }
+
+  if (Array.isArray(input)) {
+    return input.map(Number);
+  }
+
+  return [];
+}
+
 export const transformGameLog = (
   data: PlayerLogData[]
 ): TransformedRound[] => {
@@ -38,7 +56,7 @@ export const transformGameLog = (
     number,
     {
       round_id: number;
-      winning_option_id: number | null;
+      winning_option_id: number[];
       status: number;
       detail: Record<number, number>;
     }
@@ -59,7 +77,7 @@ export const transformGameLog = (
     if (!result[roundId]) {
       result[roundId] = {
         round_id: roundId,
-        winning_option_id: item.round_data?.winning_option_id ?? null,
+        winning_option_id: parseWinningIds(item.round_data?.winning_option_id),
         status: item.round_data?.status ?? 0,
         detail: {
           5: 0,

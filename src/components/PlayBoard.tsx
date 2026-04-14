@@ -408,11 +408,27 @@ export default function PlayBoard({
                     <div className="flex items-center h-full whitespace-nowrap ">
                         {results?.data?.map((result, index) => (
                             <div key={index} className=" flex-shrink-0 relative h-[30px] w-[30px] mt-[3px] mr-[12px]">
-                                <img
-                                    src={getResultOptionLogo(result.option_id)}
-                                    alt={result.option_name || `Result ${index + 1}`}
-                                    className="absolute inset-0 h-full w-full"
-                                />
+                                {result.is_jackpot === 0 && (
+                                    <img
+                                        src={getResultOptionLogo(result.option_id)}
+                                        alt={result.option_name || `Result ${index + 1}`}
+                                        className="absolute inset-0 h-full w-full"
+                                    />
+                                )}
+                                {result.is_jackpot === 1 && (
+                                    <img
+                                        src={getAssetUrl("fruit-jackpot/big.svg")}
+                                        alt={result.option_name || `Result ${index + 1}`}
+                                        className="absolute inset-0 h-full w-full"
+                                    />
+                                )}
+                                {result.is_jackpot === 2 && (
+                                    <img
+                                        src={getAssetUrl("fruit-jackpot/small.svg")}
+                                        alt={result.option_name || `Result ${index + 1}`}
+                                        className="absolute inset-0 h-full w-full"
+                                    />
+                                )}
                                 {index === 0 && (
                                     <div className="absolute left-[3px] top-[18px] w-[24px] h-[12px] z-50">
                                         <img src={getAssetUrl(GAME_ASSETS.newtag)} alt="Result Board Frame" className="absolute inset-0 h-full w-full" />

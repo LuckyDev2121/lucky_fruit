@@ -272,7 +272,7 @@ type RoundData={
   id:number,
   game_id:number,
   round_no:number,
-  winning_option_id:number|null,
+  winning_option_id:number[] ;
   status:number,
   created_at:string,
 }
