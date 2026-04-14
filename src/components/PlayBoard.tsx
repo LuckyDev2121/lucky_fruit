@@ -48,7 +48,6 @@ export default function PlayBoard({
     const [chooseTime, setChooseTime] = useState(0);
     const [resultTime, setResultTime] = useState(0);
     const [hiddenTime, setHiddenTime] = useState(0);
-    // const [resetKey, setResetKey] = useState(0);
     const [showResultTimer, setShowResultTimer] = useState(false);
     const {
         betAmounts,
@@ -407,7 +406,8 @@ export default function PlayBoard({
                 <div className="scrollbar-hidden absolute flex left-1/2 top-[442px] h-[40px] w-[280px] overflow-y-hidden overflow-x-auto z-20 -translate-x-1/2 transform">
                     <div className="flex items-center h-full whitespace-nowrap ">
                         {results?.data?.map((result, index) => (
-                            <div key={index} className=" flex-shrink-0 relative h-[30px] w-[30px] mt-[3px] mr-[12px]">
+                            <div key={index} className={`flex-shrink-0 relative h-[30px] w-[30px] mt-[3px] ${results.data?.length === undefined || index === results.data.length - 1 ? "" : "mr-[12px]"
+                                }`}>
                                 {result.is_jackpot === 0 && (
                                     <img
                                         src={getResultOptionLogo(result.option_id)}
