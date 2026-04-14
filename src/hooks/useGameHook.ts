@@ -76,10 +76,13 @@ function emit() {
   listeners.forEach((listener) => listener(store));
 }
 
-function updateStore(partial: Partial<GameStore>) {
+function updateStore(
+  partial: Partial<GameStore> | ((current: GameStore) => Partial<GameStore>),
+) {
+  const nextPartial = typeof partial === "function" ? partial(store) : partial;
   store = {
     ...store,
-    ...partial,
+    ...nextPartial,
   };
   emit();
 }
@@ -243,17 +246,15 @@ export function useGame() {
     if (currentBalance < amount) {
       throw new Error("Insufficient balance");
     }
-    console.log("useHook",optionId, amount)
-    const response: PlaceBet = await placeBetRequest(optionId, amount);
-    const nextRoundBets = {
-      ...store.currentRoundBets,
-      [optionId]: (store.currentRoundBets[optionId] ?? 0) + amount,
-    };
 
-    updateStore({
-      currentRoundBets: nextRoundBets,
+    const response: PlaceBet = await placeBetRequest(optionId, amount);
+    updateStore((current) => ({
+      currentRoundBets: {
+        ...current.currentRoundBets,
+        [optionId]: (current.currentRoundBets[optionId] ?? 0) + amount,
+      },
       lastBetMessage: response.message ?? null,
-    });
+    }));
 
     return response;
   }, []);
@@ -263,9 +264,9 @@ export function useGame() {
       return;
     }
 
-    updateStore({
-      pendingBalanceDeduction: store.pendingBalanceDeduction + amount,
-    });
+    updateStore((current) => ({
+      pendingBalanceDeduction: current.pendingBalanceDeduction + amount,
+    }));
   }, []);
 
   const releaseBetBalance = useCallback((amount: number) => {
@@ -273,9 +274,9 @@ export function useGame() {
       return;
     }
 
-    updateStore({
-      pendingBalanceDeduction: Math.max(0, store.pendingBalanceDeduction - amount),
-    });
+    updateStore((current) => ({
+      pendingBalanceDeduction: Math.max(0, current.pendingBalanceDeduction - amount),
+    }));
   }, []);
 
   const handleSetMusicEnabled = useCallback(async (nextValue: boolean) => {

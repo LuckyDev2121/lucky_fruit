@@ -31,6 +31,15 @@ export type PlayerLogData={
   round_data?:RoundData;
 };
 
+const ROUND_OPTION_IDS = [5, 6, 7, 8, 9, 10, 11, 12] as const;
+
+type MutableRound = {
+  round_id: number;
+  winning_option_id: number[];
+  status: number;
+  detail: number[];
+};
+
 function parseWinningIds(input: unknown): number[] {
   if (input === null || input === undefined) return [];
 
@@ -70,65 +79,46 @@ function parseWinningIds(input: unknown): number[] {
 export const transformGameLog = (
   data: PlayerLogData[]
 ): TransformedRound[] => {
-  const result: Record<
-    number,
-    {
-      round_id: number;
-      winning_option_id: number[];
-      status: number;
-      detail: Record<number, number>;
-    }
-  > = {};
+  const rounds = new Map<number, MutableRound>();
 
-  data.forEach((item) => {
-    // skip invalid (because optional fields)
+  for (const item of data) {
     if (
       item.round_id === undefined ||
       item.option_id === undefined ||
       item.amount === undefined
-    )
-      return;
+    ) {
+      continue;
+    }
 
     const roundId = item.round_id;
+    let round = rounds.get(roundId);
 
-    // create round group
-    if (!result[roundId]) {
-      result[roundId] = {
+    if (!round) {
+      round = {
         round_id: roundId,
         winning_option_id: parseWinningIds(item.round_data?.winning_option_id),
         status: item.round_data?.status ?? 0,
-        detail: {
-          5: 0,
-          6: 0,
-          7: 0,
-          8: 0,
-          9: 0,
-          10: 0,
-          11: 0,
-          12: 0,
-        },
+        detail: new Array(ROUND_OPTION_IDS.length).fill(0),
       };
+      rounds.set(roundId, round);
     }
 
-    // add amount
-    const optionId = item.option_id;
     const amount = Number(item.amount);
-
-    if (result[roundId].detail[optionId] !== undefined) {
-      result[roundId].detail[optionId] += amount;
+    const optionIndex = item.option_id - ROUND_OPTION_IDS[0];
+    if (Number.isFinite(amount) && optionIndex >= 0 && optionIndex < round.detail.length) {
+      round.detail[optionIndex] += amount;
     }
-  });
+  }
 
-  // convert to final array
-  return Object.values(result)
+  return Array.from(rounds.values())
     .map((round) => ({
       round_id: round.round_id,
       winning_option_id: round.winning_option_id,
       status: round.status,
-      detail: Object.entries(round.detail).map(([key, value]) => ({
-        option_id: Number(key),
-        bet_amount: value,
+      detail: round.detail.map((bet_amount, index) => ({
+        option_id: ROUND_OPTION_IDS[index],
+        bet_amount,
       })),
     }))
-    .sort((a, b) => b.round_id - a.round_id); // latest first
+    .sort((a, b) => b.round_id - a.round_id);
 };

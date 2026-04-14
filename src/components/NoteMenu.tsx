@@ -44,23 +44,29 @@ function CloseIcon() {
 }
 
 export default function NoteMenu({ onCloseNote, onOpenModal }: NoteMenuProps) {
-
-
     const { options, playerLog, winToday, handlePlayerLog, handleWinToday } = useGame();
 
     useEffect(() => {
         const load = async () => {
-            await handlePlayerLog();
-            await handleWinToday();
+            if (playerLog.length === 0) {
+                await handlePlayerLog();
+            }
+
+            if (!winToday) {
+                await handleWinToday();
+            }
         };
-        load();
-    }, []);
+        void load();
+    }, [handlePlayerLog, handleWinToday, playerLog.length, winToday]);
+
     const rounds = useMemo(() => {
-        if (!playerLog) return [];
         return transformGameLog(playerLog);
     }, [playerLog]);
 
-    useEffect(() => { console.log("rounds", rounds) }, [rounds])
+    const optionById = useMemo(() => {
+        return new Map(options.map((option) => [option.id, option]));
+    }, [options]);
+
     return (
         <div className="h-[342px] bg-gradient-to-t from-[#7C00D5] to-[#5028C1] w-[393px] rounded-t-[20px]">
             <ModalHeaderPlate className="absolute left-1/2 -translate-x-1/2" />
@@ -81,23 +87,25 @@ export default function NoteMenu({ onCloseNote, onOpenModal }: NoteMenuProps) {
                         </div>
                     </div>
                 </div>
-                {rounds.map((item,) => {
+                {rounds.map((item) => {
                     const result = new Date(new Date().getTime() - (39 * item.round_id) * 1000)
                     const formatDate = (date: Date) => {
                         return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")} ${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
                     };
+                    const winningOption = item.winning_option_id[0]
+                        ? optionById.get(item.winning_option_id[0])
+                        : undefined;
                     return (
-                        <div className="relative h-[134px] w-[324px] flex px-3 pt-2 pb-5  bg-[#450371] rounded-[12px] mt-[40px] ">
+                        <div key={item.round_id} className="relative h-[134px] w-[324px] flex px-3 pt-2 pb-5  bg-[#450371] rounded-[12px] mt-[40px] ">
                             <div className="absolute w-[300px] flex justify-between">
                                 <span className=" relative  text-[10px] text-[#FFFFFF]/60 ">Round {item.round_id}</span>
                                 <span className=" relative   text-[10px] text-[#FFFFFF]/60  ">{formatDate(result)}</span>
                             </div>
                             <div className="absolute w-[300px] top-[30px] justify-between items-center flex">
                                 <span className=" relative flex  items-center">Winning
-                                    {item.winning_option_id.length === 1 && (
+                                    {item.winning_option_id.length === 1 && winningOption && (
                                         <img
-                                            key={item.winning_option_id[0]}
-                                            src={getAssetUrl(options[item.winning_option_id[0] - 5].logo)}
+                                            src={getAssetUrl(winningOption.logo)}
                                             alt="a"
                                             className="w-[20px] h-[20px] ml-[10px]"
                                         />
@@ -123,11 +131,13 @@ export default function NoteMenu({ onCloseNote, onOpenModal }: NoteMenuProps) {
                             </div>
                             <span className="absolute top-[54px]">Mine</span>
                             <div className="absolute top-[78px]  grid grid-cols-4 grid-rows-2 gap-[0px]">
-                                {item.detail.map((element, index) => {
-                                    if (element.bet_amount) {
+                                {item.detail.map((element) => {
+                                    const option = optionById.get(element.option_id);
+
+                                    if (element.bet_amount && option) {
                                         return (
-                                            <div className="relative w-[75px] h-[20px] justify-center items-center flex " >
-                                                <img src={getAssetUrl(options[index].logo)} alt={options[index].name} className="h-4 w-4 mr-[2px]" />
+                                            <div key={element.option_id} className="relative w-[75px] h-[20px] justify-center items-center flex " >
+                                                <img src={getAssetUrl(option.logo)} alt={option.name} className="h-4 w-4 mr-[2px]" />
                                                 <div className=" justify-center items-center content-center h-[14px] w-[10px]">
                                                     <img src={getAssetUrl(GAME_ASSETS.diamondIcon)} alt="Diamond Icon" className="h-[9px] w-[16px] mr-[5px]" />
                                                 </div>
