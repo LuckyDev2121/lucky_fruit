@@ -32,18 +32,36 @@ export type PlayerLogData={
 };
 
 function parseWinningIds(input: unknown): number[] {
-  if (!input) return [];
+  if (input === null || input === undefined) return [];
 
-  if (typeof input === "string") {
-    try {
-      return JSON.parse(input).map(Number);
-    } catch {
-      return [];
-    }
+  // already array
+  if (Array.isArray(input)) {
+    return input.map(Number).filter(n => !Number.isNaN(n));
   }
 
-  if (Array.isArray(input)) {
-    return input.map(Number);
+  if (typeof input === "string") {
+    const trimmed = input.trim();
+
+    // case 1: JSON array string -> ["5","6"]
+    if (trimmed.startsWith("[")) {
+      try {
+        const parsed = JSON.parse(trimmed);
+        if (Array.isArray(parsed)) {
+          return parsed.map(Number).filter(n => !Number.isNaN(n));
+        }
+      } catch {
+        // fallback below
+      }
+    }
+
+    // case 2: single number string -> "9"
+    const num = Number(trimmed);
+    return Number.isNaN(num) ? [] : [num];
+  }
+
+  // case 3: number
+  if (typeof input === "number") {
+    return [input];
   }
 
   return [];

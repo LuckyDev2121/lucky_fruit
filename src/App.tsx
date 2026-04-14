@@ -4,13 +4,7 @@ import { MusicPlayer, SoundPlayer } from "./components/GameMusic";
 import LoadingScreen from "./components/LoadingScrean";
 import LuckyFruitGame from "./components/LuckyFruitGame";
 import { GAME_ASSETS, getAssetUrl } from "./config/gameConfig";
-import {
-  fetchGameDetail,
-  fetchGameResults,
-  fetchPlayerInfo,
-  fetchSoundSetting,
-} from "./api/api";
-import { useGame } from "./hooks/useGameHook";
+import { useGame, bootstrapGameStore } from "./hooks/useGameHook";
 
 function preloadImage(src: string) {
   return new Promise<void>((resolve) => {
@@ -97,12 +91,9 @@ function App() {
 
         setProgress(85);
 
-        const [, , , , res] = await Promise.all([
-          fetchGameDetail(),
-          fetchPlayerInfo(),
-          fetchGameResults(),
-          fetchSoundSetting(),
+        const [res] = await Promise.all([
           createRound(),
+          bootstrapGameStore({ resetPendingBalanceDeduction: true }),
         ]);
         if (cancelled) {
           return;

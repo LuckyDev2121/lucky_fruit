@@ -152,7 +152,6 @@ function initializeStore() {
   }
 
   hasInitialized = true;
-  void runRefreshGameData();
 
   const channel = echo.channel(REALTIME_CHANNEL);
   const eventName = `.${REALTIME_EVENT}`;
@@ -160,6 +159,11 @@ function initializeStore() {
   channel.listen(eventName, async () => {
     await runRefreshGameData();
   });
+}
+
+export async function bootstrapGameStore(options?: RefreshGameDataOptions) {
+  initializeStore();
+  await runRefreshGameData(options);
 }
 
 export function useGame() {
