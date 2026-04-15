@@ -7,7 +7,7 @@ import {
   CURRENT_ROUND_API_URL,
   ROUND_RESULT_API_URL,
   SOUND_SETTING_API_URL,
-  SOUND_SETTING_GAME_API_URL,
+  MUSIC_SETTING_API_URL,
   RANKING_TODAY_API_URL,
   WIN_TODAY_API_URL,
   PLAYER_LOG_API_URL,
@@ -232,7 +232,7 @@ type SoundSettingResponse = {
 };
 
 export const fetchSoundSetting = async (): Promise<boolean> => {
-  const response = await axios.get<SoundSettingResponse>(SOUND_SETTING_GAME_API_URL);
+  const response = await axios.get<SoundSettingResponse>(SOUND_SETTING_API_URL);
 
   if (!response.data.status) {
     throw new Error(response.data.message || "Failed to load sound setting");
@@ -258,6 +258,44 @@ export const saveSoundSetting = async (
 
   if (!response.data.status) {
     throw new Error(response.data.message || "Failed to save sound setting");
+  }
+
+  return response.data;
+};
+
+type MusicSettingResponse = {
+  status?: boolean;
+  data?: number;
+  message?: string;
+};
+
+export const fetchMusicSetting = async (): Promise<boolean> => {
+  const response = await axios.get<MusicSettingResponse>(MUSIC_SETTING_API_URL);
+
+  if (!response.data.status) {
+    throw new Error(response.data.message || "Failed to load music setting");
+  }
+
+  return response.data.data === 1;
+};
+
+type SaveMusicSettingResponse = {
+  status?: boolean;
+  message?: string;
+};
+
+export const saveMusicSetting = async (
+  playerId: number,
+  isMusicOn: boolean,
+): Promise<SaveMusicSettingResponse> => {
+  const response = await axios.post<SaveMusicSettingResponse>(MUSIC_SETTING_API_URL, {
+    game_id: 5,
+    player_id: playerId,
+    status: isMusicOn ? 1 : 0,
+  });
+
+  if (!response.data.status) {
+    throw new Error(response.data.message || "Failed to save music setting");
   }
 
   return response.data;

@@ -7,7 +7,7 @@ type TopMenuProps = {
 
 function CupIcon() {
   return (
-    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
+    <svg width="25" height="25" viewBox="0 0 15 15" fill="none" aria-hidden="true">
       <path
         d="M4.1 3.2H10.1V4.5C10.1 6.7 8.95 8.45 7.1 8.45C5.25 8.45 4.1 6.7 4.1 4.5V3.2Z"
         fill="white"
@@ -44,7 +44,7 @@ function CupIcon() {
 
 function ClipboardIcon() {
   return (
-    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
+    <svg width="25" height="25" viewBox="0 0 15 15" fill="none" aria-hidden="true">
       <rect x="3" y="2.6" width="9" height="10.4" rx="1.8" stroke="white" strokeWidth="1.1" />
       <rect x="5" y="1.4" width="5" height="2.6" rx="1" fill="white" />
       <path d="M5.2 6.1H9.8" stroke="white" strokeWidth="1.1" strokeLinecap="round" />
@@ -56,7 +56,7 @@ function ClipboardIcon() {
 
 function SpeakerHighIcon() {
   return (
-    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
+    <svg width="25" height="25" viewBox="0 0 15 15" fill="none" aria-hidden="true">
       <path
         d="M2.2 8.8H4.4L7.45 11V4L4.4 6.2H2.2V8.8Z"
         fill="white"
@@ -82,7 +82,7 @@ function SpeakerHighIcon() {
 
 function QuestionMarkIcon() {
   return (
-    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
+    <svg width="25" height="25" viewBox="0 0 15 15" fill="none" aria-hidden="true">
       <path
         d="M5.55 5.4C5.55 4.35 6.4 3.5 7.45 3.5C8.5 3.5 9.35 4.25 9.35 5.2C9.35 5.95 8.95 6.45 8.25 6.9C7.6 7.3 7.2 7.7 7.2 8.45V8.7"
         stroke="white"
@@ -97,7 +97,7 @@ function QuestionMarkIcon() {
 
 function CloseIcon() {
   return (
-    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
+    <svg width="25" height="25" viewBox="0 0 15 15" fill="none" aria-hidden="true">
       <path
         d="M4.2 4.2L10.8 10.8"
         stroke="white"

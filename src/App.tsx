@@ -46,7 +46,8 @@ async function preloadGameAssets(setProgress: (value: number) => void) {
 }
 
 function App() {
-  const [isSoundPlaying, setIsSoundPlaying] = useState(true);
+  // const [isSoundPlaying, setIsSoundPlaying] = useState(true);
+  // const [isMusicPlaying, setIsMusicPlaying] = useState(true);
   const [isOpenResultMenu, setIsOpenResultMenu] = useState(false);
   const [progress, setProgress] = useState(0);
   const [isBootLoading, setIsBootLoading] = useState(true);
@@ -55,7 +56,7 @@ function App() {
   const [roundTime, setRoundTime] = useState(0)
   const openResultMenu = () => setIsOpenResultMenu(true);
   const closeResultMenu = () => setIsOpenResultMenu(false);
-  const { createRound, isMusicEnabled, setMusicEnabled } = useGame();
+  const { createRound, isMusicEnabled, isSoundEnabled, setMusicEnabled, setSoundEnabled } = useGame();
 
   const attemptStartRound = useCallback(async () => {
     try {
@@ -160,7 +161,7 @@ function App() {
     <div className="relative flex min-h-[100dvh] w-full items-end justify-center overflow-hidden">
       <MusicPlayer isMusicPlaying={isMusicEnabled} />
       <SoundPlayer
-        isSoundPlaying={isSoundPlaying}
+        isSoundPlaying={isSoundEnabled}
         isOpenResultMenu={isOpenResultMenu}
       />
       <LuckyFruitGame
@@ -171,11 +172,13 @@ function App() {
         onOpenResultMenu={openResultMenu}
         onCloseResultMenu={closeResultMenu}
         isMusicPlaying={isMusicEnabled}
-        isSoundPlaying={isSoundPlaying}
+        isSoundPlaying={isSoundEnabled}
         onToggleMusic={() => {
           void setMusicEnabled(!isMusicEnabled);
         }}
-        onToggleSound={() => setIsSoundPlaying((prev) => !prev)}
+        onToggleSound={() => {
+          void setSoundEnabled(!isSoundEnabled);
+        }}
       />
     </div>
   );

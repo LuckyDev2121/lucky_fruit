@@ -12,6 +12,8 @@ import {
   makeGameResult,
   fetchSoundSetting,
   saveSoundSetting,
+  fetchMusicSetting,
+  saveMusicSetting,
   fetchRankingToday,
   type PlayerLogData,
   type WinTodayResponse,
@@ -45,6 +47,8 @@ type GameStore = {
   pendingBalanceDeduction: number;
   isLoading: boolean;
   lastBetMessage: string | null;
+  isSoundEnabled: boolean;
+  isSoundSettingLoading: boolean;
   isMusicEnabled: boolean;
   isMusicSettingLoading: boolean;
   rankingTodays: RankingTodayItem[];
@@ -52,6 +56,7 @@ type GameStore = {
   playerLog: PlayerLogData[];
   url?:RechargeUrlResponse | null;
 };
+
 
 const listeners = new Set<(state: GameStore) => void>();
 
@@ -66,8 +71,10 @@ let store: GameStore = {
   pendingBalanceDeduction: 0,
   isLoading: true,
   lastBetMessage: null,
-  isMusicEnabled: true,
   isMusicSettingLoading: true,
+  isMusicEnabled: true,
+  isSoundSettingLoading: true,
+  isSoundEnabled: true,
   rankingTodays: [],
   winToday:null,
   playerLog:[],
@@ -122,11 +129,12 @@ async function runRefreshGameData(options?: RefreshGameDataOptions) {
   updateStore({ isLoading: true, isMusicSettingLoading: true });
 
   try {
-    const [gameDetail, player, gameResults, isMusicEnabled, rankingToday, winToday, playerLog,url] = await Promise.all([
+    const [gameDetail, player, gameResults, isSoundEnabled, isMusicEnabled, rankingToday, winToday, playerLog,url] = await Promise.all([
       fetchGameDetail(),
       fetchPlayerInfo(),
       fetchGameResults(),
       fetchSoundSetting(),
+      fetchMusicSetting(),
       fetchRankingToday(),
       fetchWinToday(),
       fetchPlayerLog(),
@@ -137,8 +145,10 @@ async function runRefreshGameData(options?: RefreshGameDataOptions) {
       gameDetails: gameDetail,
       playerInfo: player,
       results: gameResults,
+      isSoundEnabled,
       isMusicEnabled,
       isLoading: false,
+      isSoundSettingLoading: false,
       isMusicSettingLoading: false,
       rankingTodays: rankingToday,
       playerLog:playerLog,
@@ -150,7 +160,7 @@ async function runRefreshGameData(options?: RefreshGameDataOptions) {
       previousRoundBets: normalizeBetRecord(gameDetail.options, store.previousRoundBets),
     });
   } catch (error) {
-    updateStore({ isLoading: false, isMusicSettingLoading: false });
+    updateStore({ isLoading: false, isMusicSettingLoading: false, isSoundSettingLoading: false });
     throw error;
   }
 }
@@ -298,7 +308,7 @@ export function useGame() {
     }));
   }, []);
 
-  const handleSetMusicEnabled = useCallback(async (nextValue: boolean) => {
+  const handleSetSoundEnabled = useCallback(async (nextValue: boolean) => {
     const playerId = store.playerInfo?.id;
 
     if (!playerId) {
@@ -306,6 +316,16 @@ export function useGame() {
     }
 
     await saveSoundSetting(playerId, nextValue);
+    updateStore({ isSoundEnabled: nextValue });
+  }, []);
+  const handleSetMusicEnabled = useCallback(async (nextValue: boolean) => {
+    const playerId = store.playerInfo?.id;
+
+    if (!playerId) {
+      throw new Error("Player information is not loaded");
+    }
+
+    await saveMusicSetting(playerId, nextValue);
     updateStore({ isMusicEnabled: nextValue });
   }, []);
 
@@ -360,6 +380,8 @@ export function useGame() {
     lastBetMessage: snapshot.lastBetMessage,
     isMusicEnabled: snapshot.isMusicEnabled,
     isMusicSettingLoading: snapshot.isMusicSettingLoading,
+    isSoundEnabled: snapshot.isSoundEnabled,
+    isSoundSettingLoading: snapshot.isSoundSettingLoading,
     rankingToday: snapshot.rankingTodays,
     rechargeUrl: snapshot.url?.url || null,
     refreshGameData,
@@ -370,6 +392,7 @@ export function useGame() {
     reserveBetBalance,
     releaseBetBalance,
     setMusicEnabled: handleSetMusicEnabled,
+    setSoundEnabled: handleSetSoundEnabled,
     clearCurrentRoundBets,
     archiveCurrentRoundBets,
     setPreviousRoundBets,
