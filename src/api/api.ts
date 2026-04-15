@@ -1,5 +1,6 @@
 import axios from "axios";
 import {
+  GAME_ID,
   GAME_DETAILS_API_URL,
   PLAYER_API_URL,
   GAME_RESULTS_API_URL,
@@ -143,7 +144,7 @@ export type PlaceBet = {
 
 export const placeBet = async (betId: number, amount: number): Promise<PlaceBet> => {
   const response = await axios.post<PlaceBet>(PLACE_BET_API_URL, {
-    game_id: 5,
+    game_id: GAME_ID,
     option_id: betId,
     amount: amount,
   });
@@ -180,7 +181,7 @@ export type MakeResultResponse = {
 
 export const makeGameResult = async (roundId: number): Promise<ResultData> => {
     const response = await axios.post<MakeResultResponse>(ROUND_RESULT_API_URL, {
-      game_id: 5,
+      game_id: GAME_ID,
       round_no: roundId,
     });
 
@@ -232,7 +233,7 @@ type SoundSettingResponse = {
 };
 
 export const fetchSoundSetting = async (): Promise<boolean> => {
-  const response = await axios.get<SoundSettingResponse>(`${SOUND_SETTING_API_URL}/${(await fetchPlayerInfo()).id}`);
+  const response = await axios.get<SoundSettingResponse>(`${SOUND_SETTING_API_URL}/${GAME_ID}/${(await fetchPlayerInfo()).id}`);
 
   if (!response.data.status) {
     throw new Error(response.data.message || "Failed to load sound setting");
@@ -251,7 +252,7 @@ export const saveSoundSetting = async (
   isMusicOn: boolean,
 ): Promise<SaveSoundSettingResponse> => {
   const response = await axios.post<SaveSoundSettingResponse>(SOUND_SETTING_API_URL, {
-    game_id: 5,
+    game_id: GAME_ID,
     player_id: playerId,
     status: isMusicOn ? 1 : 0,
   });
@@ -270,7 +271,7 @@ type MusicSettingResponse = {
 };
 
 export const fetchMusicSetting = async (): Promise<boolean> => {
-  const response = await axios.get<MusicSettingResponse>(`${MUSIC_SETTING_API_URL}/${(await fetchPlayerInfo()).id}`);
+  const response = await axios.get<MusicSettingResponse>(`${MUSIC_SETTING_API_URL}/${GAME_ID}/${(await fetchPlayerInfo()).id}`);
 
   if (!response.data.status) {
     throw new Error(response.data.message || "Failed to load music setting");
@@ -289,7 +290,7 @@ export const saveMusicSetting = async (
   isMusicOn: boolean,
 ): Promise<SaveMusicSettingResponse> => {
   const response = await axios.post<SaveMusicSettingResponse>(MUSIC_SETTING_API_URL, {
-    game_id: 5,
+    game_id: GAME_ID,
     player_id: playerId,
     status: isMusicOn ? 1 : 0,
   });
