@@ -60,8 +60,6 @@ export default function PlayBoard({
         releaseBetBalance,
         playerInfo,
         setPreviousRoundBets,
-        rechargeUrl,
-        handleRechargeRedirect,
     } = useGame();
     const queuedBetsRef = useRef<Record<number, number>>({});
     const isSendingBetRef = useRef(false);
@@ -247,11 +245,7 @@ export default function PlayBoard({
         const queuedTotal = sumBetMap(queuedBetsRef.current);
 
         if ((playerBalance - queuedTotal) < amount) {
-            if (rechargeUrl) {
-                window.location.href = rechargeUrl;
-            } else {
-                handleRechargeRedirect();
-            }
+            onOpenModal("recharge");
             return;
         }
 
