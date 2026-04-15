@@ -232,7 +232,7 @@ type SoundSettingResponse = {
 };
 
 export const fetchSoundSetting = async (): Promise<boolean> => {
-  const response = await axios.get<SoundSettingResponse>(`SOUND_SETTING_API_URL/${(await fetchPlayerInfo()).id}`);
+  const response = await axios.get<SoundSettingResponse>(`${SOUND_SETTING_API_URL}/${(await fetchPlayerInfo()).id}`);
 
   if (!response.data.status) {
     throw new Error(response.data.message || "Failed to load sound setting");
@@ -270,7 +270,7 @@ type MusicSettingResponse = {
 };
 
 export const fetchMusicSetting = async (): Promise<boolean> => {
-  const response = await axios.get<MusicSettingResponse>(`MUSIC_SETTING_API_URL/${(await fetchPlayerInfo()).id}`);
+  const response = await axios.get<MusicSettingResponse>(`${MUSIC_SETTING_API_URL}/${(await fetchPlayerInfo()).id}`);
 
   if (!response.data.status) {
     throw new Error(response.data.message || "Failed to load music setting");
