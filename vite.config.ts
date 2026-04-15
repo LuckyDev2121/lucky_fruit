@@ -2,7 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
 export default defineConfig({
-  base: "/lucky-fruits/",   // 👈 THIS IS REQUIRED
+  // base: "/lucky-fruits/",   // 👈 THIS IS REQUIRED
   plugins: [react()],
   server: {
     proxy: {
