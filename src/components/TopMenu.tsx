@@ -130,8 +130,6 @@ const handleClose = () => {
   // 3. Web (for testing only)
   if (window.history.length > 1) {
     window.history.back();
-  } else {
-    console.log("Exit not supported in browser");
   }
 };
 

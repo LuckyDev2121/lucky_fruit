@@ -36,7 +36,6 @@ function useAudioPlayback(
             if (!audio) return;
 
             void audio.play().catch(() => {
-                // Keep silent here. Some browsers may still reject until media is ready.
             });
         };
 
@@ -75,7 +74,7 @@ export const SoundPlayer: React.FC<SoundPlayerProps> = ({
         const audio = audioRef.current;
         if (!audio) return;
 
-        // 🔥 restart sound every time result opens
+        //  restart sound every time result opens
         audio.currentTime = 0;
 
         audio.play().catch((err) => {

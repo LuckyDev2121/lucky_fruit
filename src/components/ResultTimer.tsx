@@ -34,26 +34,6 @@ export default function ResultTimer({ start, onResultTimeUp }: ResultTimerProps)
         onResultTimeUpRef.current = onResultTimeUp;
     }, [onResultTimeUp]);
 
-    // useEffect(() => {
-    //     let isMounted = true;
-
-    //     if (RoundId) {
-    //         void makeGameRound(RoundId)
-    //             .then((response) => {
-    //                 if (isMounted) {
-    //                     setResultResponse(response);
-    //                 }
-    //             })
-    //             .catch((error) => {
-    //                 console.error(error);
-    //             });
-    //     }
-
-    //     return () => {
-    //         isMounted = false;
-    //     };
-    // }, [makeGameRound, RoundId]);
-
     useEffect(() => {
         if (duration <= 0) {
             onResultTimeUpRef.current?.();

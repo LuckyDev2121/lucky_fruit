@@ -79,42 +79,6 @@ export const fetchPlayerInfo = async (): Promise<PlayerDetailsData> => {
   return response.data.data as PlayerDetailsData;
 };
 
-// export type PlatformUserInput = {
-//   username: string;
-//   avater: string;
-// };
-
-// export type SyncUser = {
-//   username?: string;
-//   avater?: string;
-//   balance?: number;
-//   updated_at?: string;
-//   created_at?: string;
-//   id?: number;
-// };
-
-
-// type SyncUserResponse = {
-//   status?: boolean;
-//   data?: SyncUser;
-//   message?: string;
-// };
-
-// export const createOrSyncUser = async (
-//   payload: PlatformUserInput,
-// ): Promise<SyncUser> => {
-//   const response = await axios.post<SyncUserResponse>(USER_API_URL, payload);
-
-//   if (!response.data.status) {
-//     throw new Error(response.data.message || "Failed to sync user");
-//   }
-
-//   return response.data.data as SyncUser;
-// };
-
-
-
-
 type GameResultItem = {
   option_id: number;
   option_name: string;

@@ -230,7 +230,6 @@ export default function PlayBoard({
             return;
         }
     }, [RoundId, isRoundRunning]);
-    useEffect(() => console.log("RoundTime", results), [])
     useEffect(() => {
         if (isRoundRunning && RoundId) {
             clearCurrentRoundBets();
@@ -288,7 +287,7 @@ export default function PlayBoard({
             const hasBets = Object.values(batch).some((amount) => amount > 0);
             if (!hasBets) return;
 
-            // 🔥 clear queue immediately
+            //  clear queue immediately
             queuedBetsRef.current = {};
             setQueuedBets({});
 
@@ -336,7 +335,6 @@ export default function PlayBoard({
                 <GameElements
                     controlButtons={blockClick}
                     currentBetAmount={currentBetAmount}
-                    // removeBet={resetKey}
                     displayedBets={displayedBets}
                     onBetOption={handleBetOption}
                 />
@@ -469,7 +467,6 @@ export default function PlayBoard({
                                 setShowResultTimer(true)
                                 setShowBoardOpacity(false);
                                 setShowChooseRectangle(false);
-                                // setResetKey(prev => prev + 1);
                             }}
                         />
                     </div>
@@ -478,7 +475,6 @@ export default function PlayBoard({
                     <div className='absolute top-[90px] h-[271px] w-[280px] z-30 left-1/2 transform -translate-x-1/2'>
                         <ResultTimer
                             start={resultTime}
-                            // RoundId={RoundId}
                             onResultTimeUp={() => {
                                 onOpenModal("result");
                                 setShowHiddenTimer(true);

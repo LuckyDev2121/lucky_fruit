@@ -27,7 +27,6 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
     const [showIcon, setShowIcon] = useState(false);
     const initialTime = Math.max(0, start ?? 0);
     const [time, setTime] = useState(initialTime);
-    // const [resultResponse, setResultResponse] = useState<ResultData | null>(null);
     const onResultTimeUpRef = useRef(onResultTimeUp);
     const { options, makeResult: result, previousRoundBets, currentRoundBets, refreshGameData, } = useGame();
     const activeResult = result;
@@ -83,25 +82,6 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
             : "";
     };
 
-    // useEffect(() => {
-    //     let isMounted = true;
-
-    //     if (roundData?.round_no) {
-    //         void makeGameResult(roundData.round_no).then((response) => {
-    //             if (isMounted) {
-    //                 setResultResponse(response);
-    //             }
-    //         }).catch((error) => {
-    //             console.error(error);
-    //         });
-    //     }
-    //     onResultTimeUpRef.current = onResultTimeUp;
-
-    //     return () => {
-    //         isMounted = false;
-    //     };
-    // }, [makeGameResult, onResultTimeUp, roundData?.round_no]);
-
     useEffect(() => {
         void refreshGameData({ resetPendingBalanceDeduction: true });
     }, [refreshGameData]);
@@ -136,9 +116,6 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
     }, [initialTime]);
 
     const formatted = String(time).padStart(2, "0");
-    useEffect(() => {
-        console.log("UPDATED currentRoundBets", currentRoundBets);
-    }, [currentRoundBets]);
 
     return (
         <div className="relative h-[342px] w-[393px] overflow-hidden rounded-t-[20px] bg-gradient-to-t from-[#7C00D5] to-[#5028C1]">

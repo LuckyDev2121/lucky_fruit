@@ -5,7 +5,6 @@ import LoadingScreen from "./components/LoadingScrean";
 import LuckyFruitGame from "./components/LuckyFruitGame";
 import { GAME_ASSETS, getAssetUrl } from "./config/gameConfig";
 import { useGame, bootstrapGameStore } from "./hooks/useGameHook";
-// import { syncPendingPlatformUser, USER_SYNCED_EVENT } from "./utils/userIntegration";
 
 function preloadImage(src: string) {
   return new Promise<void>((resolve) => {
@@ -46,8 +45,6 @@ async function preloadGameAssets(setProgress: (value: number) => void) {
 }
 
 function App() {
-  // const [isSoundPlaying, setIsSoundPlaying] = useState(true);
-  // const [isMusicPlaying, setIsMusicPlaying] = useState(true);
   const [isOpenResultMenu, setIsOpenResultMenu] = useState(false);
   const [progress, setProgress] = useState(0);
   const [isBootLoading, setIsBootLoading] = useState(true);
@@ -93,7 +90,6 @@ function App() {
 
         setProgress(85);
 
-        // await syncPendingPlatformUser();
 
         const [res] = await Promise.all([
           createRound(),
@@ -128,17 +124,6 @@ function App() {
       cancelled = true;
     };
   }, [createRound]);
-
-  // useEffect(() => {
-  //   const handleUserSynced = () => {
-  //     void refreshGameData({ resetPendingBalanceDeduction: true });
-  //   };
-
-  //   window.addEventListener(USER_SYNCED_EVENT, handleUserSynced);
-  //   return () => {
-  //     window.removeEventListener(USER_SYNCED_EVENT, handleUserSynced);
-  //   };
-  // }, [refreshGameData]);
 
   useEffect(() => {
     if (isBootLoading || isRoundRunning) {

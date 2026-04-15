@@ -30,6 +30,5 @@ export default function MovingImage() {
                 repeat: Infinity,
             }}
         />
-        // </div>
     );
 }
