@@ -69,46 +69,6 @@ export default function ResultTimer({ start, onResultTimeUp }: ResultTimerProps)
 
     return (
         <div className='absolute left-[3px] top-[4px] h-[263px] w-[274px] z-30 grid grid-cols-3 grid-rows-3  '>
-            {/* {activeResult?.winning_option_id === 12 ?
-                <div className="relative col-start-1 row-start-2 z-40" >
-                    <img src={getAssetUrl(GAME_ASSETS.selectround)} alt="Choose Rectangle" className="absolute -left-[2px] -top-[8px] h-[100px] w-[96px]" />
-                </div> : <div className={`relative col-start-1 row-start-2 z-40 bg-black/50 rounded-[8px]`} />
-            }
-            {activeResult?.winning_option_id === 11 ?
-                <div className="relative col-start-1 row-start-3 z-40" >
-                    <img src={getAssetUrl(GAME_ASSETS.selectround)} alt="Choose Rectangle" className="absolute -left-[2px] -top-[8px] h-[100px] w-[96px]" />
-                </div> : <div className={`relative col-start-1 row-start-3 z-40 bg-black/50 rounded-[8px]`} />
-            }
-            {activeResult?.winning_option_id === 10 ?
-                <div className="relative col-start-2 row-start-3 z-40" >
-                    <img src={getAssetUrl(GAME_ASSETS.selectround)} alt="Choose Rectangle" className="absolute -left-[2px] -top-[8px] h-[100px] w-[96px]" />
-                </div> : <div className={`relative col-start-2 row-start-3 z-40 bg-black/50 rounded-[8px]`} />
-            }
-            {activeResult?.winning_option_id === 9 ?
-                <div className="relative left-[5px] col-start-3 row-start-3 z-40" >
-                    <img src={getAssetUrl(GAME_ASSETS.selectround)} alt="Choose Rectangle" className="absolute -left-[2px] -top-[8px] h-[100px] w-[96px]" />
-                </div> : <div className={`relative col-start-3 row-start-3 z-40 bg-black/50 rounded-[8px]`} />
-            }
-            {activeResult?.winning_option_id === 8 ?
-                <div className="relative left-[5px] col-start-3 row-start-2 z-40" >
-                    <img src={getAssetUrl(GAME_ASSETS.selectround)} alt="Choose Rectangle" className="absolute  -left-[2px] -top-[8px] h-[100px] w-[96px]" />
-                </div> : <div className={`relative col-start-3 row-start-2 z-40 bg-black/50 rounded-[8px]`} />
-            }
-            {activeResult?.winning_option_id === 7 ?
-                <div className="relative left-[5px] col-start-3 row-start-1 z-40" >
-                    <img src={getAssetUrl(GAME_ASSETS.selectround)} alt="Choose Rectangle" className="absolute -left-[2px] -top-[8px] h-[100px] w-[96px]" />
-                </div> : <div className={`relative col-start-3 row-start-1 z-40 bg-black/50 rounded-[8px]`} />
-            }
-            {activeResult?.winning_option_id === 6 ?
-                <div className="relative col-start-2 row-start-1 z-40" >
-                    <img src={getAssetUrl(GAME_ASSETS.selectround)} alt="Choose Rectangle" className="absolute -left-[2px] -top-[8px] h-[100px] w-[96px]" />
-                </div> : <div className={`relative col-start-2 row-start-1 z-40 bg-black/50 rounded-[8px]`} />
-            }
-            {activeResult?.winning_option_id === 5 ?
-                <div className="relative col-start-1 row-start-1 z-40" >
-                    <img src={getAssetUrl(GAME_ASSETS.selectround)} alt="Choose Rectangle" className="absolute -left-[2px] -top-[8px] h-[100px] w-[96px]" />
-                </div> : <div className={`relative col-start-1 row-start-1 z-40 bg-black/50 rounded-[8px]`} />
-            } */}
             {gridMap.map((item) => (
                 winningIds.includes(item.id) ? (
                     <div key={item.id} className={`relative col-start-${item.col} row-start-${item.row} z-40`}>

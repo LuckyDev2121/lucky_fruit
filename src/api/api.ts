@@ -1,7 +1,6 @@
 import axios from "axios";
 import {
   GAME_DETAILS_API_URL,
-  USER_API_URL,
   PLAYER_API_URL,
   GAME_RESULTS_API_URL,
   PLACE_BET_API_URL,
@@ -12,6 +11,7 @@ import {
   RANKING_TODAY_API_URL,
   WIN_TODAY_API_URL,
   PLAYER_LOG_API_URL,
+  RECHARGE_URL_API_URL,
 } from "../config/gameConfig";
 type GameOption = {
   id: number;
@@ -78,38 +78,38 @@ export const fetchPlayerInfo = async (): Promise<PlayerDetailsData> => {
   return response.data.data as PlayerDetailsData;
 };
 
-export type PlatformUserInput = {
-  username: string;
-  avater: string;
-};
+// export type PlatformUserInput = {
+//   username: string;
+//   avater: string;
+// };
 
-export type SyncUser = {
-  username?: string;
-  avater?: string;
-  balance?: number;
-  updated_at?: string;
-  created_at?: string;
-  id?: number;
-};
+// export type SyncUser = {
+//   username?: string;
+//   avater?: string;
+//   balance?: number;
+//   updated_at?: string;
+//   created_at?: string;
+//   id?: number;
+// };
 
 
-type SyncUserResponse = {
-  status?: boolean;
-  data?: SyncUser;
-  message?: string;
-};
+// type SyncUserResponse = {
+//   status?: boolean;
+//   data?: SyncUser;
+//   message?: string;
+// };
 
-export const createOrSyncUser = async (
-  payload: PlatformUserInput,
-): Promise<SyncUser> => {
-  const response = await axios.post<SyncUserResponse>(USER_API_URL, payload);
+// export const createOrSyncUser = async (
+//   payload: PlatformUserInput,
+// ): Promise<SyncUser> => {
+//   const response = await axios.post<SyncUserResponse>(USER_API_URL, payload);
 
-  if (!response.data.status) {
-    throw new Error(response.data.message || "Failed to sync user");
-  }
+//   if (!response.data.status) {
+//     throw new Error(response.data.message || "Failed to sync user");
+//   }
 
-  return response.data.data as SyncUser;
-};
+//   return response.data.data as SyncUser;
+// };
 
 
 
@@ -334,4 +334,19 @@ export const fetchPlayerLog= async (): Promise<PlayerLogData[]> => {
     throw new Error(response.data.status || "Failed to load ranking today");
   }
   return response.data.data ?? [];
+};
+
+export type RechargeUrlResponse={
+  status?:boolean;
+  message?:string;
+  url?:string;
+}
+export const fetchRechargeUrl = async (): Promise<RechargeUrlResponse> => {
+  const response = await axios.get<RechargeUrlResponse>(RECHARGE_URL_API_URL);
+
+  if (!response.data.status) {
+    throw new Error(response.data.message || "API returned false status");
+  }
+
+  return response.data;
 };

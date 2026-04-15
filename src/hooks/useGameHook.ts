@@ -7,6 +7,7 @@ import {
   fetchPlayerInfo,
   fetchGameResults,
   createRound,
+  fetchRechargeUrl,
   placeBet as placeBetRequest,
   makeGameResult,
   fetchSoundSetting,
@@ -21,6 +22,7 @@ import {
   type ResultData,
   type PlaceBet,
   type RankingTodayItem,
+  type RechargeUrlResponse,
 } from "../api/api";
 import {
   REALTIME_CHANNEL,
@@ -48,6 +50,7 @@ type GameStore = {
   rankingTodays: RankingTodayItem[];
   winToday: WinTodayResponse|null;
   playerLog: PlayerLogData[];
+  url?:RechargeUrlResponse | null;
 };
 
 const listeners = new Set<(state: GameStore) => void>();
@@ -68,6 +71,7 @@ let store: GameStore = {
   rankingTodays: [],
   winToday:null,
   playerLog:[],
+  url:null,
 };
 
 let hasInitialized = false;
@@ -118,7 +122,7 @@ async function runRefreshGameData(options?: RefreshGameDataOptions) {
   updateStore({ isLoading: true, isMusicSettingLoading: true });
 
   try {
-    const [gameDetail, player, gameResults, isMusicEnabled, rankingToday, winToday, playerLog] = await Promise.all([
+    const [gameDetail, player, gameResults, isMusicEnabled, rankingToday, winToday, playerLog,url] = await Promise.all([
       fetchGameDetail(),
       fetchPlayerInfo(),
       fetchGameResults(),
@@ -126,6 +130,7 @@ async function runRefreshGameData(options?: RefreshGameDataOptions) {
       fetchRankingToday(),
       fetchWinToday(),
       fetchPlayerLog(),
+      fetchRechargeUrl(),
     ]);
 
     updateStore({
@@ -138,6 +143,7 @@ async function runRefreshGameData(options?: RefreshGameDataOptions) {
       rankingTodays: rankingToday,
       playerLog:playerLog,
       winToday:winToday,
+      url: url,
       pendingBalanceDeduction: options?.resetPendingBalanceDeduction
         ? 0
         : store.pendingBalanceDeduction,
@@ -208,6 +214,19 @@ export function useGame() {
     updateStore({ winToday: data });
     return data;
   }, []);
+
+  const handleRechargeRedirect = useCallback(async () => {
+  try {
+    const data = await fetchRechargeUrl();
+
+    if (data.url && data.url.startsWith("http")) {
+      updateStore({url:data});
+      window.location.href = data.url;
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}, []);
 
   const handleGameRound = useCallback(async (roundId: number) => {
     const data = await makeGameResult(roundId);
@@ -342,6 +361,7 @@ export function useGame() {
     isMusicEnabled: snapshot.isMusicEnabled,
     isMusicSettingLoading: snapshot.isMusicSettingLoading,
     rankingToday: snapshot.rankingTodays,
+    rechargeUrl: snapshot.url?.url || null,
     refreshGameData,
     createRound: handleCreateRound,
     makeGameRound:handleGameRound,
@@ -355,5 +375,6 @@ export function useGame() {
     setPreviousRoundBets,
     handlePlayerLog,
     handleWinToday,
+    handleRechargeRedirect,
   };
 }

@@ -28,7 +28,7 @@ const API_BASE_URL =
 
 
 export const GAME_DETAILS_API_URL = `${API_BASE_URL.replace(/\/$/, "")}/game-details/${GAME_ID}`;
-export const USER_API_URL = `${API_BASE_URL.replace(/\/$/, "")}/user`;
+// export const USER_API_URL = `${API_BASE_URL.replace(/\/$/, "")}/user`;
 export const PLAYER_API_URL = `${API_BASE_URL.replace(/\/$/, "")}/player`;
 export const GAME_RESULTS_API_URL = `${API_BASE_URL.replace(/\/$/, "")}/game/${GAME_ID}/results`;
 export const ROUND_RESULT_API_URL = `${API_BASE_URL.replace(/\/$/, "")}/round-result`;
@@ -39,6 +39,7 @@ export const SOUND_SETTING_API_URL = `${API_BASE_URL.replace(/\/$/, "")}/sound-s
 export const RANKING_TODAY_API_URL = `${API_BASE_URL.replace(/\/$/, "")}/ranking-today/${GAME_ID}`;
 export const WIN_TODAY_API_URL= `${API_BASE_URL.replace(/\/$/, "")}/win-today`;
 export const PLAYER_LOG_API_URL= `${API_BASE_URL.replace(/\/$/, "")}/player-log`;
+export const RECHARGE_URL_API_URL= `${API_BASE_URL.replace(/\/$/, "")}/company/wallet/1`;
 
 
 export const REVERB_KEY =
@@ -143,3 +144,4 @@ export const GAME_ASSETS = {
   gamelogo: "game-logo.svg",
   hand: "hand.svg",
 } as const;
+

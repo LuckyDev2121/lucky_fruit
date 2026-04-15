@@ -60,6 +60,8 @@ export default function PlayBoard({
         releaseBetBalance,
         playerInfo,
         setPreviousRoundBets,
+        rechargeUrl,
+        handleRechargeRedirect,
     } = useGame();
     const queuedBetsRef = useRef<Record<number, number>>({});
     const isSendingBetRef = useRef(false);
@@ -214,9 +216,6 @@ export default function PlayBoard({
             onOpenModal("result");
             setShowResultTimer(false)
         } else if (RoundTime < 1) {
-            // setChooseTime(5);
-            // setResultTime(1);
-            // setHiddenTime(3);
             setBlockClick("none");
             setShowLedTimer(false);
             setShowChooseTimer(false);
@@ -248,6 +247,11 @@ export default function PlayBoard({
         const queuedTotal = sumBetMap(queuedBetsRef.current);
 
         if ((playerBalance - queuedTotal) < amount) {
+            if (rechargeUrl) {
+                window.location.href = rechargeUrl;
+            } else {
+                handleRechargeRedirect();
+            }
             return;
         }
 

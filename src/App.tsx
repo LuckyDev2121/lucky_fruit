@@ -5,7 +5,7 @@ import LoadingScreen from "./components/LoadingScrean";
 import LuckyFruitGame from "./components/LuckyFruitGame";
 import { GAME_ASSETS, getAssetUrl } from "./config/gameConfig";
 import { useGame, bootstrapGameStore } from "./hooks/useGameHook";
-import { syncPendingPlatformUser, USER_SYNCED_EVENT } from "./utils/userIntegration";
+// import { syncPendingPlatformUser, USER_SYNCED_EVENT } from "./utils/userIntegration";
 
 function preloadImage(src: string) {
   return new Promise<void>((resolve) => {
@@ -55,7 +55,7 @@ function App() {
   const [roundTime, setRoundTime] = useState(0)
   const openResultMenu = () => setIsOpenResultMenu(true);
   const closeResultMenu = () => setIsOpenResultMenu(false);
-  const { createRound, isMusicEnabled, refreshGameData, setMusicEnabled } = useGame();
+  const { createRound, isMusicEnabled, setMusicEnabled } = useGame();
 
   const attemptStartRound = useCallback(async () => {
     try {
@@ -92,7 +92,7 @@ function App() {
 
         setProgress(85);
 
-        await syncPendingPlatformUser();
+        // await syncPendingPlatformUser();
 
         const [res] = await Promise.all([
           createRound(),
@@ -128,16 +128,16 @@ function App() {
     };
   }, [createRound]);
 
-  useEffect(() => {
-    const handleUserSynced = () => {
-      void refreshGameData({ resetPendingBalanceDeduction: true });
-    };
+  // useEffect(() => {
+  //   const handleUserSynced = () => {
+  //     void refreshGameData({ resetPendingBalanceDeduction: true });
+  //   };
 
-    window.addEventListener(USER_SYNCED_EVENT, handleUserSynced);
-    return () => {
-      window.removeEventListener(USER_SYNCED_EVENT, handleUserSynced);
-    };
-  }, [refreshGameData]);
+  //   window.addEventListener(USER_SYNCED_EVENT, handleUserSynced);
+  //   return () => {
+  //     window.removeEventListener(USER_SYNCED_EVENT, handleUserSynced);
+  //   };
+  // }, [refreshGameData]);
 
   useEffect(() => {
     if (isBootLoading || isRoundRunning) {

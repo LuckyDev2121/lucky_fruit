@@ -8,7 +8,7 @@ type CoinBoardProps = {
 };
 
 export default function CoinBoard({ onOpenModal }: CoinBoardProps) {
-  const { playerInfo, displayBalance } = useGame();
+  const { playerInfo, displayBalance, } = useGame();
 
   useEffect(() => {
     if (playerInfo?.avater) {
