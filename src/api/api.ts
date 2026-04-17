@@ -325,7 +325,7 @@ export type Bets={
   created_at?:string;
   round_data?:RoundData;
 }
-type PlayerLogData={
+export type PlayerLogData={
   round_id:number;
   round_no:number;
   winning_option:number[];
