@@ -4,11 +4,11 @@ import './index.css'
 import App from './App.tsx'
 import { checkIntroIntegration } from "./api/auth.ts"
 
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    void navigator.serviceWorker.register("/sw.js");
-  });
-}
+// if ("serviceWorker" in navigator) {
+//   window.addEventListener("load", () => {
+//     void navigator.serviceWorker.register("/sw.js");
+//   });
+// }
 
 async function bootstrap() {
   const search = window.location.search.replace(/\?/g, "&").replace(/^&/, "?");
