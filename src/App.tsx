@@ -53,7 +53,15 @@ function App() {
   const [roundTime, setRoundTime] = useState(0)
   const openResultMenu = () => setIsOpenResultMenu(true);
   const closeResultMenu = () => setIsOpenResultMenu(false);
-  const { createRound, isMusicEnabled, isSoundEnabled, setMusicEnabled, setSoundEnabled } = useGame();
+  const {
+    createRound,
+    isMusicEnabled,
+    isSoundEnabled,
+    isMusicSettingLoading,
+    isSoundSettingLoading,
+    setMusicEnabled,
+    setSoundEnabled,
+  } = useGame();
 
   const attemptStartRound = useCallback(async () => {
     try {
@@ -137,34 +145,33 @@ function App() {
     return () => window.clearInterval(timer);
   }, [attemptStartRound, isBootLoading, isRoundRunning]);
 
-  if (isBootLoading) {
-
-    return <LoadingScreen progress={progress} />;
-  }
-
   return (
     <div className="relative flex min-h-[100dvh] w-full items-end justify-center overflow-hidden">
-      <MusicPlayer isMusicPlaying={isMusicEnabled} />
+      <MusicPlayer isMusicPlaying={!isMusicSettingLoading && isMusicEnabled} />
       <SoundPlayer
-        isSoundPlaying={isSoundEnabled}
+        isSoundPlaying={!isSoundSettingLoading && isSoundEnabled}
         isOpenResultMenu={isOpenResultMenu}
       />
-      <LuckyFruitGame
-        TodaysRoundId={roundId}
-        isRoundRunning={isRoundRunning}
-        RoundTime={roundTime}
-        onRoundFinished={handleRoundFinished}
-        onOpenResultMenu={openResultMenu}
-        onCloseResultMenu={closeResultMenu}
-        isMusicPlaying={isMusicEnabled}
-        isSoundPlaying={isSoundEnabled}
-        onToggleMusic={() => {
-          void setMusicEnabled(!isMusicEnabled);
-        }}
-        onToggleSound={() => {
-          void setSoundEnabled(!isSoundEnabled);
-        }}
-      />
+      {isBootLoading ? (
+        <LoadingScreen progress={progress} />
+      ) : (
+        <LuckyFruitGame
+          TodaysRoundId={roundId}
+          isRoundRunning={isRoundRunning}
+          RoundTime={roundTime}
+          onRoundFinished={handleRoundFinished}
+          onOpenResultMenu={openResultMenu}
+          onCloseResultMenu={closeResultMenu}
+          isMusicPlaying={isMusicEnabled}
+          isSoundPlaying={isSoundEnabled}
+          onToggleMusic={() => {
+            void setMusicEnabled(!isMusicEnabled);
+          }}
+          onToggleSound={() => {
+            void setSoundEnabled(!isSoundEnabled);
+          }}
+        />
+      )}
     </div>
   );
 }
