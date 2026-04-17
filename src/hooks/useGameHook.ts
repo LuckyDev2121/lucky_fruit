@@ -159,13 +159,15 @@ const apiMusic = isMusicEnabled ?? DEFAULT_MUSIC_ENABLED;
   playerInfo: player,
   results: gameResults,
 
-  isSoundEnabled: store.soundOverridden
-  ? store.isSoundEnabled
-  : apiSound,
+  isSoundEnabled:
+  store.soundOverridden === true
+    ? store.isSoundEnabled
+    : apiSound,
 
-  isMusicEnabled: store.musicOverridden
-  ? store.isMusicEnabled
-  : apiMusic,
+isMusicEnabled:
+  store.musicOverridden === true
+    ? store.isMusicEnabled
+    : apiMusic,
 
   isLoading: false,
   isSoundSettingLoading: false,
