@@ -8,8 +8,8 @@ import {
   fetchGameResults,
   createRound,
   fetchRechargeUrl,
-  fetchSoundSetting,
-  fetchMusicSetting,
+  // fetchSoundSetting,
+  // fetchMusicSetting,
   placeBet as placeBetRequest,
   makeGameResult,
   saveSoundSetting,
@@ -155,12 +155,12 @@ async function runRefreshGameData(options?: RefreshGameDataOptions) {
       fetchGameDetail(),
       fetchPlayerInfo(),
       fetchGameResults(),
-      fetchSoundSetting(),
-      fetchMusicSetting(),
       fetchRankingToday(),
       fetchWinToday(),
       fetchPlayerLog(),
       fetchRechargeUrl(),
+      // fetchSoundSetting(),
+      // fetchMusicSetting(),
     ]);
 
   updateStore({
