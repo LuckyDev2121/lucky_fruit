@@ -64,6 +64,9 @@ musicOverridden: boolean;
 
 const DEFAULT_SOUND_ENABLED = true;
 const DEFAULT_MUSIC_ENABLED = true;
+const SOUND_KEY = "game_sound_enabled";
+const MUSIC_KEY = "game_music_enabled";
+
 
 const listeners = new Set<(state: GameStore) => void>();
 let store: GameStore = {
@@ -78,17 +81,26 @@ let store: GameStore = {
   isLoading: true,
   lastBetMessage: null,
   isMusicSettingLoading: true,
-  isMusicEnabled: true,
+  isMusicEnabled: getInitialMusic(),
   isSoundSettingLoading: true,
-  isSoundEnabled: true,
+  isSoundEnabled: getInitialSound(),
   rankingTodays: [],
   winToday:null,
   playerLog:[],
   url:null,
-  soundOverridden: false,
-musicOverridden: false,
+  soundOverridden: true,
+musicOverridden: true,
   // runtimeConfig: { backendOrigin: "", apiBaseUrl: "" },
 };
+function getInitialSound(): boolean {
+  const saved = localStorage.getItem(SOUND_KEY);
+  return saved === null ? true : saved === "true";
+}
+
+function getInitialMusic(): boolean {
+  const saved = localStorage.getItem(MUSIC_KEY);
+  return saved === null ? true : saved === "true";
+}
 
 let hasInitialized = false;
 
@@ -152,23 +164,13 @@ async function runRefreshGameData(options?: RefreshGameDataOptions) {
       fetchPlayerLog(),
       fetchRechargeUrl(),
     ]);
-const apiSound = isSoundEnabled ?? DEFAULT_SOUND_ENABLED;
-const apiMusic = isMusicEnabled ?? DEFAULT_MUSIC_ENABLED;
+
   updateStore({
   gameDetails: gameDetail,
   playerInfo: player,
   results: gameResults,
-
-  isSoundEnabled:
-  store.soundOverridden === true
-    ? store.isSoundEnabled
-    : apiSound,
-
-isMusicEnabled:
-  store.musicOverridden === true
-    ? store.isMusicEnabled
-    : apiMusic,
-
+isSoundEnabled: store.isSoundEnabled,
+isMusicEnabled: store.isMusicEnabled,
   isLoading: false,
   isSoundSettingLoading: false,
   isMusicSettingLoading: false,
@@ -327,35 +329,28 @@ export function useGame() {
     }));
   }, []);
 const handleSetSoundEnabled = useCallback(async (nextValue: boolean) => {
-  updateStore({
-    isSoundEnabled: nextValue,
-    soundOverridden: true,
-  });
+  updateStore({ isSoundEnabled: nextValue });
+
+  localStorage.setItem(SOUND_KEY, String(nextValue));
 
   try {
     await saveSoundSetting(nextValue);
   } catch (err) {
-    updateStore({
-      isSoundEnabled: !nextValue,
-    });
+    updateStore({ isSoundEnabled: !nextValue });
   }
 }, []);
 
 const handleSetMusicEnabled = useCallback(async (nextValue: boolean) => {
-  updateStore({
-    isMusicEnabled: nextValue,
-    musicOverridden: true,
-  });
+  updateStore({ isMusicEnabled: nextValue });
+
+  localStorage.setItem(MUSIC_KEY, String(nextValue));
 
   try {
     await saveMusicSetting(nextValue);
   } catch (err) {
-    updateStore({
-      isMusicEnabled: !nextValue,
-    });
+    updateStore({ isMusicEnabled: !nextValue });
   }
 }, []);
-
   const clearCurrentRoundBets = useCallback(() => {
     updateStore({ currentRoundBets: {} });
   }, []);
