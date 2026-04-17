@@ -215,13 +215,12 @@ type SaveSoundSettingResponse = {
 };
 
 export const saveSoundSetting = async (
-  userId: number,
-  isMusicOn: boolean,
+  isSoundOn: boolean,
 ): Promise<SaveSoundSettingResponse> => {
   const response = await axios.post<SaveSoundSettingResponse>(SOUND_SETTING_API_URL, {
     game_id: GAME_ID,
-    user_id: userId,
-    status: isMusicOn ? 1 : 0,
+    user_id: getUserId(),
+    status: isSoundOn ? 1 : 0,
   });
 
   if (!response.data.status) {
@@ -253,12 +252,11 @@ type SaveMusicSettingResponse = {
 };
 
 export const saveMusicSetting = async (
-  userId: number,
   isMusicOn: boolean,
 ): Promise<SaveMusicSettingResponse> => {
   const response = await axios.post<SaveMusicSettingResponse>(MUSIC_SETTING_API_URL, {
     game_id: GAME_ID,
-    user_id: userId,
+    user_id: getUserId(),
     status: isMusicOn ? 1 : 0,
   });
 

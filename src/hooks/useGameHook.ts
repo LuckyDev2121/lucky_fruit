@@ -312,23 +312,14 @@ export function useGame() {
   }, []);
 
   const handleSetSoundEnabled = useCallback(async (nextValue: boolean) => {
-    const playerId = store.playerInfo?.id;
+    
 
-    if (!playerId) {
-      throw new Error("Player information is not loaded");
-    }
-
-    await saveSoundSetting(playerId, nextValue);
+    await saveSoundSetting( nextValue);
     updateStore({ isSoundEnabled: nextValue });
   }, []);
   const handleSetMusicEnabled = useCallback(async (nextValue: boolean) => {
-    const playerId = store.playerInfo?.id;
 
-    if (!playerId) {
-      throw new Error("Player information is not loaded");
-    }
-
-    await saveMusicSetting(playerId, nextValue);
+    await saveMusicSetting( nextValue);
     updateStore({ isMusicEnabled: nextValue });
   }, []);
 
