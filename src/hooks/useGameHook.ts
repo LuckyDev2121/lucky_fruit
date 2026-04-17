@@ -62,8 +62,6 @@ type GameStore = {
 musicOverridden: boolean;
 };
 
-const DEFAULT_SOUND_ENABLED = true;
-const DEFAULT_MUSIC_ENABLED = true;
 const SOUND_KEY = "game_sound_enabled";
 const MUSIC_KEY = "game_music_enabled";
 
@@ -150,7 +148,7 @@ async function runRefreshGameData(options?: RefreshGameDataOptions) {
   updateStore({ isLoading: true, isMusicSettingLoading: true });
 
   try {
-    const [gameDetail, player, gameResults, isSoundEnabled, isMusicEnabled, rankingToday,
+    const [gameDetail, player, gameResults,  rankingToday,
   winToday,
   playerLog,
   url ] = await Promise.all([
