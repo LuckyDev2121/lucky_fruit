@@ -1,19 +1,9 @@
 import axios from "axios";
 import {
   GAME_ID,
-  GAME_DETAILS_API_URL,
-  PLAYER_API_URL,
-  GAME_RESULTS_API_URL,
-  PLACE_BET_API_URL,
-  CURRENT_ROUND_API_URL,
-  ROUND_RESULT_API_URL,
-  SOUND_SETTING_API_URL,
-  MUSIC_SETTING_API_URL,
-  RANKING_TODAY_API_URL,
-  WIN_TODAY_API_URL,
-  PLAYER_LOG_API_URL,
-  RECHARGE_URL_API_URL,
+  buildApiUrl,
 } from "../config/gameConfig";
+import { getUserId } from "../utils/user";
 type GameOption = {
   id: number;
   name: string;
@@ -46,7 +36,7 @@ type GameDetails = {
 };
 
 export const fetchGameDetail = async (): Promise<GameDetailsData> => {
-  const response = await axios.get<GameDetails>(GAME_DETAILS_API_URL);
+  const response = await axios.get<GameDetails>(buildApiUrl(`game-details/${GAME_ID}`));
 
   if (!response.data.status) {
     throw new Error(response.data.message || "API returned false status");
@@ -70,7 +60,8 @@ type PlayerDetails = {
 };
 
 export const fetchPlayerInfo = async (): Promise<PlayerDetailsData> => {
-  const response = await axios.get<PlayerDetails>(PLAYER_API_URL);
+  const userId = getUserId();
+  const response = await axios.get<PlayerDetails>(buildApiUrl(`player/${userId}`));
 
   if (!response.data.status) {
     throw new Error(response.data.message || "API returned false status");
@@ -92,7 +83,7 @@ export type GameResults = {
 };
 
 export const fetchGameResults = async (): Promise<GameResults> => {
-  const response = await axios.get<GameResults>(GAME_RESULTS_API_URL);
+  const response = await axios.get<GameResults>(buildApiUrl(`game/${GAME_ID}/results`));
 
   if (!response.data.status) {
     throw new Error(response.data.message || "API returned false status");
@@ -107,10 +98,12 @@ export type PlaceBet = {
 };
 
 export const placeBet = async (betId: number, amount: number): Promise<PlaceBet> => {
-  const response = await axios.post<PlaceBet>(PLACE_BET_API_URL, {
+  const userId = getUserId();
+  const response = await axios.post<PlaceBet>(buildApiUrl("place-bet"), {
     game_id: GAME_ID,
     option_id: betId,
     amount: amount,
+    user_id: userId,
   });
 
   if (!response.data.status) {
@@ -144,7 +137,7 @@ export type MakeResultResponse = {
 };
 
 export const makeGameResult = async (roundId: number): Promise<ResultData> => {
-    const response = await axios.post<MakeResultResponse>(ROUND_RESULT_API_URL, {
+    const response = await axios.post<MakeResultResponse>(buildApiUrl("round-result"), {
       game_id: GAME_ID,
       round_no: roundId,
     });
@@ -181,7 +174,7 @@ export type CreateRoundResponse = {
 
 
 export const createRound = async (): Promise<CreateRoundResponse> => {
-    const response = await axios.get<CreateRoundResponse>(CURRENT_ROUND_API_URL);
+    const response = await axios.get<CreateRoundResponse>(buildApiUrl(`game-round/${GAME_ID}`));
   
   if (!response.data) {
     throw new Error(response.data || "Failed to load sound setting");
@@ -197,35 +190,28 @@ type SoundSettingResponse = {
 };
 
 export const fetchSoundSetting = async (): Promise<boolean> => {
-  const response = await axios.get<SoundSettingResponse>(`${SOUND_SETTING_API_URL}/${GAME_ID}/${(await fetchPlayerInfo()).id}`);
+  const userId = getUserId();
 
-  if (!response.data.status) {
-    throw new Error(response.data.message || "Failed to load sound setting");
-  }
+  const response = await axios.get<SoundSettingResponse>(
+    buildApiUrl(`sound-setting/${GAME_ID}/${userId}`)
+  );
 
   return response.data.data === 1;
 };
 
-type SaveSoundSettingResponse = {
-  status?: boolean;
-  message?: string;
-};
+// type SaveSoundSettingResponse = {
+//   status?: boolean;
+//   message?: string;
+// };
 
-export const saveSoundSetting = async (
-  playerId: number,
-  isMusicOn: boolean,
-): Promise<SaveSoundSettingResponse> => {
-  const response = await axios.post<SaveSoundSettingResponse>(SOUND_SETTING_API_URL, {
+export const saveSoundSetting = async (isMusicOn: boolean) => {
+  const userId = getUserId();
+
+  return axios.post(buildApiUrl("sound-setting"), {
     game_id: GAME_ID,
-    player_id: playerId,
+    user_id: userId,
     status: isMusicOn ? 1 : 0,
   });
-
-  if (!response.data.status) {
-    throw new Error(response.data.message || "Failed to save sound setting");
-  }
-
-  return response.data;
 };
 
 type MusicSettingResponse = {
@@ -235,7 +221,8 @@ type MusicSettingResponse = {
 };
 
 export const fetchMusicSetting = async (): Promise<boolean> => {
-  const response = await axios.get<MusicSettingResponse>(`${MUSIC_SETTING_API_URL}/${GAME_ID}/${(await fetchPlayerInfo()).id}`);
+   const userId = getUserId();
+  const response = await axios.get<MusicSettingResponse>(buildApiUrl(`music-setting/${GAME_ID}/${userId}`));
 
   if (!response.data.status) {
     throw new Error(response.data.message || "Failed to load music setting");
@@ -253,7 +240,7 @@ export const saveMusicSetting = async (
   playerId: number,
   isMusicOn: boolean,
 ): Promise<SaveMusicSettingResponse> => {
-  const response = await axios.post<SaveMusicSettingResponse>(MUSIC_SETTING_API_URL, {
+  const response = await axios.post<SaveMusicSettingResponse>(buildApiUrl("music-setting"), {
     game_id: GAME_ID,
     player_id: playerId,
     status: isMusicOn ? 1 : 0,
@@ -283,7 +270,7 @@ type RankingTodayResponse = {
 };
 
 export const fetchRankingToday = async (): Promise<RankingTodayItem[]> => {
-  const response = await axios.get<RankingTodayResponse>(RANKING_TODAY_API_URL);
+  const response = await axios.get<RankingTodayResponse>(buildApiUrl(`ranking-today/${GAME_ID}`));
 
   if (!response.data.status) {
     throw new Error(response.data.message || "Failed to load ranking today");
@@ -296,12 +283,13 @@ export type WinTodayResponse={
   user_id?:number;
   win?:number;
 }
-export const fetchWinToday= async (): Promise<WinTodayResponse> => {
-  const response = await axios.get<WinTodayResponse>(WIN_TODAY_API_URL);
+export const fetchWinToday = async (): Promise<WinTodayResponse> => {
+  const userId = getUserId();
 
-  if (!response.data.status) {
-    throw new Error(response.data.status || "Failed to load ranking today");
-  }
+  const response = await axios.get<WinTodayResponse>(
+    buildApiUrl(`win-today/${userId}`)
+  );
+
   return response.data;
 };
 
@@ -330,12 +318,13 @@ type PlayerLogResponse={
   data?:PlayerLogData[];
 }
 
-export const fetchPlayerLog= async (): Promise<PlayerLogData[]> => {
-  const response = await axios.get<PlayerLogResponse>(PLAYER_LOG_API_URL);
+export const fetchPlayerLog = async (): Promise<PlayerLogData[]> => {
+  const userId = getUserId();
 
-  if (!response.data.status) {
-    throw new Error(response.data.status || "Failed to load ranking today");
-  }
+  const response = await axios.get<PlayerLogResponse>(
+    buildApiUrl(`player-log/${userId}`)
+  );
+
   return response.data.data ?? [];
 };
 
@@ -345,7 +334,7 @@ export type RechargeUrlResponse={
   url?:string;
 }
 export const fetchRechargeUrl = async (): Promise<RechargeUrlResponse> => {
-  const response = await axios.get<RechargeUrlResponse>(RECHARGE_URL_API_URL);
+  const response = await axios.get<RechargeUrlResponse>(buildApiUrl("company/wallet/1"));
 
   if (!response.data.status) {
     throw new Error(response.data.message || "API returned false status");
@@ -353,3 +342,4 @@ export const fetchRechargeUrl = async (): Promise<RechargeUrlResponse> => {
 
   return response.data;
 };
+

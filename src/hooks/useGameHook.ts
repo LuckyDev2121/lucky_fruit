@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { echo } from "./echo";
+import { getEcho } from "./echo";
 import {
   fetchPlayerLog,
   fetchWinToday,
@@ -25,11 +25,14 @@ import {
   type PlaceBet,
   type RankingTodayItem,
   type RechargeUrlResponse,
+  
 } from "../api/api";
 import {
+  // fetchRuntimeConfigFromApi,
   REALTIME_CHANNEL,
   REALTIME_EVENT,
   getAssetUrl,
+  // type RuntimeConfig,
 } from "../config/gameConfig";
 
 export function resolveAssetUrl(path: string): string {
@@ -55,6 +58,7 @@ type GameStore = {
   winToday: WinTodayResponse|null;
   playerLog: PlayerLogData[];
   url?:RechargeUrlResponse | null;
+  // runtimeConfig: RuntimeConfig;
 };
 
 
@@ -79,6 +83,7 @@ let store: GameStore = {
   winToday:null,
   playerLog:[],
   url:null,
+  // runtimeConfig: { backendOrigin: "", apiBaseUrl: "" },
 };
 
 let hasInitialized = false;
@@ -139,6 +144,7 @@ async function runRefreshGameData(options?: RefreshGameDataOptions) {
       fetchWinToday(),
       fetchPlayerLog(),
       fetchRechargeUrl(),
+      // fetchRuntimeConfigFromApi(),
     ]);
 
     updateStore({
@@ -158,6 +164,7 @@ async function runRefreshGameData(options?: RefreshGameDataOptions) {
         ? 0
         : store.pendingBalanceDeduction,
       previousRoundBets: normalizeBetRecord(gameDetail.options, store.previousRoundBets),
+      // runtimeConfig: runtimeConfig,
     });
   } catch (error) {
     updateStore({ isLoading: false, isMusicSettingLoading: false, isSoundSettingLoading: false });
@@ -166,13 +173,11 @@ async function runRefreshGameData(options?: RefreshGameDataOptions) {
 }
 
 function initializeStore() {
-  if (hasInitialized) {
-    return;
-  }
+  if (hasInitialized) return;
 
   hasInitialized = true;
 
-  const channel = echo.channel(REALTIME_CHANNEL);
+  const channel = getEcho().channel(REALTIME_CHANNEL);
   const eventName = `.${REALTIME_EVENT}`;
 
   channel.listen(eventName, async () => {
