@@ -201,7 +201,7 @@ type SoundSettingResponse = {
 
 export const fetchSoundSetting = async (): Promise<boolean> => {
   const response = await axios.get<SoundSettingResponse>(`${SOUND_SETTING_API_URL}/${GAME_ID}/${getUserId()}`);
-
+console.log("userid", getUserId(),"fetchMusic",response.data);
   if (!response.data.status) {
     throw new Error(response.data.message || "Failed to load sound setting");
   }
@@ -222,7 +222,7 @@ export const saveSoundSetting = async (
     user_id: getUserId(),
     status: isSoundOn ? 1 : 0,
   });
-
+  console.log("saveSound-userid",getUserId(),"isSoundOn",isSoundOn)
   if (!response.data.status) {
     throw new Error(response.data.message || "Failed to save sound setting");
   }
@@ -242,7 +242,7 @@ export const fetchMusicSetting = async (): Promise<boolean> => {
   if (!response.data.status) {
     throw new Error(response.data.message || "Failed to load music setting");
   }
-
+console.log("userid", getUserId(),"fetchMusic",response.data);
   return response.data.data === 1;
 };
 
@@ -259,7 +259,7 @@ export const saveMusicSetting = async (
     user_id: getUserId(),
     status: isMusicOn ? 1 : 0,
   });
-
+console.log("saveMusic-userid",getUserId(),"isMusicOn",isMusicOn)
   if (!response.data.status) {
     throw new Error(response.data.message || "Failed to save music setting");
   }

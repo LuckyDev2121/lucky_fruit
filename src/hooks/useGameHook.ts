@@ -62,9 +62,6 @@ type GameStore = {
 musicOverridden: boolean;
 };
 
-const SOUND_KEY = "game_sound_enabled";
-const MUSIC_KEY = "game_music_enabled";
-
 
 const listeners = new Set<(state: GameStore) => void>();
 let store: GameStore = {
@@ -79,26 +76,17 @@ let store: GameStore = {
   isLoading: true,
   lastBetMessage: null,
   isMusicSettingLoading: true,
-  isMusicEnabled: getInitialMusic(),
+  isMusicEnabled: true,
   isSoundSettingLoading: true,
-  isSoundEnabled: getInitialSound(),
+  isSoundEnabled: true,
   rankingTodays: [],
   winToday:null,
   playerLog:[],
   url:null,
-  soundOverridden: true,
-musicOverridden: true,
+  soundOverridden: false,
+musicOverridden: false,
   // runtimeConfig: { backendOrigin: "", apiBaseUrl: "" },
 };
-function getInitialSound(): boolean {
-  const saved = localStorage.getItem(SOUND_KEY);
-  return saved === null ? true : saved === "true";
-}
-
-function getInitialMusic(): boolean {
-  const saved = localStorage.getItem(MUSIC_KEY);
-  return saved === null ? true : saved === "true";
-}
 
 let hasInitialized = false;
 
@@ -148,10 +136,7 @@ async function runRefreshGameData(options?: RefreshGameDataOptions) {
   updateStore({ isLoading: true, isMusicSettingLoading: true });
 
   try {
-    const [gameDetail, player, gameResults,  rankingToday,
-  winToday,
-  playerLog,
-  url ] = await Promise.all([
+    const [gameDetail, player, gameResults,  rankingToday,  winToday, playerLog, url, isSoundEnabled, isMusicEnabled, ] = await Promise.all([
       fetchGameDetail(),
       fetchPlayerInfo(),
       fetchGameResults(),
@@ -167,20 +152,20 @@ async function runRefreshGameData(options?: RefreshGameDataOptions) {
   gameDetails: gameDetail,
   playerInfo: player,
   results: gameResults,
-isSoundEnabled: store.isSoundEnabled,
-isMusicEnabled: store.isMusicEnabled,
+
   isLoading: false,
   isSoundSettingLoading: false,
   isMusicSettingLoading: false,
   rankingTodays: rankingToday,
-      playerLog:playerLog,
-      winToday:winToday,
-      url: url,
-      pendingBalanceDeduction: options?.resetPendingBalanceDeduction
-        ? 0
-        : store.pendingBalanceDeduction,
-      previousRoundBets: normalizeBetRecord(gameDetail.options, store.previousRoundBets),
-     
+  playerLog:playerLog,
+  winToday:winToday,
+  url: url,
+    pendingBalanceDeduction: options?.resetPendingBalanceDeduction
+      ? 0
+      : store.pendingBalanceDeduction,
+  previousRoundBets: normalizeBetRecord(gameDetail.options, store.previousRoundBets),
+  isSoundEnabled,
+  isMusicEnabled,
 });
   } catch (error) {
     updateStore({ isLoading: false, isMusicSettingLoading: false, isSoundSettingLoading: false });
@@ -326,29 +311,19 @@ export function useGame() {
       pendingBalanceDeduction: Math.max(0, current.pendingBalanceDeduction - amount),
     }));
   }, []);
-const handleSetSoundEnabled = useCallback(async (nextValue: boolean) => {
-  updateStore({ isSoundEnabled: nextValue });
-
-  localStorage.setItem(SOUND_KEY, String(nextValue));
-
-  try {
-    await saveSoundSetting(nextValue);
-  } catch (err) {
-    updateStore({ isSoundEnabled: !nextValue });
-  }
-}, []);
+ const handleSetSoundEnabled = useCallback(async (nextValue: boolean) => {
+    
+console.log("sound",nextValue);
+    await saveSoundSetting( nextValue);
+    updateStore({ isSoundEnabled: nextValue });
+  }, []);
 
 const handleSetMusicEnabled = useCallback(async (nextValue: boolean) => {
-  updateStore({ isMusicEnabled: nextValue });
-
-  localStorage.setItem(MUSIC_KEY, String(nextValue));
-
-  try {
-    await saveMusicSetting(nextValue);
-  } catch (err) {
-    updateStore({ isMusicEnabled: !nextValue });
-  }
-}, []);
+console.log("music",nextValue);
+    await saveMusicSetting( nextValue);
+    updateStore({ isMusicEnabled: nextValue });
+  }, []);
+  
   const clearCurrentRoundBets = useCallback(() => {
     updateStore({ currentRoundBets: {} });
   }, []);

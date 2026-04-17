@@ -78,7 +78,6 @@ function App() {
     void attemptStartRound();
   }, [attemptStartRound]);
 
-
   useEffect(() => {
     let cancelled = false;
 
@@ -160,13 +159,10 @@ function App() {
         isMusicPlaying={isMusicEnabled}
         isSoundPlaying={isSoundEnabled}
         onToggleMusic={() => {
-          const next = !isMusicEnabled;
-          void setMusicEnabled(next);
+          void setMusicEnabled(!isMusicEnabled);
         }}
-
         onToggleSound={() => {
-          const next = !isSoundEnabled;
-          void setSoundEnabled(next);
+          void setSoundEnabled(!isSoundEnabled);
         }}
       />
     </div>
