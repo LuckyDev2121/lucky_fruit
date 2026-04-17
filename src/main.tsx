@@ -24,7 +24,7 @@ async function bootstrap() {
     const res = await checkIntroIntegration(userId, token);
 
     if (!res.status || !res.user_id) {
-      window.location.href = "/blocked";
+      window.history.back();
       return;
     }
 
@@ -38,7 +38,7 @@ async function bootstrap() {
     );
   } catch (err) {
     console.error("Intro check failed", err);
-    window.location.href = "/error";
+    window.history.back();
   }
 }
 bootstrap();

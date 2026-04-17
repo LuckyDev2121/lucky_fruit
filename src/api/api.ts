@@ -199,19 +199,26 @@ export const fetchSoundSetting = async (): Promise<boolean> => {
   return response.data.data === 1;
 };
 
-// type SaveSoundSettingResponse = {
-//   status?: boolean;
-//   message?: string;
-// };
+type SaveSoundSettingResponse = {
+  status?: boolean;
+  message?: string;
+};
 
-export const saveSoundSetting = async (isMusicOn: boolean) => {
-  const userId = getUserId();
-
-  return axios.post(buildApiUrl("sound-setting"), {
+export const saveSoundSetting = async (
+  playerId: number,
+  isMusicOn: boolean,
+): Promise<SaveSoundSettingResponse> => {
+  const response = await axios.post<SaveSoundSettingResponse>(buildApiUrl("sound-setting"), {
     game_id: GAME_ID,
-    user_id: userId,
+    player_id: playerId,
     status: isMusicOn ? 1 : 0,
   });
+
+ if (!response.data.status) {
+    throw new Error(response.data.message || "Failed to save music setting");
+  }
+
+  return response.data;
 };
 
 type MusicSettingResponse = {
