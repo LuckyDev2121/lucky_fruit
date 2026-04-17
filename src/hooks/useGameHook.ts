@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { getEcho } from "./echo";
+import { echo,  } from "./echo";
 import {
   fetchPlayerLog,
   fetchWinToday,
@@ -177,7 +177,7 @@ function initializeStore() {
 
   hasInitialized = true;
 
-  const channel = getEcho().channel(REALTIME_CHANNEL);
+  const channel = echo.channel(REALTIME_CHANNEL);
   const eventName = `.${REALTIME_EVENT}`;
 
   channel.listen(eventName, async () => {

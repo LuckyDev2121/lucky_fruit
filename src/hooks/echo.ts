@@ -1,10 +1,10 @@
 import Echo from "laravel-echo";
 import Pusher from "pusher-js";
 import {
-  getRealtimeHost,
-  getRealtimePort,
-  getUseTls,
+  REALTIME_HOST,
+  REALTIME_PORT,
   REVERB_KEY,
+  USE_TLS,
 } from "../config/gameConfig";
 
 declare global {
@@ -15,43 +15,18 @@ declare global {
 
 window.Pusher = Pusher;
 
-let echoInstance: Echo<"reverb"> | null = null;
-
-function createEcho() {
-  const useTls = getUseTls();
-  const host = getRealtimeHost();
-  const port = getRealtimePort();
-
-  return new Echo({
-    broadcaster: "reverb",
-    key: REVERB_KEY,
-    wsHost: host,
-    httpHost: host,
-    wsPort: port,
-    httpPort: port,
-    wssPort: port,
-    httpsPort: port,
-    forceTLS: useTls,
-    enabledTransports: useTls ? ["wss"] : ["ws"],
-    disableStats: true,
-    cluster: "",
-    namespace: false,
-  });
-}
-
-export function getEcho() {
-  if (!echoInstance) {
-    echoInstance = createEcho();
-  }
-
-  return echoInstance;
-}
-
-export function resetEcho() {
-  if (!echoInstance) {
-    return;
-  }
-
-  echoInstance.disconnect();
-  echoInstance = null;
-}
+export const echo = new Echo({
+  broadcaster: "reverb",
+      key: REVERB_KEY,
+      wsHost: REALTIME_HOST,
+      httpHost: REALTIME_HOST,
+      wsPort: REALTIME_PORT,
+      httpPort: REALTIME_PORT,
+      wssPort: REALTIME_PORT,
+      httpsPort: REALTIME_PORT,
+      forceTLS: USE_TLS,
+      enabledTransports: USE_TLS ? ["wss"] : ["ws"],
+      disableStats: true,
+      cluster: "",
+      namespace: false,
+});

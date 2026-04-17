@@ -2,7 +2,6 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
-import { initializeRuntimeConfig } from './config/gameConfig'
 import { checkIntroIntegration } from "./api/auth.ts"
 
 if ("serviceWorker" in navigator) {
@@ -18,11 +17,9 @@ async function bootstrap() {
   const userId = Number(params.get("userid"));
   const token = Number(params.get("token"));
 
-  await initializeRuntimeConfig();
-
   try {
     const res = await checkIntroIntegration(userId, token);
-
+    console.log("Intro check result", res);
     if (!res.status || !res.user_id) {
       window.history.back();
       return;

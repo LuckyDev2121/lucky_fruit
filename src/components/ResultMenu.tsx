@@ -28,7 +28,7 @@ export default function ResultMenu({ start, onResultTimeUp }: ResultMenuProps) {
     const initialTime = Math.max(0, start ?? 0);
     const [time, setTime] = useState(initialTime);
     const onResultTimeUpRef = useRef(onResultTimeUp);
-    const { options, makeResult: result, previousRoundBets, currentRoundBets, refreshGameData, } = useGame();
+    const { options, makeResult: result, previousRoundBets, refreshGameData, } = useGame();
     const activeResult = result;
     const isJackpot = !!activeResult?.jackpot_avatar;
 
