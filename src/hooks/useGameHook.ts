@@ -10,9 +10,7 @@ import {
   fetchRechargeUrl,
   placeBet as placeBetRequest,
   makeGameResult,
-  fetchSoundSetting,
   saveSoundSetting,
-  fetchMusicSetting,
   saveMusicSetting,
   fetchRankingToday,
   type PlayerLogData,
@@ -134,12 +132,10 @@ async function runRefreshGameData(options?: RefreshGameDataOptions) {
   updateStore({ isLoading: true, isMusicSettingLoading: true });
 
   try {
-    const [gameDetail, player, gameResults, isSoundEnabled, isMusicEnabled, rankingToday, winToday, playerLog,url] = await Promise.all([
+    const [gameDetail, player, gameResults,  rankingToday, winToday, playerLog,url] = await Promise.all([
       fetchGameDetail(),
       fetchPlayerInfo(),
       fetchGameResults(),
-      fetchSoundSetting(),
-      fetchMusicSetting(),
       fetchRankingToday(),
       fetchWinToday(),
       fetchPlayerLog(),
@@ -151,8 +147,6 @@ async function runRefreshGameData(options?: RefreshGameDataOptions) {
       gameDetails: gameDetail,
       playerInfo: player,
       results: gameResults,
-      isSoundEnabled,
-      isMusicEnabled,
       isLoading: false,
       isSoundSettingLoading: false,
       isMusicSettingLoading: false,
@@ -313,12 +307,12 @@ export function useGame() {
 
   const handleSetSoundEnabled = useCallback(async (nextValue: boolean) => {
     
-
+console.log("sound",nextValue);
     await saveSoundSetting( nextValue);
     updateStore({ isSoundEnabled: nextValue });
   }, []);
   const handleSetMusicEnabled = useCallback(async (nextValue: boolean) => {
-
+console.log("music",nextValue);
     await saveMusicSetting( nextValue);
     updateStore({ isMusicEnabled: nextValue });
   }, []);
