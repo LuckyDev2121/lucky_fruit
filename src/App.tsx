@@ -79,6 +79,10 @@ function App() {
   }, [attemptStartRound]);
 
   useEffect(() => {
+    void setMusicEnabled(true);
+    void setSoundEnabled(true);
+  }, [])
+  useEffect(() => {
     let cancelled = false;
 
     const bootstrap = async () => {
