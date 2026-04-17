@@ -55,6 +55,11 @@ function App() {
   const closeResultMenu = () => setIsOpenResultMenu(false);
   const { createRound, isMusicEnabled, isSoundEnabled, setMusicEnabled, setSoundEnabled } = useGame();
 
+  useEffect(() => {
+    void setMusicEnabled(true);
+    void setSoundEnabled(true);
+  }, [])
+
   const attemptStartRound = useCallback(async () => {
     try {
       const res = await createRound();
@@ -78,10 +83,7 @@ function App() {
     void attemptStartRound();
   }, [attemptStartRound]);
 
-  useEffect(() => {
-    void setMusicEnabled(true);
-    void setSoundEnabled(true);
-  }, [])
+
   useEffect(() => {
     let cancelled = false;
 
