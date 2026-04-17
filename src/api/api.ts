@@ -314,7 +314,7 @@ type RoundData={
   status:number,
   created_at:string,
 }
-export type PlayerLogData={
+export type Bets={
   id?:number;
   round_id?:number;
   player_id?:number;
@@ -324,6 +324,14 @@ export type PlayerLogData={
   status?:number;
   created_at?:string;
   round_data?:RoundData;
+}
+type PlayerLogData={
+  round_id:number;
+  round_no:number;
+  winning_option:number[];
+  is_jackpot:number;
+  winAnyOption:true;
+  bets:Bets[];
 }
 type PlayerLogResponse={
   status?:boolean;

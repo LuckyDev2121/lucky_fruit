@@ -14,12 +14,11 @@ type RoundData={
   id:number,
   game_id:number,
   round_no:number,
-  winning_option_id:number[],
+  winning_option_id:number[] ;
   status:number,
   created_at:string,
-};
-
-export type PlayerLogData={
+}
+export type Bets={
   id?:number;
   round_id?:number;
   player_id?:number;
@@ -29,7 +28,16 @@ export type PlayerLogData={
   status?:number;
   created_at?:string;
   round_data?:RoundData;
-};
+}
+type PlayerLogData={
+  round_id:number;
+  round_no:number;
+  winning_option:number[];
+  is_jackpot:number;
+  winAnyOption:boolean;
+  bets:Bets[];
+}
+
 
 const ROUND_OPTION_IDS = [5, 6, 7, 8, 9, 10, 11, 12] as const;
 
@@ -82,11 +90,7 @@ export const transformGameLog = (
   const rounds = new Map<number, MutableRound>();
 
   for (const item of data) {
-    if (
-      item.round_id === undefined ||
-      item.option_id === undefined ||
-      item.amount === undefined
-    ) {
+    if (item.round_id === undefined) {
       continue;
     }
 
@@ -96,17 +100,24 @@ export const transformGameLog = (
     if (!round) {
       round = {
         round_id: roundId,
-        winning_option_id: parseWinningIds(item.round_data?.winning_option_id),
-        status: item.status ?? 0,
+        winning_option_id: parseWinningIds(item.winning_option),
+        status: item.winAnyOption ? 1 : 0,
         detail: new Array(ROUND_OPTION_IDS.length).fill(0),
       };
       rounds.set(roundId, round);
     }
 
-    const amount = Number(item.amount);
-    const optionIndex = item.option_id - ROUND_OPTION_IDS[0];
-    if (Number.isFinite(amount) && optionIndex >= 0 && optionIndex < round.detail.length) {
-      round.detail[optionIndex] += amount;
+    for (const bet of item.bets) {
+      if (bet.option_id === undefined || bet.amount === undefined) {
+        continue;
+      }
+
+      const amount = Number(bet.amount);
+      const optionIndex = bet.option_id - ROUND_OPTION_IDS[0];
+
+      if (Number.isFinite(amount) && optionIndex >= 0 && optionIndex < round.detail.length) {
+        round.detail[optionIndex] += amount;
+      }
     }
   }
 
