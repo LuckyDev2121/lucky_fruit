@@ -286,7 +286,7 @@ type RankingTodayResponse = {
 };
 
 export const fetchRankingToday = async (): Promise<RankingTodayItem[]> => {
-  const response = await axios.get<RankingTodayResponse>(`RANKING_TODAY_API_URL`);
+  const response = await axios.get<RankingTodayResponse>(RANKING_TODAY_API_URL);
 
   if (!response.data.status) {
     throw new Error(response.data.message || "Failed to load ranking today");
@@ -300,7 +300,7 @@ export type WinTodayResponse={
   win?:number;
 }
 export const fetchWinToday= async (): Promise<WinTodayResponse> => {
-  const response = await axios.get<WinTodayResponse>(`WIN_TODAY_API_URL/${getUserId()}`);
+  const response = await axios.get<WinTodayResponse>(`${WIN_TODAY_API_URL}/${getUserId()}`);
 
   if (!response.data.status) {
     throw new Error(response.data.status || "Failed to load ranking today");
@@ -334,7 +334,7 @@ type PlayerLogResponse={
 }
 
 export const fetchPlayerLog= async (): Promise<PlayerLogData[]> => {
-  const response = await axios.get<PlayerLogResponse>(`PLAYER_LOG_API_URL/${getUserId()}`);
+  const response = await axios.get<PlayerLogResponse>(`${PLAYER_LOG_API_URL}/${getUserId()}`);
 
   if (!response.data.status) {
     throw new Error(response.data.status || "Failed to load ranking today");
