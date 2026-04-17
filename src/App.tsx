@@ -48,6 +48,8 @@ function App() {
   const [isOpenResultMenu, setIsOpenResultMenu] = useState(false);
   const [progress, setProgress] = useState(0);
   const [isBootLoading, setIsBootLoading] = useState(true);
+  const [audioUnlockVersion, setAudioUnlockVersion] = useState(0);
+  const [hasAudioGesture, setHasAudioGesture] = useState(false);
   const [roundId, setRoundId] = useState<number | null>(null);
   const [isRoundRunning, setIsRoundRunning] = useState(false);
   const [roundTime, setRoundTime] = useState(0)
@@ -62,6 +64,16 @@ function App() {
     setMusicEnabled,
     setSoundEnabled,
   } = useGame();
+  const shouldRequestAudioUnlock =
+    !isMusicSettingLoading &&
+    !isSoundSettingLoading &&
+    (isMusicEnabled || isSoundEnabled) &&
+    !hasAudioGesture;
+
+  const handleUnlockAudio = useCallback(() => {
+    setHasAudioGesture(true);
+    setAudioUnlockVersion((current) => current + 1);
+  }, []);
 
   const attemptStartRound = useCallback(async () => {
     try {
@@ -147,30 +159,44 @@ function App() {
 
   return (
     <div className="relative flex min-h-[100dvh] w-full items-end justify-center overflow-hidden">
-      <MusicPlayer isMusicPlaying={!isMusicSettingLoading && isMusicEnabled} />
+      <MusicPlayer
+        isMusicPlaying={!isMusicSettingLoading && isMusicEnabled}
+        unlockVersion={audioUnlockVersion}
+      />
       <SoundPlayer
         isSoundPlaying={!isSoundSettingLoading && isSoundEnabled}
         isOpenResultMenu={isOpenResultMenu}
+        unlockVersion={audioUnlockVersion}
       />
       {isBootLoading ? (
-        <LoadingScreen progress={progress} />
-      ) : (
-        <LuckyFruitGame
-          TodaysRoundId={roundId}
-          isRoundRunning={isRoundRunning}
-          RoundTime={roundTime}
-          onRoundFinished={handleRoundFinished}
-          onOpenResultMenu={openResultMenu}
-          onCloseResultMenu={closeResultMenu}
-          isMusicPlaying={isMusicEnabled}
-          isSoundPlaying={isSoundEnabled}
-          onToggleMusic={() => {
-            void setMusicEnabled(!isMusicEnabled);
-          }}
-          onToggleSound={() => {
-            void setSoundEnabled(!isSoundEnabled);
-          }}
+        <LoadingScreen
+          progress={progress}
+          onUnlockAudio={handleUnlockAudio}
+          showUnlockHint={shouldRequestAudioUnlock}
         />
+      ) : (
+        <div
+          className="contents"
+          onClick={shouldRequestAudioUnlock ? handleUnlockAudio : undefined}
+          onTouchStart={shouldRequestAudioUnlock ? handleUnlockAudio : undefined}
+        >
+          <LuckyFruitGame
+            TodaysRoundId={roundId}
+            isRoundRunning={isRoundRunning}
+            RoundTime={roundTime}
+            onRoundFinished={handleRoundFinished}
+            onOpenResultMenu={openResultMenu}
+            onCloseResultMenu={closeResultMenu}
+            isMusicPlaying={isMusicEnabled}
+            isSoundPlaying={isSoundEnabled}
+            onToggleMusic={() => {
+              void setMusicEnabled(!isMusicEnabled);
+            }}
+            onToggleSound={() => {
+              void setSoundEnabled(!isSoundEnabled);
+            }}
+          />
+        </div>
       )}
     </div>
   );

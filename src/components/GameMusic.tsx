@@ -1,93 +1,74 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { getMusicUrl, GAME_MUSIC } from "../config/gameConfig";
 
 type MusicPlayerProps = {
     isMusicPlaying: boolean;
+    unlockVersion: number;
 }
 
 type SoundPlayerProps = {
     isSoundPlaying: boolean;
     isOpenResultMenu: boolean;
+    unlockVersion: number;
 }
 
-let hasInteracted = false;
+function attemptPlayback(audio: HTMLAudioElement) {
+    const play = () => {
+        void audio.play().catch((err) => {
+            console.warn("Playback blocked:", err);
+        });
+    };
 
-function useInteractionVersion() {
-    const [interactionVersion, setInteractionVersion] = useState(0);
+    if (audio.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+        play();
+        return undefined;
+    }
 
-    useEffect(() => {
-        if (hasInteracted) {
-            setInteractionVersion(1);
-            return;
-        }
+    const handleCanPlay = () => {
+        audio.removeEventListener("canplay", handleCanPlay);
+        play();
+    };
 
-        const markInteracted = () => {
-            hasInteracted = true;
-            setInteractionVersion((current) => current + 1);
-        };
+    audio.addEventListener("canplay", handleCanPlay, { once: true });
+    audio.load();
 
-        window.addEventListener("pointerdown", markInteracted, { once: true });
-        window.addEventListener("keydown", markInteracted, { once: true });
-
-        return () => {
-            window.removeEventListener("pointerdown", markInteracted);
-            window.removeEventListener("keydown", markInteracted);
-        };
-    }, []);
-
-    return interactionVersion;
+    return () => {
+        audio.removeEventListener("canplay", handleCanPlay);
+    };
 }
-
 function useAudioPlayback(
     audioRef: React.RefObject<HTMLAudioElement | null>,
     shouldPlay: boolean,
+    unlockVersion: number,
 ) {
-    const interactionVersion = useInteractionVersion();
-
     useEffect(() => {
         const audio = audioRef.current;
 
         if (!audio) return;
 
         if (shouldPlay) {
-            void audio.play().catch((err) => {
-                console.warn("Autoplay blocked:", err);
-            });
+            return attemptPlayback(audio);
         } else {
             audio.pause();
         }
-    }, [audioRef, interactionVersion, shouldPlay]);
-
-    useEffect(() => {
-        if (!shouldPlay) return;
-
-        const tryPlay = () => {
-            const audio = audioRef.current;
-
-            if (!audio) return;
-
-            void audio.play().catch(() => {
-            });
-        };
-
-        window.addEventListener("pointerdown", tryPlay, { once: true });
-        window.addEventListener("keydown", tryPlay, { once: true });
-
-        return () => {
-            window.removeEventListener("pointerdown", tryPlay);
-            window.removeEventListener("keydown", tryPlay);
-        };
-    }, [audioRef, interactionVersion, shouldPlay]);
+    }, [audioRef, shouldPlay, unlockVersion]);
 }
 
-export const MusicPlayer: React.FC<MusicPlayerProps> = ({ isMusicPlaying }) => {
+export const MusicPlayer: React.FC<MusicPlayerProps> = ({ isMusicPlaying, unlockVersion }) => {
     const audioRef = useRef<HTMLAudioElement>(null);
 
-    useAudioPlayback(audioRef, isMusicPlaying);
+    useAudioPlayback(audioRef, isMusicPlaying, unlockVersion);
 
     return (
         <>
-            <audio ref={audioRef} src={getMusicUrl(GAME_MUSIC.music)} loop preload="auto" />
+            <audio
+                ref={audioRef}
+                src={getMusicUrl(GAME_MUSIC.music)}
+                loop
+                preload="auto"
+                autoPlay={isMusicPlaying}
+                playsInline
+            />
         </>
     );
 };
@@ -95,9 +76,9 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({ isMusicPlaying }) => {
 export const SoundPlayer: React.FC<SoundPlayerProps> = ({
     isSoundPlaying,
     isOpenResultMenu,
+    unlockVersion,
 }) => {
     const audioRef = useRef<HTMLAudioElement>(null);
-    const interactionVersion = useInteractionVersion();
 
     useEffect(() => {
         if (!isSoundPlaying) return;
@@ -109,10 +90,8 @@ export const SoundPlayer: React.FC<SoundPlayerProps> = ({
         //  restart sound every time result opens
         audio.currentTime = 0;
 
-        audio.play().catch((err) => {
-            console.warn("Sound blocked:", err);
-        });
-    }, [interactionVersion, isOpenResultMenu, isSoundPlaying]);
+        return attemptPlayback(audio);
+    }, [isOpenResultMenu, isSoundPlaying, unlockVersion]);
 
     return (
         <audio

@@ -1,8 +1,23 @@
 import { getAssetUrl, GAME_ASSETS } from "../config/gameConfig";
 
-export default function LoadingScreen({ progress }: { progress: number }) {
+type LoadingScreenProps = {
+    progress: number;
+    onUnlockAudio?: () => void;
+    showUnlockHint?: boolean;
+};
+
+export default function LoadingScreen({
+    progress,
+    onUnlockAudio,
+    showUnlockHint = false,
+}: LoadingScreenProps) {
     return (
-        <div className="bg-[#A91FE6] h-svh w-full">
+        <button
+            type="button"
+            onClick={onUnlockAudio}
+            onTouchStart={onUnlockAudio}
+            className="bg-[#A91FE6] h-svh w-full text-left"
+        >
             <div className="absolute inset-0 z-[200] flex-col flex left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[300px] w-[200px] rounded-[40px] border-blue-950 items-center justify-center px-6">
                 <div className="w-[100px] h-[100px] ">
                     <img src={getAssetUrl(GAME_ASSETS.gamelogo)} alt="Loading" />
@@ -13,7 +28,12 @@ export default function LoadingScreen({ progress }: { progress: number }) {
                         style={{ width: `${progress}%` }}
                     />
                 </div>
+                {showUnlockHint ? (
+                    <p className="mt-4 text-center text-sm font-semibold text-white">
+                        Tap to enable sound
+                    </p>
+                ) : null}
             </div>
-        </div >
+        </button>
     );
 }
