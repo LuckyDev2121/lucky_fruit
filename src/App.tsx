@@ -55,10 +55,10 @@ function App() {
   const closeResultMenu = () => setIsOpenResultMenu(false);
   const { createRound, isMusicEnabled, isSoundEnabled, setMusicEnabled, setSoundEnabled } = useGame();
 
-  useEffect(() => {
-    void setMusicEnabled(true);
-    void setSoundEnabled(true);
-  }, [])
+  // useEffect(() => {
+  //   void setMusicEnabled(true);
+  //   void setSoundEnabled(true);
+  // }, [])
 
   const attemptStartRound = useCallback(async () => {
     try {
@@ -165,10 +165,13 @@ function App() {
         isMusicPlaying={isMusicEnabled}
         isSoundPlaying={isSoundEnabled}
         onToggleMusic={() => {
-          void setMusicEnabled(!isMusicEnabled);
+          const next = !isMusicEnabled;
+          void setMusicEnabled(next);
         }}
+
         onToggleSound={() => {
-          void setSoundEnabled(!isSoundEnabled);
+          const next = !isSoundEnabled;
+          void setSoundEnabled(next);
         }}
       />
     </div>

@@ -8,6 +8,8 @@ import {
   fetchGameResults,
   createRound,
   fetchRechargeUrl,
+  fetchSoundSetting,
+  fetchMusicSetting,
   placeBet as placeBetRequest,
   makeGameResult,
   saveSoundSetting,
@@ -56,12 +58,14 @@ type GameStore = {
   winToday: WinTodayResponse|null;
   playerLog: PlayerLogData[];
   url?:RechargeUrlResponse | null;
-  // runtimeConfig: RuntimeConfig;
+  soundOverridden: boolean;
+musicOverridden: boolean;
 };
 
+const DEFAULT_SOUND_ENABLED = true;
+const DEFAULT_MUSIC_ENABLED = true;
 
 const listeners = new Set<(state: GameStore) => void>();
-
 let store: GameStore = {
   gameDetails: null,
   playerInfo: null,
@@ -81,6 +85,8 @@ let store: GameStore = {
   winToday:null,
   playerLog:[],
   url:null,
+  soundOverridden: false,
+musicOverridden: false,
   // runtimeConfig: { backendOrigin: "", apiBaseUrl: "" },
 };
 
@@ -132,25 +138,39 @@ async function runRefreshGameData(options?: RefreshGameDataOptions) {
   updateStore({ isLoading: true, isMusicSettingLoading: true });
 
   try {
-    const [gameDetail, player, gameResults,  rankingToday, winToday, playerLog,url] = await Promise.all([
+    const [gameDetail, player, gameResults, isSoundEnabled, isMusicEnabled, rankingToday,
+  winToday,
+  playerLog,
+  url ] = await Promise.all([
       fetchGameDetail(),
       fetchPlayerInfo(),
       fetchGameResults(),
+      fetchSoundSetting(),
+      fetchMusicSetting(),
       fetchRankingToday(),
       fetchWinToday(),
       fetchPlayerLog(),
       fetchRechargeUrl(),
-      // fetchRuntimeConfigFromApi(),
     ]);
+const apiSound = isSoundEnabled ?? DEFAULT_SOUND_ENABLED;
+const apiMusic = isMusicEnabled ?? DEFAULT_MUSIC_ENABLED;
+  updateStore({
+  gameDetails: gameDetail,
+  playerInfo: player,
+  results: gameResults,
 
-    updateStore({
-      gameDetails: gameDetail,
-      playerInfo: player,
-      results: gameResults,
-      isLoading: false,
-      isSoundSettingLoading: false,
-      isMusicSettingLoading: false,
-      rankingTodays: rankingToday,
+  isSoundEnabled: store.soundOverridden
+  ? store.isSoundEnabled
+  : apiSound,
+
+  isMusicEnabled: store.musicOverridden
+  ? store.isMusicEnabled
+  : apiMusic,
+
+  isLoading: false,
+  isSoundSettingLoading: false,
+  isMusicSettingLoading: false,
+  rankingTodays: rankingToday,
       playerLog:playerLog,
       winToday:winToday,
       url: url,
@@ -158,8 +178,8 @@ async function runRefreshGameData(options?: RefreshGameDataOptions) {
         ? 0
         : store.pendingBalanceDeduction,
       previousRoundBets: normalizeBetRecord(gameDetail.options, store.previousRoundBets),
-      // runtimeConfig: runtimeConfig,
-    });
+     
+});
   } catch (error) {
     updateStore({ isLoading: false, isMusicSettingLoading: false, isSoundSettingLoading: false });
     throw error;
@@ -304,18 +324,35 @@ export function useGame() {
       pendingBalanceDeduction: Math.max(0, current.pendingBalanceDeduction - amount),
     }));
   }, []);
+const handleSetSoundEnabled = useCallback(async (nextValue: boolean) => {
+  updateStore({
+    isSoundEnabled: nextValue,
+    soundOverridden: true,
+  });
 
-  const handleSetSoundEnabled = useCallback(async (nextValue: boolean) => {
-    
-console.log("sound",nextValue);
-    await saveSoundSetting( nextValue);
-    updateStore({ isSoundEnabled: nextValue });
-  }, []);
-  const handleSetMusicEnabled = useCallback(async (nextValue: boolean) => {
-console.log("music",nextValue);
-    await saveMusicSetting( nextValue);
-    updateStore({ isMusicEnabled: nextValue });
-  }, []);
+  try {
+    await saveSoundSetting(nextValue);
+  } catch (err) {
+    updateStore({
+      isSoundEnabled: !nextValue,
+    });
+  }
+}, []);
+
+const handleSetMusicEnabled = useCallback(async (nextValue: boolean) => {
+  updateStore({
+    isMusicEnabled: nextValue,
+    musicOverridden: true,
+  });
+
+  try {
+    await saveMusicSetting(nextValue);
+  } catch (err) {
+    updateStore({
+      isMusicEnabled: !nextValue,
+    });
+  }
+}, []);
 
   const clearCurrentRoundBets = useCallback(() => {
     updateStore({ currentRoundBets: {} });
