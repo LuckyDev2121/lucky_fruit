@@ -1,4 +1,5 @@
 import MenuButton from "./MenuButton";
+import { closeCurrentView } from "../utils/closeCurrentView";
 
 type TopMenuProps = {
   onOpenModal: (modal: string) => void;
@@ -114,25 +115,6 @@ function CloseIcon() {
   );
 }
 
-const handleClose = () => {
-  // 1. Android app
-  if ((window as any).Android?.exitApp) {
-    (window as any).Android.exitApp();
-    return;
-  }
-
-  // 2. iOS app
-  if ((window as any).webkit?.messageHandlers?.exitApp) {
-    (window as any).webkit.messageHandlers.exitApp.postMessage(null);
-    return;
-  }
-
-  // 3. Web (for testing only)
-  if (window.history.length > 1) {
-    window.history.back();
-  }
-};
-
 const TopMenu: React.FC<TopMenuProps> = ({ onOpenModal, onOpenAlert }) => {
   return (
     <div className="flex gap-[5px]">
@@ -173,7 +155,7 @@ const TopMenu: React.FC<TopMenuProps> = ({ onOpenModal, onOpenAlert }) => {
         borderWidth="0px"
         icon={<CloseIcon />}
         background={"#773AC8"}
-        onClick={handleClose}
+        onClick={closeCurrentView}
       />
     </div >
   );

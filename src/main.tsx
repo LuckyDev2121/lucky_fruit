@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
 import { checkIntroIntegration } from "./api/auth.ts"
+import { closeCurrentView } from "./utils/closeCurrentView.ts"
 
 async function bootstrap() {
   const search = window.location.search.replace(/\?/g, "&").replace(/^&/, "?");
@@ -15,7 +16,7 @@ async function bootstrap() {
     const res = await checkIntroIntegration(userId, token);
     console.log("Intro check result", res);
     if (!res.status || !res.user_id) {
-      window.history.back();
+      closeCurrentView();
       return;
     }
 
@@ -29,7 +30,7 @@ async function bootstrap() {
     );
   } catch (err) {
     console.error("Intro check failed", err);
-    window.history.back();
+    closeCurrentView();
   }
 }
 bootstrap();
