@@ -117,22 +117,9 @@ export const CONNECTION_LABELS: Record<ConnectionState, string> = {
 };
 
 export const GAME_ASSETS = {
-  betAmount1M: "bet-amount-1M.svg",
-  betAmount10k: "bet-amount-10k.svg",
-  betAmount100: "bet-amount-100.svg",
-  betAmount100k: "bet-amount-100k.svg",
-  betAmount1000: "bet-amount-1000.svg",
-  fruitAvocado: "fruit-avocado.svg",
   fruitBgFrame: "fruit-bg-frame.svg",
-  fruitCheri: "fruit-cheri.svg",
   fruitContainerFrame: "fruit-container-frame.svg",
   fruitGameName: "fruit-game-name.svg",
-  fruitGraps: "fruit-graps.svg",
-  fruitLemon: "fruit-lemon.svg",
-  fruitOrange: "fruit-orange.svg",
-  fruitStroberry: "fruit-stroberry.svg",
-  fruitTomato: "fruit-tomato.svg",
-  fruitWatermalon: "fruit-watermalon.svg",
   timeCountingBoard: "time-Counting-board.svg",
   diamondIcon: "diamond-icon.svg",
   resultfirstposition: "result-1st-postion.svg",
