@@ -16,7 +16,9 @@ export default function CoinBoard({ onOpenModal }: CoinBoardProps) {
       img.src = playerInfo?.avater;
     }
   }, [playerInfo?.avater]);
-
+  useEffect(() => {
+    console.log(playerInfo?.balance, displayBalance)
+  }, [playerInfo, displayBalance])
   return (
     <div className="z-[530] flex items-center" style={{ height: "26px" }}>
       <button className="flex items-center relative" style={{ width: "107px", height: "26px" }} onClick={() => onOpenModal("recharge")}>
