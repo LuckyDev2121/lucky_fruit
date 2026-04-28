@@ -110,6 +110,7 @@ type RefreshGameDataOptions = {
 };
 
 function formatBalanceValue(amount: number): string {
+
   if (Number.isNaN(amount) || amount <= 0) {
     return "0";
   }
@@ -313,13 +314,11 @@ export function useGame() {
   }, []);
  const handleSetSoundEnabled = useCallback(async (nextValue: boolean) => {
     
-console.log("sound",nextValue);
     await saveSoundSetting( nextValue);
     updateStore({ isSoundEnabled: nextValue });
   }, []);
 
 const handleSetMusicEnabled = useCallback(async (nextValue: boolean) => {
-console.log("music",nextValue);
     await saveMusicSetting( nextValue);
     updateStore({ isMusicEnabled: nextValue });
   }, []);
